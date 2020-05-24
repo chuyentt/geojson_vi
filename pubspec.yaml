@@ -1,13 +1,11 @@
 name: geojson_vi
-description: GeoJSON package for Dart developers.
-version: 1.0.0
+description: GeoJSON package for Dart developers to create, read, update and delete the geospatial data interchange format.
+
+version: 1.0.5
 homepage: https://github.com/chuyentt/geojson_vi
 
 environment:
   sdk: '>=2.8.1 <3.0.0'
-
-#dependencies:
-#  path: ^1.7.0
 
 dev_dependencies:
   pedantic: ^1.8.0
