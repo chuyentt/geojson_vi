@@ -4,6 +4,9 @@ GeoJSON package for Dart developers to create, read, update and delete the geosp
 
 This package support the GeoJSON object like spatially bounded entity (a Feature), or a list of Features (a FeatureCollection). GeoJSON supports the following geometry types like Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Features in GeoJSON contain a Geometry object and additional properties, and a FeatureCollection contains a list of Features.
 
+## GeoJSON UML Model
+![GeoJSON UML Model](docs/GeoJSON_UML_Model.pdf)
+
 ## Usage
 ### Read the GeoJSON file
 ```dart
