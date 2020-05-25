@@ -1,4 +1,4 @@
-# GeoJSON package for Dart developers.
+# GeoJSON package for Dart developers
 
 GeoJSON package for Dart developers to create, read, update and delete the geospatial data interchange format. This package was originally published by Tran, C. T. (2020). The GeoJSON package for Dart developers (Version 1.0.5). Zenodo. https://doi.org/10.5281/ZENODO.3841927.
 
