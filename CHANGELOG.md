@@ -33,3 +33,7 @@
 ## 1.0.5+4
 
 - Fix formatting issues
+
+## 1.0.6
+
+- Fix encode issues

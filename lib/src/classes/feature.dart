@@ -25,8 +25,9 @@ class GeoJSONFeature {
 
   GeoJSONFeature(this.geometry);
 
-  int _id;
-  int get id => _id;
+  String _id;
+  String get id => _id;
+  // set id(value) => _id = value;
 
   var _properties = <String, dynamic>{};
   Map<String, dynamic> get properties => _properties;
@@ -70,7 +71,7 @@ class GeoJSONFeature {
     feature._properties = data['properties'];
     feature._bbox = data['bbox'];
     feature._title = data['title'];
-    return GeoJSONFeature(geom);
+    return feature;
   }
 
   Map<String, dynamic> toMap() {
