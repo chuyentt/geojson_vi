@@ -1,8 +1,8 @@
 # GeoJSON package for Dart developers.
 
-GeoJSON package for Dart developers to create, read, update and delete the geospatial data interchange format. This package is referenced originally from the specification document by H. Butler, M. Daly, A. Doyle, S. Gillies, S. Hagen, and T. Schaub, "The GeoJSON Format", August 2016, https://tools.ietf.org/html/rfc7946.
+GeoJSON package for Dart developers to create, read, update and delete the geospatial data interchange format. This package was originally published by Tran, C. T. (2020). The GeoJSON package for Dart developers (Version 1.0.5). Zenodo. https://doi.org/10.5281/ZENODO.3841927.
 
-This package support the GeoJSON object like spatially bounded entity (a Feature), or a list of Features (a FeatureCollection). GeoJSON supports the following geometry types like Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Features in GeoJSON contain a Geometry object and additional properties, and a FeatureCollection contains a list of Features.
+GeoJSON package support GeoJSON objects like spatially bounded entity (a Feature), or a list of Features (a FeatureCollection). GeoJSON supports the following geometry types like Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Features in GeoJSON contain a Geometry object and additional properties, and a FeatureCollection contains a list of Features.
 
 ## GeoJSON UML Model
 ![GeoJSON UML Model](docs/GeoJSON_UML_Model.svg)
@@ -244,3 +244,5 @@ Output: ```new.geojson```
   ]
 }
 ```
+## Reference
+H. Butler, M. Daly, A. Doyle, S. Gillies, S. Hagen, and T. Schaub, "The GeoJSON Format", August 2016, https://tools.ietf.org/html/rfc7946.

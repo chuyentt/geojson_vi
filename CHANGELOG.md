@@ -21,3 +21,7 @@
 ## 1.0.5+1
 
 - Update the package description
+
+## 1.0.5+2
+
+- Update the package description
