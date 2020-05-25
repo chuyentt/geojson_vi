@@ -2,7 +2,6 @@ import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các vùng
 class GeoJSONMultiPolygon extends Geometry {
-  
   GeoJSONMultiPolygon(this._coordinates) : super(GeometryType.multiPolygon);
 
   final List<List<List<List<double>>>> _coordinates;
@@ -32,10 +31,6 @@ class GeoJSONMultiPolygon extends Geometry {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'type': type.name,
-      'coordinates': coordinates
-    };
+    return {'type': type.name, 'coordinates': coordinates};
   }
-
 }

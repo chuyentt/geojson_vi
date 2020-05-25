@@ -2,7 +2,6 @@ import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các điểm
 class GeoJSONMultiPoint extends Geometry {
-  
   GeoJSONMultiPoint(this._coordinates) : super(GeometryType.multiPoint);
 
   final List<List<double>> _coordinates;
@@ -24,10 +23,6 @@ class GeoJSONMultiPoint extends Geometry {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'type': type.name,
-      'coordinates': coordinates
-    };
+    return {'type': type.name, 'coordinates': coordinates};
   }
-
 }

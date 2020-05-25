@@ -2,9 +2,9 @@ import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các đường
 class GeoJSONMultiLineString extends Geometry {
-  
-  GeoJSONMultiLineString(this._coordinates) : super(GeometryType.multiLineString);
-  
+  GeoJSONMultiLineString(this._coordinates)
+      : super(GeometryType.multiLineString);
+
   final List<List<List<double>>> _coordinates;
   List<List<List<double>>> get coordinates => _coordinates;
 
@@ -33,5 +33,4 @@ class GeoJSONMultiLineString extends Geometry {
       'coordinates': coordinates,
     };
   }
-
 }

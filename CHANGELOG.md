@@ -25,3 +25,11 @@
 ## 1.0.5+2
 
 - Update the package description
+
+## 1.0.5+3
+
+- Update the package description
+
+## 1.0.5+4
+
+- Fix formatting issues

@@ -4,10 +4,7 @@ import 'helpers.dart';
 import 'classes/feature_collection.dart';
 
 /// Kiểu dữ liệu GeoJSON
-enum GeoJSONType {
-  feature,
-  featureCollection
-}
+enum GeoJSONType { feature, featureCollection }
 
 extension GeoJSONTypeExtension on GeoJSONType {
   String get name {
@@ -24,9 +21,8 @@ extension GeoJSONTypeExtension on GeoJSONType {
 
 /// Nguyên mẫu trừu tượng
 abstract class GeoJSON {
-
   GeoJSONFeatureCollection featureCollection = GeoJSONFeatureCollection();
-  
+
   String _path;
   String get path => _path;
 
@@ -51,7 +47,7 @@ abstract class GeoJSON {
 
   /// Lưu GeoJSON vào file
   Future<File> save({String newPath}) async {
-    var filePath = newPath ?? path; 
+    var filePath = newPath ?? path;
     var file = File(filePath);
     // Write the file.
     return file.writeAsString(toGeoJSONString());
@@ -62,10 +58,9 @@ abstract class GeoJSON {
 
 /// Nguyên mẫu private GeoJSON
 class _GeoJSON extends GeoJSON {
-
   @override
   String _path;
-  
+
   void _parse(Map<String, dynamic> data) {
     if (data == null) return null;
     GeoJSONType type = enumFromString(data['type'], GeoJSONType);
@@ -79,7 +74,7 @@ class _GeoJSON extends GeoJSON {
     }
     return null;
   }
-  
+
   @override
   String toGeoJSONString() {
     return JsonEncoder().convert(featureCollection.toMap());

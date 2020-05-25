@@ -7,10 +7,8 @@ import 'multi_line_string.dart';
 import 'polygon.dart';
 import 'multi_polygon.dart';
 
-
 /// Định nghĩa nguyên mẫu tập hợp các đối tượng hình học
 class GeoJSONGeometryCollection extends Geometry {
-
   GeoJSONGeometryCollection() : super(GeometryType.geometryCollection);
 
   final List<Geometry> _geometries = <Geometry>[];
@@ -55,5 +53,4 @@ class GeoJSONGeometryCollection extends Geometry {
       'geometries': geometries.map((e) => e.toMap()).toList(),
     };
   }
-
 }

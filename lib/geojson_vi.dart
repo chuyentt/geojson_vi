@@ -1,6 +1,3 @@
-/// Support for doing something GeoJSON.
-///
-/// More dartdocs go here.
 library geojson_vi;
 
 export 'src/geojson_vi_base.dart';

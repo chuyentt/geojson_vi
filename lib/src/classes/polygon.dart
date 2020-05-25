@@ -2,10 +2,9 @@ import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng vùng
 class GeoJSONPolygon extends Geometry {
-
   GeoJSONPolygon(this._coordinates) : super(GeometryType.polygon);
-  
-  final List<List<List<double>>> _coordinates;// = List<List<List<double>>>[];
+
+  final List<List<List<double>>> _coordinates; // = List<List<List<double>>>[];
   List<List<List<double>>> get coordinates => _coordinates;
 
   static GeoJSONPolygon fromMap(Map data) {
@@ -28,10 +27,6 @@ class GeoJSONPolygon extends Geometry {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'type': type.name,
-      'coordinates': coordinates
-    };
+    return {'type': type.name, 'coordinates': coordinates};
   }
-
 }

@@ -1,4 +1,4 @@
-/// Kiểu dữ liệu Geometry
+/// Geometry type
 enum GeometryType {
   point,
   multiPoint,
@@ -33,9 +33,8 @@ extension GeometryTypeExtension on GeometryType {
 }
 
 abstract class Geometry {
-  
   final GeometryType type;
-  
+
   int places = 6;
 
   Geometry(this.type);

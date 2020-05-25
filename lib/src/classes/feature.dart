@@ -19,7 +19,7 @@ class GeoJSONFeature {
   /// TODO: Có thể viết báo đề xuất thêm id là bắt buộc và chứng minh
   /// cho việc này là việc tìm kiếm và truy xuất,...
   /// Vẽ lại mô hình UML
-  
+
   final type = GeoJSONType.feature;
   final Geometry geometry;
 
@@ -118,5 +118,4 @@ class GeoJSONFeature {
     }
     return {};
   }
-
 }

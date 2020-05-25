@@ -3,7 +3,6 @@ import 'feature.dart';
 
 /// Định nghĩa nguyên mẫu tập hợp các đối tượng địa lý
 class GeoJSONFeatureCollection {
-
   final _type = GeoJSONType.featureCollection;
   GeoJSONType get type => _type;
 
