@@ -37,3 +37,7 @@
 ## 1.0.6
 
 - Fix encode issues
+
+## 1.0.6+1
+
+- Update GeoJSON UML model

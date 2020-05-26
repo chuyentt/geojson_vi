@@ -3,22 +3,6 @@ import 'dart:io';
 import 'helpers.dart';
 import 'classes/feature_collection.dart';
 
-/// Kiểu dữ liệu GeoJSON
-enum GeoJSONType { feature, featureCollection }
-
-extension GeoJSONTypeExtension on GeoJSONType {
-  String get name {
-    switch (this) {
-      case GeoJSONType.feature:
-        return 'Feature';
-      case GeoJSONType.featureCollection:
-        return 'FeatureCollection';
-      default:
-        return null;
-    }
-  }
-}
-
 /// Nguyên mẫu trừu tượng
 abstract class GeoJSON {
   GeoJSONFeatureCollection featureCollection = GeoJSONFeatureCollection();
@@ -54,6 +38,22 @@ abstract class GeoJSON {
   }
 
   String toGeoJSONString();
+}
+
+/// Kiểu dữ liệu GeoJSON
+enum GeoJSONType { feature, featureCollection }
+
+extension GeoJSONTypeExtension on GeoJSONType {
+  String get name {
+    switch (this) {
+      case GeoJSONType.feature:
+        return 'Feature';
+      case GeoJSONType.featureCollection:
+        return 'FeatureCollection';
+      default:
+        return null;
+    }
+  }
 }
 
 /// Nguyên mẫu private GeoJSON
