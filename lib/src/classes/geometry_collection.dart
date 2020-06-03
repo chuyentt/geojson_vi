@@ -1,11 +1,4 @@
-import '../helpers.dart';
 import 'geometry.dart';
-import 'point.dart';
-import 'multi_point.dart';
-import 'line_string.dart';
-import 'multi_line_string.dart';
-import 'polygon.dart';
-import 'multi_polygon.dart';
 
 /// Định nghĩa nguyên mẫu tập hợp các đối tượng hình học
 class GeoJSONGeometryCollection implements Geometry {

@@ -53,3 +53,7 @@
 ## 1.1.0+1
 
 - Update the package export 
+
+## 1.1.0+2
+
+- Update the document

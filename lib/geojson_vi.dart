@@ -1,3 +1,6 @@
+/// Support for Dart developers to create, read, update and delete the geospatial data interchange format.
+///
+/// More information go to the README
 library geojson_vi;
 
 export 'src/geojson_vi_base.dart';
