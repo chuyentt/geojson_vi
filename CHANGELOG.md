@@ -49,3 +49,7 @@
 ## 1.1.0
 
 - Added calculate area example into the readme
+
+## 1.1.0+1
+
+- Update the package export 

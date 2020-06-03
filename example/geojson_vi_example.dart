@@ -1,5 +1,4 @@
 import 'package:geojson_vi/geojson_vi.dart';
-import 'package:geojson_vi/src/classes/geometry.dart';
 
 void main() {
   // ### Create a Feature with Point geometry

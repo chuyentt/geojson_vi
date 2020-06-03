@@ -2,6 +2,7 @@ library geojson_vi;
 
 export 'src/geojson_vi_base.dart';
 export 'src/classes/feature.dart';
+export 'src/classes/geometry.dart';
 export 'src/classes/point.dart';
 export 'src/classes/multi_point.dart';
 export 'src/classes/line_string.dart';
