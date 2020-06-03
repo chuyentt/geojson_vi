@@ -34,10 +34,10 @@ abstract class GeoJSON {
     var filePath = newPath ?? path;
     var file = File(filePath);
     // Write the file.
-    return file.writeAsString(toGeoJSONString());
+    return file.writeAsString(toGeoJSONString);
   }
 
-  String toGeoJSONString();
+  String get toGeoJSONString;
 }
 
 /// Kiểu dữ liệu GeoJSON
@@ -66,7 +66,7 @@ class _GeoJSON extends GeoJSON {
     GeoJSONType type = enumFromString(data['type'], GeoJSONType);
     switch (type) {
       case GeoJSONType.featureCollection:
-        featureCollection.fromMap(data);
+        featureCollection = GeoJSONFeatureCollection.fromMap(data);
         break;
       case GeoJSONType.feature:
         featureCollection.featureFromMap(data);
@@ -76,7 +76,7 @@ class _GeoJSON extends GeoJSON {
   }
 
   @override
-  String toGeoJSONString() {
-    return JsonEncoder().convert(featureCollection.toMap());
+  String get toGeoJSONString {
+    return JsonEncoder().convert(featureCollection.toMap);
   }
 }

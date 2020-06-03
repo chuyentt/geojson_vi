@@ -1,4 +1,5 @@
 import 'package:geojson_vi/geojson_vi.dart';
+import 'package:test/test.dart';
 
 void main() {
   // ### Create a Feature with Point geometry
@@ -102,4 +103,11 @@ void main() {
       }
     });
   });
+
+  // Search by geometry and properties
+  var polygonFeatures = geoJSON.featureCollection.features.where((element) {
+    return (element.geometry.type == GeometryType.polygon && (element.properties['title']).contains('HUMG'));
+  }).toList();
+
+  print(polygonFeatures.isNotEmpty ? polygonFeatures.first.toMap : 'not found');
 }

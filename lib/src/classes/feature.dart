@@ -20,8 +20,8 @@ class GeoJSONFeature {
   /// cho việc này là việc tìm kiếm và truy xuất,...
   /// Vẽ lại mô hình UML
 
-  final type = GeoJSONType.feature;
-  final Geometry geometry;
+  GeoJSONType get type => GeoJSONType.feature;
+  Geometry geometry;
 
   GeoJSONFeature(this.geometry);
 
@@ -38,52 +38,22 @@ class GeoJSONFeature {
   String _title;
   String get title => _title;
 
-  static GeoJSONFeature fromMap(Map data) {
-    var geom;
-    Map json = data['geometry'];
-    GeometryType type = enumFromString(json['type'], GeometryType);
-    switch (type) {
-      case GeometryType.point:
-        geom = GeoJSONPoint.fromMap(data['geometry']);
-        break;
-      case GeometryType.lineString:
-        geom = GeoJSONLineString.fromMap(data['geometry']);
-        break;
-      case GeometryType.multiPoint:
-        geom = GeoJSONMultiPoint.fromMap(data['geometry']);
-        break;
-      case GeometryType.polygon:
-        geom = GeoJSONPolygon.fromMap(data['geometry']);
-        break;
-      case GeometryType.multiLineString:
-        geom = GeoJSONMultiLineString.fromMap(data['geometry']);
-        break;
-      case GeometryType.multiPolygon:
-        geom = GeoJSONMultiPolygon.fromMap(data['geometry']);
-        break;
-      case GeometryType.geometryCollection:
-        geom = GeoJSONGeometryCollection.fromMap(data['geometry']);
-        break;
-      default:
-    }
-    var feature = GeoJSONFeature(geom);
-    feature._id = data['id'];
-    feature._properties = data['properties'];
-    feature._bbox = data['bbox'];
-    feature._title = data['title'];
-    return feature;
+  GeoJSONFeature.fromMap(Map data) {
+    geometry = Geometry.fromMap(data['geometry']);
+    _id = data['id'];
+    _properties = data['properties'];
+    _bbox = data['bbox'];
+    _title = data['title'];
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'type': type.name,
-      if (id != null) 'id': id,
-      'properties': properties,
-      if (bbox != null) 'bbox': bbox,
-      if (title != null) 'title': title,
-      'geometry': geometrySerialize
-    };
-  }
+  Map<String, dynamic> get toMap => {
+    'type': type.name,
+    if (id != null) 'id': id,
+    'properties': properties,
+    if (bbox != null) 'bbox': bbox,
+    if (title != null) 'title': title,
+    'geometry': geometrySerialize
+  };
 
   Map<String, dynamic> get geometrySerialize {
     switch (geometry.type) {

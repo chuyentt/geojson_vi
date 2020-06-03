@@ -156,6 +156,13 @@ void main() {
       }
     });
   });
+
+  // Search by geometry and properties
+  var polygonFeatures = geoJSON.featureCollection.features.where((element) {
+    return (element.geometry.type == GeometryType.polygon && (element.properties['title']).contains('HUMG'));
+  }).toList();
+
+  print(polygonFeatures.isNotEmpty ? polygonFeatures.first.toMap : 'not found');
 }
 ```
 Output: ```new.geojson```
