@@ -8,49 +8,29 @@ import 'polygon.dart';
 import 'multi_polygon.dart';
 
 /// Định nghĩa nguyên mẫu tập hợp các đối tượng hình học
-class GeoJSONGeometryCollection extends Geometry {
-  GeoJSONGeometryCollection() : super(GeometryType.geometryCollection);
+class GeoJSONGeometryCollection implements Geometry {
+  final List<Geometry> geometries = <Geometry>[];
+  GeoJSONGeometryCollection();
 
-  final List<Geometry> _geometries = <Geometry>[];
-  List<Geometry> get geometries => _geometries;
+  @override
+  GeometryType get type => GeometryType.geometryCollection;
 
-  static GeoJSONGeometryCollection fromMap(Map data) {
+  GeoJSONGeometryCollection.fromMap(Map data) {
     List geomsMap = data['geometries'];
     var geoms = GeoJSONGeometryCollection();
     geomsMap.forEach((geomMap) {
-      GeometryType type = enumFromString(geomMap['type'], GeometryType);
-      Geometry geom;
-      switch (type) {
-        case GeometryType.point:
-          geom = GeoJSONPoint.fromMap(geomMap);
-          break;
-        case GeometryType.lineString:
-          geom = GeoJSONLineString.fromMap(geomMap);
-          break;
-        case GeometryType.multiPoint:
-          geom = GeoJSONMultiPoint.fromMap(geomMap);
-          break;
-        case GeometryType.polygon:
-          geom = GeoJSONPolygon.fromMap(geomMap);
-          break;
-        case GeometryType.multiLineString:
-          geom = GeoJSONMultiLineString.fromMap(geomMap);
-          break;
-        case GeometryType.multiPolygon:
-          geom = GeoJSONMultiPolygon.fromMap(geomMap);
-          break;
-        default:
-      }
-      geoms._geometries.add(geom);
+      var geom = Geometry.fromMap(geomMap);
+      geoms.geometries.add(geom);
     });
-    return geoms;
+    geometries.add(geoms);
   }
 
   @override
-  Map<String, dynamic> toMap() {
-    return {
-      'type': 'GeometryCollection',
-      'geometries': geometries.map((e) => e.toMap()).toList(),
-    };
-  }
+  Map<String, dynamic> get toMap => {
+    'type': 'GeometryCollection',
+    'geometries': geometries.map((e) => e.toMap).toList(),
+  };
+
+  @override
+  double get area => 0;
 }

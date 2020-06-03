@@ -139,6 +139,23 @@ void main() {
   geoJSON.featureCollection.features.add(feature_polygon);
 
   geoJSON.save();
+
+  // # Read the GeoJSON file
+  var launchTime = DateTime.now();
+  GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
+    print(geoJSON.featureCollection.features.length);
+    print(DateTime.now().difference(launchTime));
+  });
+
+  // Calculate area of polygon
+  GeoJSON.load('example/data/polygon_with_holes.geojson').then((value) {
+    value.featureCollection.features.forEach((element) {
+      if (element.geometry.type == GeometryType.polygon) {
+        GeoJSONPolygon pg = element.geometry;
+        print('Area: ${pg.area}');
+      }
+    });
+  });
 }
 ```
 Output: ```new.geojson```
@@ -255,4 +272,4 @@ H. Butler, M. Daly, A. Doyle, S. Gillies, S. Hagen, and T. Schaub, "The GeoJSON 
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-https://github.com/chuyentt/geojson_vi/issues
+[tracker]: https://github.com/chuyentt/geojson_vi/issues

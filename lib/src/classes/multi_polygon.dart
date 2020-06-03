@@ -1,13 +1,14 @@
 import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các vùng
-class GeoJSONMultiPolygon extends Geometry {
-  GeoJSONMultiPolygon(this._coordinates) : super(GeometryType.multiPolygon);
+class GeoJSONMultiPolygon implements Geometry {
+  List<List<List<List<double>>>> coordinates;
+  GeoJSONMultiPolygon(this.coordinates);
 
-  final List<List<List<List<double>>>> _coordinates;
-  List<List<List<List<double>>>> get coordinates => _coordinates;
+  @override
+  GeometryType get type => GeometryType.multiPolygon;
 
-  static GeoJSONMultiPolygon fromMap(Map data) {
+  GeoJSONMultiPolygon.fromMap(Map data) {
     var llll = data['coordinates'];
     final polyArray = <List<List<List<double>>>>[];
     llll.forEach((lll) {
@@ -18,7 +19,6 @@ class GeoJSONMultiPolygon extends Geometry {
           final pos = <double>[];
           l.forEach((value) {
             pos.add(value);
-            // pos.add(double.parse(value.toStringAsFixed(places)));
           });
           posArray.add(pos);
         });
@@ -26,11 +26,15 @@ class GeoJSONMultiPolygon extends Geometry {
       });
       polyArray.add(ringArray);
     });
-    return GeoJSONMultiPolygon(polyArray);
+    coordinates = polyArray;
   }
 
   @override
-  Map<String, dynamic> toMap() {
-    return {'type': type.name, 'coordinates': coordinates};
-  }
+  Map<String, dynamic> get toMap => {
+    'type': type.name,
+    'coordinates': coordinates,
+  };
+
+  @override
+  double get area => 0;
 }

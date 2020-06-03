@@ -45,3 +45,7 @@
 ## 1.0.6+2
 
 - Update the document
+
+## 1.1.0
+
+- Added calculate area example into the readme

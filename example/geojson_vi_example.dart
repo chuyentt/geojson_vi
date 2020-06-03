@@ -1,4 +1,5 @@
 import 'package:geojson_vi/geojson_vi.dart';
+import 'package:geojson_vi/src/classes/geometry.dart';
 
 void main() {
   // ### Create a Feature with Point geometry
@@ -93,5 +94,13 @@ void main() {
     print(DateTime.now().difference(launchTime));
   });
 
-  
+  // Calculate area of polygon
+  GeoJSON.load('example/data/polygon_with_holes.geojson').then((value) {
+    value.featureCollection.features.forEach((element) {
+      if (element.geometry.type == GeometryType.polygon) {
+        GeoJSONPolygon pg = element.geometry;
+        print('Area: ${pg.area}');
+      }
+    });
+  });
 }

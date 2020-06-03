@@ -89,31 +89,31 @@ class GeoJSONFeature {
     switch (geometry.type) {
       case GeometryType.point:
         final geom = geometry as GeoJSONPoint;
-        return geom.toMap();
+        return geom.toMap;
         break;
       case GeometryType.lineString:
         final geom = geometry as GeoJSONLineString;
-        return geom.toMap();
+        return geom.toMap;
         break;
       case GeometryType.multiPoint:
         final geom = geometry as GeoJSONMultiPoint;
-        return geom.toMap();
+        return geom.toMap;
         break;
       case GeometryType.polygon:
         final geom = geometry as GeoJSONPolygon;
-        return geom.toMap();
+        return geom.toMap;
         break;
       case GeometryType.multiLineString:
         final geom = geometry as GeoJSONMultiLineString;
-        return geom.toMap();
+        return geom.toMap;
         break;
       case GeometryType.multiPolygon:
         final geom = geometry as GeoJSONMultiPolygon;
-        return geom.toMap();
+        return geom.toMap;
         break;
       case GeometryType.geometryCollection:
         final geom = geometry as GeoJSONGeometryCollection;
-        return geom.toMap();
+        return geom.toMap;
         break;
       default:
     }
