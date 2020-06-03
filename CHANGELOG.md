@@ -41,3 +41,7 @@
 ## 1.0.6+1
 
 - Update GeoJSON UML model
+
+## 1.0.6+2
+
+- Update the document

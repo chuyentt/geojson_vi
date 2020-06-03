@@ -244,5 +244,15 @@ Output: ```new.geojson```
   ]
 }
 ```
+Quick viewing on geojson.io
+![Quick viewing](doc/vs.png)
+
 ## Reference
 H. Butler, M. Daly, A. Doyle, S. Gillies, S. Hagen, and T. Schaub, "The GeoJSON Format", August 2016, https://tools.ietf.org/html/rfc7946.
+
+
+## Features and bugs
+
+Please file feature requests and bugs at the [issue tracker][tracker].
+
+https://github.com/chuyentt/geojson_vi/issues
