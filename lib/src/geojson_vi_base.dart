@@ -1,46 +1,35 @@
 import 'dart:convert';
 import 'dart:io';
-import 'helpers.dart';
+
 import 'classes/feature_collection.dart';
+import 'classes/feature.dart';
+import 'helpers.dart';
 
-/// Nguyên mẫu trừu tượng
+/// The abstract class of GeoJSON
 abstract class GeoJSON {
-  GeoJSONFeatureCollection featureCollection = GeoJSONFeatureCollection();
+  /// The GeoJSON file path
+  String get path;
 
-  String _path;
-  String get path => _path;
+  /// The FeatureCollection object
+  GeoJSONFeatureCollection get featureCollection;
 
-  /// Mở file GeoJSON có sẵn
+  /// Load GeoJSON from file with file path
   static Future<GeoJSON> load(String path) async {
-    _GeoJSON geoJson;
-    var file = File(path);
-    await file.readAsString().then((data) async {
-      var json = jsonDecode(data);
-      geoJson = _GeoJSON();
-      await geoJson._parse(json);
-    }).catchError((onError) => print('Error, could not open file'));
-    return geoJson;
+    return await _GeoJSON._load(path);
   }
 
-  /// Tạo mới file GeoJSON
+  /// Create new GeoJSON with file path
   static GeoJSON create(String path) {
-    var geoJSON = _GeoJSON();
-    geoJSON._path = path;
+    var geoJSON = _GeoJSON(path);
+    geoJSON._featureCollection ??= GeoJSONFeatureCollection();
     return geoJSON;
   }
 
-  /// Lưu GeoJSON vào file
-  Future<File> save({String newPath}) async {
-    var filePath = newPath ?? path;
-    var file = File(filePath);
-    // Write the file.
-    return file.writeAsString(toGeoJSONString);
-  }
-
-  String get toGeoJSONString;
+  /// Save to file or save as for new file path
+  Future<File> save({String newPath});
 }
 
-/// Kiểu dữ liệu GeoJSON
+/// The GeoJSON Type
 enum GeoJSONType { feature, featureCollection }
 
 extension GeoJSONTypeExtension on GeoJSONType {
@@ -56,27 +45,65 @@ extension GeoJSONTypeExtension on GeoJSONType {
   }
 }
 
-/// Nguyên mẫu private GeoJSON
-class _GeoJSON extends GeoJSON {
-  @override
+/// The implement of the GeoJSON abstract class
+class _GeoJSON implements GeoJSON {
+  /// Private cache
+  static final _cache = <String, _GeoJSON>{};
+
+  /// Default private constructor with cache applied
+  factory _GeoJSON(String path) {
+    _GeoJSON geoJSON;
+    if (_cache[path] == null) {
+      geoJSON = _GeoJSON._init(path);
+    }
+    return _cache.putIfAbsent(path, () => geoJSON);
+  }
+
+  /// Private constructor
+  _GeoJSON._init(this._path);
+
+  /// Private GeoJSON file path
   String _path;
 
-  void _parse(Map<String, dynamic> data) {
-    if (data == null) return null;
-    GeoJSONType type = enumFromString(data['type'], GeoJSONType);
-    switch (type) {
-      case GeoJSONType.featureCollection:
-        featureCollection = GeoJSONFeatureCollection.fromMap(data);
-        break;
-      case GeoJSONType.feature:
-        featureCollection.featureFromMap(data);
-        break;
+  /// Private FeatureCollection object
+  GeoJSONFeatureCollection _featureCollection;
+
+  /// Private load
+  static Future<_GeoJSON> _load(String path) async {
+    var file = File(path);
+    var geoJSON = _GeoJSON(path);
+    if (geoJSON._featureCollection != null) {
+      return geoJSON;
+    } else {
+      /// Read file as string
+      await file.readAsString().then((data) async {
+        var json = jsonDecode(data);
+        if (data != null) {
+          GeoJSONType type = enumFromString(json['type'], GeoJSONType);
+          switch (type) {
+            case GeoJSONType.featureCollection:
+              geoJSON._featureCollection = GeoJSONFeatureCollection.fromMap(json);
+              break;
+            case GeoJSONType.feature:
+              geoJSON._featureCollection.features.add(GeoJSONFeature.fromMap(json));
+              break;
+          }
+        }
+      }).catchError((onError) => print('Error, could not open file'));
+      return geoJSON;
     }
-    return null;
   }
 
   @override
-  String get toGeoJSONString {
-    return JsonEncoder().convert(featureCollection.toMap);
+  String get path => _path;
+
+  @override
+  GeoJSONFeatureCollection get featureCollection => _featureCollection;
+
+  @override
+  Future<File> save({String newPath}) {
+    var filePath = newPath ?? path;
+    var file = File(filePath);
+    return file.writeAsString(JsonEncoder().convert(_featureCollection.toMap));
   }
 }

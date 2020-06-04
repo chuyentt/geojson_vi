@@ -1,7 +1,6 @@
 import 'package:geojson_vi/geojson_vi.dart';
-import 'package:test/test.dart';
 
-void main() {
+Future<void> main() async {
   // ### Create a Feature with Point geometry
 
   // New GeoJSON
@@ -85,17 +84,17 @@ void main() {
   // Add to featureCollection
   geoJSON.featureCollection.features.add(feature_polygon);
 
-  geoJSON.save();
+  await geoJSON.save();
 
   // # Read the GeoJSON file
   var launchTime = DateTime.now();
-  GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
+  await GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
     print(geoJSON.featureCollection.features.length);
     print(DateTime.now().difference(launchTime));
   });
 
   // Calculate area of polygon
-  GeoJSON.load('example/data/polygon_with_holes.geojson').then((value) {
+  await GeoJSON.load('example/data/polygon_with_holes.geojson').then((value) {
     value.featureCollection.features.forEach((element) {
       if (element.geometry.type == GeometryType.polygon) {
         GeoJSONPolygon pg = element.geometry;
@@ -110,4 +109,11 @@ void main() {
   }).toList();
 
   print(polygonFeatures.isNotEmpty ? polygonFeatures.first.toMap : 'not found');
+  
+  // # Read the GeoJSON file (cache applied)
+  launchTime = DateTime.now();
+  await GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
+    print(geoJSON.featureCollection.features.length);
+    print(DateTime.now().difference(launchTime));
+  });
 }

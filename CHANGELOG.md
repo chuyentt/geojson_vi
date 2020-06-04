@@ -61,3 +61,7 @@
 ## 1.1.0+3
 
 - Update the document
+
+## 1.2.0
+
+- Refactoring the code, create instance from a cache if available

@@ -1,6 +1,6 @@
 # GeoJSON package for Dart developers
 
-GeoJSON package for Dart developers to create, read, update and delete the geospatial data interchange format. This package was originally published by Chuyen, T. T. (2020). The GeoJSON package for Dart developers. Zenodo. https://doi.org/10.5281/ZENODO.3841927.
+GeoJSON package for Dart developers to create, read, search, update and delete the geospatial data interchange format. This package was originally published by Chuyen, T. T. (2020). The GeoJSON package for Dart developers. Zenodo. https://doi.org/10.5281/ZENODO.3841927.
 
 GeoJSON package support GeoJSON objects like spatially bounded entity (a Feature), or a list of Features (a FeatureCollection). GeoJSON supports the following geometry types like Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Features in GeoJSON contain a Geometry object and additional properties, and a FeatureCollection contains a list of Features.
 
@@ -16,7 +16,7 @@ void main() {
   
   // # Read the GeoJSON file
   var launchTime = DateTime.now();
-  GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
+  await GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
     print(geoJSON.featureCollection.features.length);
     print(DateTime.now().difference(launchTime));
   });
@@ -47,7 +47,7 @@ void main() {
   // New GeoJSON
   final geoJSON = GeoJSON.create('example/data/new.geojson');
   // TODO: your code here...
-  geoJSON.save();
+  await geoJSON.save();
 }
 ```
 ### Create the Feature
@@ -142,13 +142,13 @@ void main() {
 
   // # Read the GeoJSON file
   var launchTime = DateTime.now();
-  GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
+  await GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
     print(geoJSON.featureCollection.features.length);
     print(DateTime.now().difference(launchTime));
   });
 
   // Calculate area of polygon
-  GeoJSON.load('example/data/polygon_with_holes.geojson').then((value) {
+  await GeoJSON.load('example/data/polygon_with_holes.geojson').then((value) {
     value.featureCollection.features.forEach((element) {
       if (element.geometry.type == GeometryType.polygon) {
         GeoJSONPolygon pg = element.geometry;

@@ -5,7 +5,7 @@ import 'feature.dart';
 class GeoJSONFeatureCollection {
   GeoJSONType get type => GeoJSONType.featureCollection;
 
-  List<GeoJSONFeature> features = <GeoJSONFeature>[];
+  final List<GeoJSONFeature> features = <GeoJSONFeature>[];
   
   GeoJSONFeatureCollection();
 
@@ -13,7 +13,8 @@ class GeoJSONFeatureCollection {
     if (data == null) return;
     var items = data['features'];
     items.forEach((element) {
-      featureFromMap(element);
+      var feature = GeoJSONFeature.fromMap(element);
+      features.add(feature);
     });
   }
 
@@ -21,9 +22,4 @@ class GeoJSONFeatureCollection {
     'type': type.name,
     'features': features.map((f) => f.toMap).toList(),
   };
-
-  void featureFromMap(Map data) {
-    var item = GeoJSONFeature.fromMap(data);
-    features.add(item);
-  }
 }

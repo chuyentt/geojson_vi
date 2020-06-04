@@ -1,5 +1,4 @@
 import '../geojson_vi_base.dart';
-import '../helpers.dart';
 import 'geometry.dart';
 import 'multi_point.dart';
 import 'line_string.dart';
