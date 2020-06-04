@@ -82,10 +82,12 @@ class _GeoJSON implements GeoJSON {
           GeoJSONType type = enumFromString(json['type'], GeoJSONType);
           switch (type) {
             case GeoJSONType.featureCollection:
-              geoJSON._featureCollection = GeoJSONFeatureCollection.fromMap(json);
+              geoJSON._featureCollection =
+                  GeoJSONFeatureCollection.fromMap(json);
               break;
             case GeoJSONType.feature:
-              geoJSON._featureCollection.features.add(GeoJSONFeature.fromMap(json));
+              geoJSON._featureCollection.features
+                  .add(GeoJSONFeature.fromMap(json));
               break;
           }
         }
