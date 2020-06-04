@@ -6,7 +6,7 @@ class GeoJSONFeatureCollection {
   GeoJSONType get type => GeoJSONType.featureCollection;
 
   final List<GeoJSONFeature> features = <GeoJSONFeature>[];
-  
+
   GeoJSONFeatureCollection();
 
   GeoJSONFeatureCollection.fromMap(Map data) {
@@ -19,7 +19,7 @@ class GeoJSONFeatureCollection {
   }
 
   Map<String, dynamic> get toMap => {
-    'type': type.name,
-    'features': features.map((f) => f.toMap).toList(),
-  };
+        'type': type.name,
+        'features': features.map((f) => f.toMap).toList(),
+      };
 }

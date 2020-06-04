@@ -27,9 +27,9 @@ class GeoJSONMultiLineString implements Geometry {
 
   @override
   Map<String, dynamic> get toMap => {
-    'type': type.name,
-    'coordinates': coordinates,
-  };
+        'type': type.name,
+        'coordinates': coordinates,
+      };
 
   @override
   double get area => 0;

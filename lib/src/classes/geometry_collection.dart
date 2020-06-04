@@ -20,9 +20,9 @@ class GeoJSONGeometryCollection implements Geometry {
 
   @override
   Map<String, dynamic> get toMap => {
-    'type': 'GeometryCollection',
-    'geometries': geometries.map((e) => e.toMap).toList(),
-  };
+        'type': 'GeometryCollection',
+        'geometries': geometries.map((e) => e.toMap).toList(),
+      };
 
   @override
   double get area => 0;

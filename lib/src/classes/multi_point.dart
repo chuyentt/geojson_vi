@@ -7,7 +7,7 @@ class GeoJSONMultiPoint implements Geometry {
 
   @override
   GeometryType get type => GeometryType.multiPoint;
-  
+
   GeoJSONMultiPoint.fromMap(Map data) {
     var ll = data['coordinates'];
     final posArray = <List<double>>[];
@@ -23,9 +23,9 @@ class GeoJSONMultiPoint implements Geometry {
 
   @override
   Map<String, dynamic> get toMap => {
-    'type': type.name,
-    'coordinates': coordinates,
-  };
+        'type': type.name,
+        'coordinates': coordinates,
+      };
 
   @override
   double get area => 0;

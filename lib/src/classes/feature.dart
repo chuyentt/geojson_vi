@@ -46,13 +46,13 @@ class GeoJSONFeature {
   }
 
   Map<String, dynamic> get toMap => {
-    'type': type.name,
-    if (id != null) 'id': id,
-    'properties': properties,
-    if (bbox != null) 'bbox': bbox,
-    if (title != null) 'title': title,
-    'geometry': geometrySerialize
-  };
+        'type': type.name,
+        if (id != null) 'id': id,
+        'properties': properties,
+        if (bbox != null) 'bbox': bbox,
+        if (title != null) 'title': title,
+        'geometry': geometrySerialize
+      };
 
   Map<String, dynamic> get geometrySerialize {
     switch (geometry.type) {

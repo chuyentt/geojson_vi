@@ -65,3 +65,7 @@
 ## 1.2.0
 
 - Refactoring the code, create instance from a cache if available
+
+## 1.2.0+1
+
+- Format code
