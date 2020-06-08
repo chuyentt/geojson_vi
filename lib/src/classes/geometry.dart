@@ -1,5 +1,3 @@
-import '../helpers.dart';
-
 import 'point.dart';
 import 'multi_point.dart';
 import 'line_string.dart';
@@ -48,21 +46,21 @@ abstract class Geometry {
   double get area;
 
   factory Geometry.fromMap(Map data) {
-    GeometryType type = enumFromString(data['type'], GeometryType);
+    String type = data['type'];
     switch (type) {
-      case GeometryType.point:
+      case 'Point':
         return GeoJSONPoint.fromMap(data);
-      case GeometryType.multiPoint:
+      case 'MultiPoint':
         return GeoJSONMultiPoint.fromMap(data);
-      case GeometryType.lineString:
+      case 'LineString':
         return GeoJSONLineString.fromMap(data);
-      case GeometryType.multiLineString:
+      case 'MultiLineString':
         return GeoJSONMultiLineString.fromMap(data);
-      case GeometryType.polygon:
+      case 'Polygon':
         return GeoJSONPolygon.fromMap(data);
-      case GeometryType.multiPolygon:
+      case 'MultiPolygon':
         return GeoJSONMultiPolygon.fromMap(data);
-      case GeometryType.geometryCollection:
+      case 'GeometryCollection':
         return GeoJSONGeometryCollection.fromMap(data);
     }
     return null;

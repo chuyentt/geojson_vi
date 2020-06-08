@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'classes/feature_collection.dart';
 import 'classes/feature.dart';
-import 'helpers.dart';
 
 /// The abstract class of GeoJSON
 abstract class GeoJSON {
@@ -79,13 +78,13 @@ class _GeoJSON implements GeoJSON {
       await file.readAsString().then((data) async {
         var json = jsonDecode(data);
         if (data != null) {
-          GeoJSONType type = enumFromString(json['type'], GeoJSONType);
+          String type = json['type'];
           switch (type) {
-            case GeoJSONType.featureCollection:
+            case 'FeatureCollection':
               geoJSON._featureCollection =
                   GeoJSONFeatureCollection.fromMap(json);
               break;
-            case GeoJSONType.feature:
+            case 'Feature':
               geoJSON._featureCollection.features
                   .add(GeoJSONFeature.fromMap(json));
               break;

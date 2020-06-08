@@ -69,3 +69,15 @@
 ## 1.2.0+1
 
 - Format code
+
+## 1.2.0+2
+
+- Compatibility issues
+
+## 1.2.0+3
+
+- Compatibility issues
+
+## 1.2.1
+
+- Compatiple with Flutter
