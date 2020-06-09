@@ -1,6 +1,6 @@
-# GeoJSON package for Dart developers
+# GeoJSON package for Dart and Flutter developers
 
-GeoJSON package for Dart developers to create, read, search, update and delete the geospatial data interchange format. This package was originally published by Chuyen, T. T. (2020). The GeoJSON package for Dart developers. Zenodo. https://doi.org/10.5281/ZENODO.3841927.
+GeoJSON package for Dart and Flutter developers to create, read, search, update and delete the geospatial data interchange format (GIS data). This package was originally published by Chuyen, T. T. (2020). The GeoJSON package for Dart and Flutter developers. Zenodo. https://doi.org/10.5281/ZENODO.3841927.
 
 GeoJSON package support GeoJSON objects like spatially bounded entity (a Feature), or a list of Features (a FeatureCollection). GeoJSON supports the following geometry types like Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Features in GeoJSON contain a Geometry object and additional properties, and a FeatureCollection contains a list of Features.
 

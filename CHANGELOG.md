@@ -81,3 +81,7 @@
 ## 1.2.1
 
 - Compatiple with Flutter
+
+## 1.2.1+1
+
+- Update the document
