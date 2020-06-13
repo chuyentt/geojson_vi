@@ -85,3 +85,7 @@
 ## 1.2.1+1
 
 - Update the document
+
+## 1.2.2
+
+- Compatible with runtime flutter-web of web

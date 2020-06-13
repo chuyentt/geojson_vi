@@ -1,4 +1,5 @@
 # GeoJSON package for Dart and Flutter developers
+[![pub package](https://img.shields.io/pub/v/geojson_vi.svg)](https://pub.dartlang.org/packages/geojson_vi)
 
 GeoJSON package for Dart and Flutter developers to create, read, search, update and delete the geospatial data interchange format (GIS data). This package was originally published by Chuyen, T. T. (2020). The GeoJSON package for Dart and Flutter developers. Zenodo. https://doi.org/10.5281/ZENODO.3841927.
 

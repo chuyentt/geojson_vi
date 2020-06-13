@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 import 'classes/feature_collection.dart';
 import 'classes/feature.dart';
@@ -70,6 +70,7 @@ class _GeoJSON implements GeoJSON {
   /// Private load
   static Future<_GeoJSON> _load(String path) async {
     var file = File(path);
+
     var geoJSON = _GeoJSON(path);
     if (geoJSON._featureCollection != null) {
       return geoJSON;
