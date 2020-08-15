@@ -13,3 +13,4 @@ export 'src/classes/multi_line_string.dart';
 export 'src/classes/polygon.dart';
 export 'src/classes/multi_polygon.dart';
 export 'src/classes/geometry_collection.dart';
+export 'src/classes/feature_collection.dart';

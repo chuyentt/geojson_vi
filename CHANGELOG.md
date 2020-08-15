@@ -89,3 +89,7 @@
 ## 1.2.2
 
 - Compatible with runtime flutter-web of web
+
+## 1.2.3
+
+- Export FeatureCollection

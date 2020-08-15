@@ -4,7 +4,7 @@ Future<void> main() async {
   // ### Create a Feature with Point geometry
 
   // New GeoJSON
-  final geoJSON = GeoJSON.create('example/data/new.geojson');
+  final geoJSON = GeoJSON.create('data/new.geojson');
 
   // One position
   final pos = <double>[];
@@ -88,14 +88,13 @@ Future<void> main() async {
 
   // # Read the GeoJSON file
   var launchTime = DateTime.now();
-  await GeoJSON.load('example/data/parcels_82mb.geojson')
-      .then((GeoJSON geoJSON) {
+  await GeoJSON.load('data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
     print(geoJSON.featureCollection.features.length);
     print(DateTime.now().difference(launchTime));
   });
 
   // Calculate area of polygon
-  await GeoJSON.load('example/data/polygon_with_holes.geojson').then((value) {
+  await GeoJSON.load('data/polygon_with_holes.geojson').then((value) {
     value.featureCollection.features.forEach((element) {
       if (element.geometry.type == GeometryType.polygon) {
         GeoJSONPolygon pg = element.geometry;
@@ -114,8 +113,7 @@ Future<void> main() async {
 
   // # Read the GeoJSON file (cache applied)
   launchTime = DateTime.now();
-  await GeoJSON.load('example/data/parcels_82mb.geojson')
-      .then((GeoJSON geoJSON) {
+  await GeoJSON.load('data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
     print(geoJSON.featureCollection.features.length);
     print(DateTime.now().difference(launchTime));
   });
