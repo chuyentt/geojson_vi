@@ -36,6 +36,7 @@ class GeoJSONFeature {
 
   String _title;
   String get title => _title;
+  set title(String value) => _title = value;
 
   GeoJSONFeature.fromMap(Map data) {
     geometry = Geometry.fromMap(data['geometry']);

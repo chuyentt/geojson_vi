@@ -97,3 +97,11 @@
 ## 1.2.3+1
 
 - Make the id property of the feature writable
+
+## 1.2.3+2
+
+- Make the title property of the feature writable
+
+## 1.2.3+3
+
+- Removed some sample data files

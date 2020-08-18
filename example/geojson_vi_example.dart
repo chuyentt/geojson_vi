@@ -88,7 +88,7 @@ Future<void> main() async {
 
   // # Read the GeoJSON file
   var launchTime = DateTime.now();
-  await GeoJSON.load('data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
+  await GeoJSON.load('data/data.geojson').then((GeoJSON geoJSON) {
     print(geoJSON.featureCollection.features.length);
     print(DateTime.now().difference(launchTime));
   });
@@ -113,7 +113,7 @@ Future<void> main() async {
 
   // # Read the GeoJSON file (cache applied)
   launchTime = DateTime.now();
-  await GeoJSON.load('data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
+  await GeoJSON.load('data/polygon_with_holes.geojson').then((GeoJSON geoJSON) {
     print(geoJSON.featureCollection.features.length);
     print(DateTime.now().difference(launchTime));
   });
