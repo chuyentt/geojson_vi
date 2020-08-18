@@ -93,3 +93,7 @@
 ## 1.2.3
 
 - Export FeatureCollection
+
+## 1.2.3+1
+
+- Make the id property of the feature writable

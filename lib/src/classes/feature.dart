@@ -26,7 +26,7 @@ class GeoJSONFeature {
 
   String _id;
   String get id => _id;
-  // set id(value) => _id = value;
+  set id(String value) => _id = value;
 
   var _properties = <String, dynamic>{};
   Map<String, dynamic> get properties => _properties;
