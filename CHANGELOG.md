@@ -105,3 +105,7 @@
 ## 1.2.3+3
 
 - Removed some sample data files
+
+## 1.2.4
+
+- Handles errors

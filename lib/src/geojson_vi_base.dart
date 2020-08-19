@@ -70,7 +70,9 @@ class _GeoJSON implements GeoJSON {
   /// Private load
   static Future<_GeoJSON> _load(String path) async {
     var file = File(path);
-
+    if (!await file.exists()) {
+      return null;
+    }
     var geoJSON = _GeoJSON(path);
     if (geoJSON._featureCollection != null) {
       return geoJSON;
@@ -78,7 +80,7 @@ class _GeoJSON implements GeoJSON {
       /// Read file as string
       await file.readAsString().then((data) async {
         var json = jsonDecode(data);
-        if (data != null) {
+        if (json != null) {
           String type = json['type'];
           switch (type) {
             case 'FeatureCollection':
@@ -91,7 +93,13 @@ class _GeoJSON implements GeoJSON {
               break;
           }
         }
-      }).catchError((onError) => print('Error, could not open file'));
+      }).catchError((onError) {
+        print('Error, could not open file');
+        return null;
+      });
+
+      /// For empty file
+      geoJSON._featureCollection ??= GeoJSONFeatureCollection();
       return geoJSON;
     }
   }
