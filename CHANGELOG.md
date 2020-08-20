@@ -115,3 +115,6 @@
 
 ## 1.3.1
 - Fixed bbox reading
+
+## 1.3.1+1
+- Removed debugging info

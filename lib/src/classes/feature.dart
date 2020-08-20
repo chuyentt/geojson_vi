@@ -69,7 +69,6 @@ class GeoJSONFeature {
     switch (geometry.type) {
       case GeometryType.point:
         final geom = geometry as GeoJSONPoint;
-        print(geom.bbox);
         return geom.toMap;
         break;
       case GeometryType.lineString:
@@ -82,7 +81,6 @@ class GeoJSONFeature {
         break;
       case GeometryType.polygon:
         final geom = geometry as GeoJSONPolygon;
-        print(geom.bbox);
         return geom.toMap;
         break;
       case GeometryType.multiLineString:
