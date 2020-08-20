@@ -42,7 +42,16 @@ class GeoJSONFeature {
     geometry = Geometry.fromMap(data['geometry']);
     _id = data['id'];
     _properties = data['properties'];
-    _bbox = data['bbox'];
+    List<dynamic> b = data['bbox'];
+    var bb = <double>[];
+    if (b != null) {
+      b.forEach((element) {
+        bb.add(element.toDouble());
+      });
+      if (bb.isNotEmpty && bb.length == 4) {
+        _bbox = bb;
+      }
+    }
     _title = data['title'];
   }
 
