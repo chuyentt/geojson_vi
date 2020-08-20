@@ -94,7 +94,7 @@ class _GeoJSON implements GeoJSON {
           }
         }
       }).catchError((onError) {
-        print('Error, could not open file');
+        print(onError ?? 'Unkonwn error!');
         return null;
       });
 

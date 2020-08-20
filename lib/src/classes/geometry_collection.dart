@@ -26,4 +26,7 @@ class GeoJSONGeometryCollection implements Geometry {
 
   @override
   double get area => 0;
+
+  @override
+  List<double> get bbox => [0, 0, 0, 0]; //west, south, east, north
 }

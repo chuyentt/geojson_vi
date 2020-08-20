@@ -109,3 +109,6 @@
 ## 1.2.4
 
 - Handles errors
+
+## 1.3.0
+- Added bbox properties and fixed minor bugs

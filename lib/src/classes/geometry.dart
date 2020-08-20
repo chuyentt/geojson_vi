@@ -44,6 +44,7 @@ abstract class Geometry {
   GeometryType get type;
 
   double get area;
+  List<double> get bbox;
 
   factory Geometry.fromMap(Map data) {
     String type = data['type'];

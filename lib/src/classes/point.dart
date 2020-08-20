@@ -12,7 +12,7 @@ class GeoJSONPoint implements Geometry {
     var l = data['coordinates'];
     final pos = <double>[];
     l.forEach((value) {
-      pos.add(value);
+      pos.add(value.toDouble());
     });
     coordinates = pos;
   }
@@ -25,4 +25,8 @@ class GeoJSONPoint implements Geometry {
 
   @override
   double get area => 0;
+
+  @override
+  List<double> get bbox =>
+      [coordinates[0], coordinates[1], coordinates[0], coordinates[1]];
 }

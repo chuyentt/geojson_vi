@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import '../geojson_vi_base.dart';
 import 'feature.dart';
 

@@ -50,7 +50,8 @@ class GeoJSONFeature {
         'type': type.name,
         if (id != null) 'id': id,
         'properties': properties,
-        if (bbox != null) 'bbox': bbox,
+        'bbox': (bbox != null) ? bbox : geometry.bbox,
+        // if (bbox != null) 'bbox': bbox,
         if (title != null) 'title': title,
         'geometry': geometrySerialize
       };
@@ -59,6 +60,7 @@ class GeoJSONFeature {
     switch (geometry.type) {
       case GeometryType.point:
         final geom = geometry as GeoJSONPoint;
+        print(geom.bbox);
         return geom.toMap;
         break;
       case GeometryType.lineString:
@@ -71,6 +73,7 @@ class GeoJSONFeature {
         break;
       case GeometryType.polygon:
         final geom = geometry as GeoJSONPolygon;
+        print(geom.bbox);
         return geom.toMap;
         break;
       case GeometryType.multiLineString:

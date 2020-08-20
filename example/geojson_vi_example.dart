@@ -99,6 +99,7 @@ Future<void> main() async {
       if (element.geometry.type == GeometryType.polygon) {
         GeoJSONPolygon pg = element.geometry;
         print('Area: ${pg.area}');
+        print('bbox: ${pg.bbox}');
       }
     });
   });

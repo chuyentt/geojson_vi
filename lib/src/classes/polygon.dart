@@ -19,7 +19,7 @@ class GeoJSONPolygon implements Geometry {
       ll.forEach((l) {
         final pos = <double>[];
         l.forEach((value) {
-          pos.add(value);
+          pos.add(value.toDouble());
         });
         posArray.add(pos);
       });
@@ -57,5 +57,25 @@ class GeoJSONPolygon implements Geometry {
       _area -= _ringArea(interiorRing);
     }
     return _area;
+  }
+
+  @override
+  List<double> get bbox {
+    double swlat;
+    double swlng;
+    double nelat;
+    double nelng;
+    var first = coordinates.first.first;
+    swlat ??= first[1];
+    swlng ??= first[0];
+    nelat ??= first[1];
+    nelng ??= first[0];
+    coordinates.first.forEach((List<double> pos) {
+      if (swlat > pos[1]) swlat = pos[1];
+      if (nelat < pos[1]) nelat = pos[1];
+      if (swlng > pos[0]) swlng = pos[0];
+      if (nelng < pos[0]) nelng = pos[0];
+    });
+    return [swlng, swlat, nelng, nelat]; //west, south, east, north
   }
 }
