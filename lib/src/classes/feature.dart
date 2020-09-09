@@ -30,6 +30,7 @@ class GeoJSONFeature {
 
   var _properties = <String, dynamic>{};
   Map<String, dynamic> get properties => _properties;
+  set properties(Map<String, dynamic> value) => _properties = value;
 
   List<double> _bbox; // [west, south, east, north]
   List<double> get bbox => _bbox;

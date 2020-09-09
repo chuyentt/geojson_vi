@@ -20,8 +20,10 @@ Future<void> main() async {
   feature_point.properties['marker-color'] = '#7e7e7e';
   feature_point.properties['marker-size'] = 'medium';
   feature_point.properties['marker-symbol'] = 'college';
-  feature_point.properties['title'] = 'Hanoi University of Mining and Geology';
-  feature_point.properties['department'] = 'Geoinformation Technology';
+  feature_point.properties['title'] =
+      'Hanoi University of Mining and Geology';
+  feature_point.properties['department'] =
+      'Geoinformation Technology';
   feature_point.properties['address'] =
       'No.18 Vien Street - Duc Thang Ward - Bac Tu Liem District - Ha Noi';
   feature_point.properties['url'] = 'http://humg.edu.vn';
@@ -105,16 +107,20 @@ Future<void> main() async {
   });
 
   // Search by geometry and properties
-  var polygonFeatures = geoJSON.featureCollection.features.where((element) {
+  var polygonFeatures =
+      geoJSON.featureCollection.features.where((element) {
     return (element.geometry.type == GeometryType.polygon &&
         (element.properties['title']).contains('HUMG'));
   }).toList();
 
-  print(polygonFeatures.isNotEmpty ? polygonFeatures.first.toMap : 'not found');
+  print(polygonFeatures.isNotEmpty
+      ? polygonFeatures.first.toMap
+      : 'not found');
 
   // # Read the GeoJSON file (cache applied)
   launchTime = DateTime.now();
-  await GeoJSON.load('data/polygon_with_holes.geojson').then((GeoJSON geoJSON) {
+  await GeoJSON.load('data/polygon_with_holes.geojson')
+      .then((GeoJSON geoJSON) {
     print(geoJSON.featureCollection.features.length);
     print(DateTime.now().difference(launchTime));
   });

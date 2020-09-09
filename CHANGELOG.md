@@ -118,3 +118,9 @@
 
 ## 1.3.1+1
 - Removed debugging info
+
+## 1.3.1+2
+- Removed debugging info
+
+## 1.3.1+3
+- Make properties member public
