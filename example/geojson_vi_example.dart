@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:geojson_vi/geojson_vi.dart';
 
 Future<void> main() async {
@@ -125,4 +127,10 @@ Future<void> main() async {
     print(geoJSON.featureCollection.features.length);
     print(DateTime.now().difference(launchTime));
   });
+
+  // Create GeoJSON from GeoJSON String Objects
+  var data = jsonEncode(geoJSON.featureCollection.toMap);
+
+  var g = GeoJSON.fromString(data);
+  print(g.featureCollection.features.length);
 }

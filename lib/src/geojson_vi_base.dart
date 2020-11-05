@@ -24,8 +24,19 @@ abstract class GeoJSON {
     return geoJSON;
   }
 
+  /// Create new GeoJSON from GeoJSON String
+  static GeoJSON fromString(String data) {
+    return _GeoJSON._fromString(data);
+  }
+
   /// Save to file or save as for new file path
   Future<File> save({String newPath});
+
+  /// Clear all cached
+  void clearAll();
+
+  /// Clear cached for the path
+  void clear(String path);
 }
 
 /// The GeoJSON Type
@@ -104,6 +115,28 @@ class _GeoJSON implements GeoJSON {
     }
   }
 
+  /// GeoJSON From String
+  static _GeoJSON _fromString(String data) {
+    _cache.remove('tmp');
+    var geoJSON = _GeoJSON('tmp');
+
+    var json = jsonDecode(data);
+    if (json != null) {
+      String type = json['type'];
+      switch (type) {
+        case 'FeatureCollection':
+          geoJSON._featureCollection =
+              GeoJSONFeatureCollection.fromMap(json);
+          break;
+        case 'Feature':
+          geoJSON._featureCollection.features
+              .add(GeoJSONFeature.fromMap(json));
+          break;
+      }
+    }
+    return geoJSON;
+  }
+
   @override
   String get path => _path;
 
@@ -117,5 +150,15 @@ class _GeoJSON implements GeoJSON {
     var file = File(filePath);
     return file.writeAsString(
         JsonEncoder().convert(_featureCollection.toMap));
+  }
+
+  @override
+  void clear(String path) {
+    _cache.remove(path);
+  }
+
+  @override
+  void clearAll() {
+    _cache.clear();
   }
 }

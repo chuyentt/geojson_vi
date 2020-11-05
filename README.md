@@ -164,6 +164,20 @@ void main() {
   }).toList();
 
   print(polygonFeatures.isNotEmpty ? polygonFeatures.first.toMap : 'not found');
+
+  // # Read the GeoJSON file (cache applied)
+  launchTime = DateTime.now();
+  await GeoJSON.load('data/polygon_with_holes.geojson')
+      .then((GeoJSON geoJSON) {
+    print(geoJSON.featureCollection.features.length);
+    print(DateTime.now().difference(launchTime));
+  });
+
+  // Create GeoJSON from GeoJSON String Objects
+  var data = jsonEncode(geoJSON.featureCollection.toMap);
+
+  var g = GeoJSON.fromString(data);
+  print(g.featureCollection.features.length);
 }
 ```
 Output: ```new.geojson```

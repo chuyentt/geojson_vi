@@ -127,3 +127,6 @@
 
 ## 1.3.2
 - Added distance getter for LineString
+
+## 1.3.3
+- Create GeoJSON from GeoJSON String Objects, clear cache
