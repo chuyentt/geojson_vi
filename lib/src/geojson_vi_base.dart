@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:universal_io/io.dart';
+import 'dart:io';
 
 import 'classes/feature_collection.dart';
 import 'classes/feature.dart';
@@ -108,12 +108,14 @@ class _GeoJSON implements GeoJSON {
   String get path => _path;
 
   @override
-  GeoJSONFeatureCollection get featureCollection => _featureCollection;
+  GeoJSONFeatureCollection get featureCollection =>
+      _featureCollection;
 
   @override
   Future<File> save({String newPath}) {
     var filePath = newPath ?? path;
     var file = File(filePath);
-    return file.writeAsString(JsonEncoder().convert(_featureCollection.toMap));
+    return file.writeAsString(
+        JsonEncoder().convert(_featureCollection.toMap));
   }
 }

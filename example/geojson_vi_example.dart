@@ -50,6 +50,7 @@ Future<void> main() async {
 
   // Add the fearture to featureCollection
   geoJSON.featureCollection.features.add(feature_line_string);
+  print(feature_line_string.geometry.distance);
 
   // ### Create a Feature with Polygon geometry
 

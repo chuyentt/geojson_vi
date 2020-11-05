@@ -27,6 +27,13 @@ class GeoJSONPoint implements Geometry {
   double get area => 0;
 
   @override
-  List<double> get bbox =>
-      [coordinates[0], coordinates[1], coordinates[0], coordinates[1]];
+  double get distance => 0;
+
+  @override
+  List<double> get bbox => [
+        coordinates[0],
+        coordinates[1],
+        coordinates[0],
+        coordinates[1]
+      ];
 }

@@ -35,6 +35,9 @@ class GeoJSONMultiLineString implements Geometry {
   double get area => 0;
 
   @override
+  double get distance => 0;
+
+  @override
   List<double> get bbox {
     double swlat;
     double swlng;

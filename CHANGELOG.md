@@ -124,3 +124,6 @@
 
 ## 1.3.1+3
 - Make properties member public
+
+## 1.3.2
+- Added distance getter for LineString
