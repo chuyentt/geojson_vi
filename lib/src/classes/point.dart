@@ -34,6 +34,6 @@ class GeoJSONPoint implements Geometry {
         coordinates[0],
         coordinates[1],
         coordinates[0],
-        coordinates[1]
+        coordinates[1],
       ];
 }

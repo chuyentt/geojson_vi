@@ -125,12 +125,12 @@ class _GeoJSON implements GeoJSON {
       String type = json['type'];
       switch (type) {
         case 'FeatureCollection':
-          geoJSON._featureCollection =
-              GeoJSONFeatureCollection.fromMap(json);
+          final fc = GeoJSONFeatureCollection.fromMap(json);
+          geoJSON._featureCollection = fc;
           break;
         case 'Feature':
-          geoJSON._featureCollection.features
-              .add(GeoJSONFeature.fromMap(json));
+          final f = GeoJSONFeature.fromMap(json);
+          geoJSON._featureCollection.features.add(f);
           break;
       }
     }
@@ -141,15 +141,15 @@ class _GeoJSON implements GeoJSON {
   String get path => _path;
 
   @override
-  GeoJSONFeatureCollection get featureCollection =>
-      _featureCollection;
+  GeoJSONFeatureCollection get featureCollection => _featureCollection;
 
   @override
   Future<File> save({String newPath}) {
     var filePath = newPath ?? path;
     var file = File(filePath);
     return file.writeAsString(
-        JsonEncoder().convert(_featureCollection.toMap));
+      JsonEncoder().convert(_featureCollection.toMap),
+    );
   }
 
   @override

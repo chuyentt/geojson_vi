@@ -130,3 +130,6 @@
 
 ## 1.3.3
 - Create GeoJSON from GeoJSON String Objects, clear cache
+
+## 1.3.3+1
+- Formatting issues

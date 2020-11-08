@@ -22,12 +22,12 @@ Future<void> main() async {
   feature_point.properties['marker-color'] = '#7e7e7e';
   feature_point.properties['marker-size'] = 'medium';
   feature_point.properties['marker-symbol'] = 'college';
-  feature_point.properties['title'] =
-      'Hanoi University of Mining and Geology';
-  feature_point.properties['department'] =
-      'Geoinformation Technology';
+  feature_point.properties['title'] = 'Hanoi University of Mining and '
+      'Geology';
+  feature_point.properties['department'] = 'Geoinformation Technology';
   feature_point.properties['address'] =
-      'No.18 Vien Street - Duc Thang Ward - Bac Tu Liem District - Ha Noi';
+      'No.18 Vien Street - Duc Thang Ward - Bac Tu Liem District - '
+      'Ha Noi';
   feature_point.properties['url'] = 'http://humg.edu.vn';
 
   // Add the feature to featureCollection
