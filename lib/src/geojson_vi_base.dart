@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:geojson_vi/geojson_vi.dart';
+
 import 'classes/feature_collection.dart';
 import 'classes/feature.dart';
 
@@ -99,8 +101,51 @@ class _GeoJSON implements GeoJSON {
                   GeoJSONFeatureCollection.fromMap(json);
               break;
             case 'Feature':
-              geoJSON._featureCollection.features
-                  .add(GeoJSONFeature.fromMap(json));
+              final fc = GeoJSONFeatureCollection();
+              fc.features.add(GeoJSONFeature.fromMap(json));
+              geoJSON._featureCollection = fc;
+              break;
+            case 'Point':
+              final fc = GeoJSONFeatureCollection();
+              fc.features
+                  .add(GeoJSONFeature(GeoJSONPoint.fromMap(json)));
+              geoJSON._featureCollection = fc;
+              break;
+            case 'MultiPoint':
+              final fc = GeoJSONFeatureCollection();
+              fc.features
+                  .add(GeoJSONFeature(GeoJSONMultiPoint.fromMap(json)));
+              geoJSON._featureCollection = fc;
+              break;
+            case 'LineString':
+              final fc = GeoJSONFeatureCollection();
+              fc.features
+                  .add(GeoJSONFeature(GeoJSONLineString.fromMap(json)));
+              geoJSON._featureCollection = fc;
+              break;
+            case 'MultiLineString':
+              final fc = GeoJSONFeatureCollection();
+              fc.features.add(
+                  GeoJSONFeature(GeoJSONMultiLineString.fromMap(json)));
+              geoJSON._featureCollection = fc;
+              break;
+            case 'Polygon':
+              final fc = GeoJSONFeatureCollection();
+              fc.features
+                  .add(GeoJSONFeature(GeoJSONPolygon.fromMap(json)));
+              geoJSON._featureCollection = fc;
+              break;
+            case 'MultiPolygon':
+              final fc = GeoJSONFeatureCollection();
+              fc.features.add(
+                  GeoJSONFeature(GeoJSONMultiPolygon.fromMap(json)));
+              geoJSON._featureCollection = fc;
+              break;
+            case 'GeometryCollection':
+              final fc = GeoJSONFeatureCollection();
+              fc.features.add(GeoJSONFeature(
+                  GeoJSONGeometryCollection.fromMap(json)));
+              geoJSON._featureCollection = fc;
               break;
           }
         }
@@ -116,6 +161,10 @@ class _GeoJSON implements GeoJSON {
   }
 
   /// GeoJSON From String
+  ///
+  /// FeatureCollection, Feature and all the Geometries like
+  /// Point, MultiPoint, LineString, MultiLineString, Polygon,
+  /// MultiPolygon and GeometryCollection string
   static _GeoJSON _fromString(String data) {
     _cache.remove('tmp');
     var geoJSON = _GeoJSON('tmp');
@@ -129,8 +178,49 @@ class _GeoJSON implements GeoJSON {
           geoJSON._featureCollection = fc;
           break;
         case 'Feature':
-          final f = GeoJSONFeature.fromMap(json);
-          geoJSON._featureCollection.features.add(f);
+          final fc = GeoJSONFeatureCollection();
+          fc.features.add(GeoJSONFeature.fromMap(json));
+          geoJSON._featureCollection = fc;
+          break;
+        case 'Point':
+          final fc = GeoJSONFeatureCollection();
+          fc.features.add(GeoJSONFeature(GeoJSONPoint.fromMap(json)));
+          geoJSON._featureCollection = fc;
+          break;
+        case 'MultiPoint':
+          final fc = GeoJSONFeatureCollection();
+          fc.features
+              .add(GeoJSONFeature(GeoJSONMultiPoint.fromMap(json)));
+          geoJSON._featureCollection = fc;
+          break;
+        case 'LineString':
+          final fc = GeoJSONFeatureCollection();
+          fc.features
+              .add(GeoJSONFeature(GeoJSONLineString.fromMap(json)));
+          geoJSON._featureCollection = fc;
+          break;
+        case 'MultiLineString':
+          final fc = GeoJSONFeatureCollection();
+          fc.features
+              .add(GeoJSONFeature(GeoJSONMultiLineString.fromMap(json)));
+          geoJSON._featureCollection = fc;
+          break;
+        case 'Polygon':
+          final fc = GeoJSONFeatureCollection();
+          fc.features.add(GeoJSONFeature(GeoJSONPolygon.fromMap(json)));
+          geoJSON._featureCollection = fc;
+          break;
+        case 'MultiPolygon':
+          final fc = GeoJSONFeatureCollection();
+          fc.features
+              .add(GeoJSONFeature(GeoJSONMultiPolygon.fromMap(json)));
+          geoJSON._featureCollection = fc;
+          break;
+        case 'GeometryCollection':
+          final fc = GeoJSONFeatureCollection();
+          fc.features.add(
+              GeoJSONFeature(GeoJSONGeometryCollection.fromMap(json)));
+          geoJSON._featureCollection = fc;
           break;
       }
     }

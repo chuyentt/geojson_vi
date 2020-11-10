@@ -133,3 +133,6 @@
 
 ## 1.3.3+1
 - Formatting issues
+
+## 1.4.0
+- GeoJSON from GeoJSON String Objects is supported: FeatureCollection, Feature and all the Geometries like Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon and GeometryCollection string
