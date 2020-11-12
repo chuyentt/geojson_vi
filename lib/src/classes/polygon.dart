@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'geometry.dart';
@@ -27,12 +28,6 @@ class GeoJSONPolygon implements Geometry {
     });
     coordinates = ringArray;
   }
-
-  @override
-  Map<String, dynamic> get toMap => {
-        'type': type.name,
-        'coordinates': coordinates,
-      };
 
   double _ringArea(List<List<double>> ringPos) {
     const WGS84_RADIUS = 6378137.0;
@@ -80,5 +75,18 @@ class GeoJSONPolygon implements Geometry {
       if (nelng < pos[0]) nelng = pos[0];
     });
     return [swlng, swlat, nelng, nelat]; //west, south, east, north
+  }
+
+  /// A collection of key/value pairs of geospatial data
+  @override
+  Map<String, dynamic> get toMap => {
+        'type': type.name,
+        'coordinates': coordinates,
+      };
+
+  /// A collection of key/value pairs of geospatial data as String
+  @override
+  String toString() {
+    return jsonEncode(toMap);
   }
 }

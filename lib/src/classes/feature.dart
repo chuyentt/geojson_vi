@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../geojson_vi_base.dart';
 import 'geometry.dart';
 import 'multi_point.dart';
@@ -56,16 +58,6 @@ class GeoJSONFeature {
     _title = data['title'];
   }
 
-  Map<String, dynamic> get toMap => {
-        'type': type.name,
-        if (id != null) 'id': id,
-        'properties': properties,
-        'bbox': (bbox != null) ? bbox : geometry.bbox,
-        // if (bbox != null) 'bbox': bbox,
-        if (title != null) 'title': title,
-        'geometry': geometrySerialize
-      };
-
   Map<String, dynamic> get geometrySerialize {
     switch (geometry.type) {
       case GeometryType.point:
@@ -99,5 +91,22 @@ class GeoJSONFeature {
       default:
     }
     return {};
+  }
+
+  /// A collection of key/value pairs of geospatial data
+  Map<String, dynamic> get toMap => {
+        'type': type.name,
+        if (id != null) 'id': id,
+        'properties': properties,
+        'bbox': (bbox != null) ? bbox : geometry.bbox,
+        // if (bbox != null) 'bbox': bbox,
+        if (title != null) 'title': title,
+        'geometry': geometrySerialize
+      };
+
+  /// A collection of key/value pairs of geospatial data as String
+  @override
+  String toString() {
+    return jsonEncode(toMap);
   }
 }

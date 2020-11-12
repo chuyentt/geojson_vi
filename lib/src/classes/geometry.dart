@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'point.dart';
 import 'multi_point.dart';
 import 'line_string.dart';
@@ -68,5 +70,12 @@ abstract class Geometry {
     return null;
   }
 
+  /// A collection of key/value pairs of geospatial data
   Map<String, dynamic> get toMap;
+
+  /// A collection of key/value pairs of geospatial data as String
+  @override
+  String toString() {
+    return jsonEncode(toMap);
+  }
 }

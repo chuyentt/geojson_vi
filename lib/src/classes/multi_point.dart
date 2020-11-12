@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các điểm
@@ -20,12 +22,6 @@ class GeoJSONMultiPoint implements Geometry {
     });
     coordinates = posArray;
   }
-
-  @override
-  Map<String, dynamic> get toMap => {
-        'type': type.name,
-        'coordinates': coordinates,
-      };
 
   @override
   double get area => 0;
@@ -51,5 +47,18 @@ class GeoJSONMultiPoint implements Geometry {
       if (nelng < pos[0]) nelng = pos[0];
     });
     return [swlng, swlat, nelng, nelat]; //west, south, east, north
+  }
+
+  /// A collection of key/value pairs of geospatial data
+  @override
+  Map<String, dynamic> get toMap => {
+        'type': type.name,
+        'coordinates': coordinates,
+      };
+
+  /// A collection of key/value pairs of geospatial data as String
+  @override
+  String toString() {
+    return jsonEncode(toMap);
   }
 }

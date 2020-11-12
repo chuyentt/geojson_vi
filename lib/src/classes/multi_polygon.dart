@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các vùng
@@ -30,12 +32,6 @@ class GeoJSONMultiPolygon implements Geometry {
   }
 
   @override
-  Map<String, dynamic> get toMap => {
-        'type': type.name,
-        'coordinates': coordinates,
-      };
-
-  @override
   double get area => 0;
 
   @override
@@ -61,5 +57,18 @@ class GeoJSONMultiPolygon implements Geometry {
       });
     });
     return [swlng, swlat, nelng, nelat]; //west, south, east, north
+  }
+
+  /// A collection of key/value pairs of geospatial data
+  @override
+  Map<String, dynamic> get toMap => {
+        'type': type.name,
+        'coordinates': coordinates,
+      };
+
+  /// A collection of key/value pairs of geospatial data as String
+  @override
+  String toString() {
+    return jsonEncode(toMap);
   }
 }

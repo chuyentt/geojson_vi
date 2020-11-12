@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math' show cos, sqrt, asin;
 import 'geometry.dart';
 
@@ -21,12 +22,6 @@ class GeoJSONLineString implements Geometry {
     });
     coordinates = posArray;
   }
-
-  @override
-  Map<String, dynamic> get toMap => {
-        'type': type.name,
-        'coordinates': coordinates,
-      };
 
   @override
   double get area => 0;
@@ -69,5 +64,18 @@ class GeoJSONLineString implements Geometry {
       if (nelng < pos[0]) nelng = pos[0];
     });
     return [swlng, swlat, nelng, nelat]; //west, south, east, north
+  }
+
+  /// A collection of key/value pairs of geospatial data
+  @override
+  Map<String, dynamic> get toMap => {
+        'type': type.name,
+        'coordinates': coordinates,
+      };
+
+  /// A collection of key/value pairs of geospatial data as String
+  @override
+  String toString() {
+    return jsonEncode(toMap);
   }
 }

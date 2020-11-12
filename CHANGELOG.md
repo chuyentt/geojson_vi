@@ -136,3 +136,6 @@
 
 ## 1.4.0
 - GeoJSON from GeoJSON String Objects is supported: FeatureCollection, Feature and all the Geometries like Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon and GeometryCollection string
+
+## 1.5.0
+-  Added toString() to save GeoJSON objects as string

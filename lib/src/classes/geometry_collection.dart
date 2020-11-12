@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu tập hợp các đối tượng hình học
@@ -19,12 +21,6 @@ class GeoJSONGeometryCollection implements Geometry {
   }
 
   @override
-  Map<String, dynamic> get toMap => {
-        'type': 'GeometryCollection',
-        'geometries': geometries.map((e) => e.toMap).toList(),
-      };
-
-  @override
   double get area => 0;
 
   @override
@@ -32,4 +28,17 @@ class GeoJSONGeometryCollection implements Geometry {
 
   @override
   List<double> get bbox => [0, 0, 0, 0]; //west, south, east, north
+
+  /// A collection of key/value pairs of geospatial data
+  @override
+  Map<String, dynamic> get toMap => {
+        'type': 'GeometryCollection',
+        'geometries': geometries.map((e) => e.toMap).toList(),
+      };
+
+  /// A collection of key/value pairs of geospatial data as String
+  @override
+  String toString() {
+    return jsonEncode(toMap);
+  }
 }
