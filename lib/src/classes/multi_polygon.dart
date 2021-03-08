@@ -39,24 +39,33 @@ class GeoJSONMultiPolygon implements Geometry {
 
   @override
   List<double> get bbox {
-    double swlat;
-    double swlng;
-    double nelat;
-    double nelng;
-    var first = coordinates.first.first.first;
-    swlat ??= first[1];
-    swlng ??= first[0];
-    nelat ??= first[1];
-    nelng ??= first[0];
-    coordinates.first.forEach((coords) {
-      coords.forEach((List<double> pos) {
-        if (swlat > pos[1]) swlat = pos[1];
-        if (nelat < pos[1]) nelat = pos[1];
-        if (swlng > pos[0]) swlng = pos[0];
-        if (nelng < pos[0]) nelng = pos[0];
-      });
-    });
-    return [swlng, swlat, nelng, nelat]; //west, south, east, north
+    final longitudes = coordinates
+        .expand(
+          (element) => element.expand(
+            (element) => element.expand(
+              (element) => [element.first],
+            ),
+          ),
+        )
+        .toList();
+    final latitudes = coordinates
+        .expand(
+          (element) => element.expand(
+            (element) => element.expand(
+              (element) => [element.last],
+            ),
+          ),
+        )
+        .toList();
+    longitudes.sort();
+    latitudes.sort();
+
+    return [
+      longitudes.first,
+      latitudes.first,
+      longitudes.last,
+      latitudes.last,
+    ]; //west, south, east, north
   }
 
   /// A collection of key/value pairs of geospatial data
