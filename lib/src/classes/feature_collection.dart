@@ -21,14 +21,16 @@ class GeoJSONFeatureCollection {
   }
 
   /// A collection of key/value pairs of geospatial data
-  Map<String, dynamic> get toMap => {
-        'type': type.name,
-        'features': features.map((f) => f.toMap).toList(),
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.name,
+      'features': features.map((f) => f.toMap()).toList(),
+    };
+  }
 
   /// A collection of key/value pairs of geospatial data as String
   @override
   String toString() {
-    return jsonEncode(toMap);
+    return jsonEncode(toMap());
   }
 }

@@ -238,7 +238,7 @@ class _GeoJSON implements GeoJSON {
     var filePath = newPath ?? path;
     var file = File(filePath);
     return file.writeAsString(
-      JsonEncoder().convert(_featureCollection.toMap),
+      JsonEncoder().convert(_featureCollection.toMap()),
     );
   }
 

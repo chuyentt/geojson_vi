@@ -117,7 +117,7 @@ Future<void> main() async {
   }).toList();
 
   print(polygonFeatures.isNotEmpty
-      ? polygonFeatures.first.toMap
+      ? polygonFeatures.first.toMap()
       : 'not found');
 
   // # Read the GeoJSON file (cache applied)
@@ -129,7 +129,7 @@ Future<void> main() async {
   });
 
   // Create GeoJSON from GeoJSON String Objects
-  var data = jsonEncode(geoJSON.featureCollection.toMap);
+  var data = jsonEncode(geoJSON.featureCollection.toMap());
 
   var g = GeoJSON.fromString(data);
   print(g.featureCollection.features.length);

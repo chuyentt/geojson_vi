@@ -31,14 +31,14 @@ class GeoJSONGeometryCollection implements Geometry {
 
   /// A collection of key/value pairs of geospatial data
   @override
-  Map<String, dynamic> get toMap => {
+  Map<String, dynamic> toMap() => {
         'type': 'GeometryCollection',
-        'geometries': geometries.map((e) => e.toMap).toList(),
+        'geometries': geometries.map((e) => e.toMap()).toList(),
       };
 
   /// A collection of key/value pairs of geospatial data as String
   @override
   String toString() {
-    return jsonEncode(toMap);
+    return jsonEncode(toMap());
   }
 }

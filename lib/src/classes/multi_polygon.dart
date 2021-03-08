@@ -61,7 +61,7 @@ class GeoJSONMultiPolygon implements Geometry {
 
   /// A collection of key/value pairs of geospatial data
   @override
-  Map<String, dynamic> get toMap => {
+  Map<String, dynamic> toMap() => {
         'type': type.name,
         'coordinates': coordinates,
       };
@@ -69,6 +69,6 @@ class GeoJSONMultiPolygon implements Geometry {
   /// A collection of key/value pairs of geospatial data as String
   @override
   String toString() {
-    return jsonEncode(toMap);
+    return jsonEncode(toMap());
   }
 }

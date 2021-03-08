@@ -14,7 +14,7 @@ GeoJSON package support GeoJSON objects like spatially bounded entity (a Feature
 import 'package:geojson_vi/geojson_vi.dart';
 
 void main() {
-  
+
   // # Read the GeoJSON file
   var launchTime = DateTime.now();
   await GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
@@ -44,7 +44,7 @@ import 'package:geojson_vi/geojson_vi.dart';
 void main() {
   // ### Create new GeoJSON with a Feature
   // Create an empty GeoJSON file, then add a feature and save it.
-  
+
   // New GeoJSON
   final geoJSON = GeoJSON.create('example/data/new.geojson');
   // TODO: your code here...
@@ -56,9 +56,9 @@ void main() {
 import 'package:geojson_vi/geojson_vi.dart';
 
 void main() {
-  
+
   // ### Create a Feature with Point geometry
-  
+
   // New GeoJSON
   final geoJSON = GeoJSON.create('example/data/new.geojson');
 
@@ -70,7 +70,7 @@ void main() {
 
   // Create a Point geometry from one position
   final geom_point = GeoJSONPoint(pos);
-  
+
   // Create a Feature
   final feature_point = GeoJSONFeature(geom_point);
   feature_point.properties['marker-color'] = '#7e7e7e';
@@ -85,27 +85,27 @@ void main() {
   geoJSON.featureCollection.features.add(feature_point);
 
   // ### Create a Feature with LineString geometry
-  
+
   // LineString from 3 positions
   final pos1 = [105.7771289,21.0715458];
   final pos2 = [105.7745218,21.0715658];
   final pos3 = [105.7729125,21.0715358];
-  
+
   // Create a LineString geometry from array of position
   final geom_line_string = GeoJSONLineString([pos1, pos2, pos3]);
-  
-  // Create a Feature 
+
+  // Create a Feature
   final feature_line_string = GeoJSONFeature(geom_line_string);
   feature_line_string.properties['stroke'] = '#7e7e7e';
   feature_line_string.properties['stroke-width'] = 2;
   feature_line_string.properties['stroke-opacity'] = 1;
   feature_line_string.properties['title'] = 'Vien St.';
-  
+
   // Add the fearture to featureCollection
   geoJSON.featureCollection.features.add(feature_line_string);
 
   // ### Create a Feature with Polygon geometry
-  
+
   // A linear ring is a closed LineString with four or more positions.
   // The first and last positions are equivalent, and they MUST contain
   // identical values; their representation SHOULD also be identical.
@@ -120,13 +120,13 @@ void main() {
 
   //The exterior ring (boundary)
   final linerRing = [p01,p02,p03,p04,p05,p06,p07,p08];
-  
+
   // Create a Polygon geometry from array of position
   final geom_polygon = GeoJSONPolygon([
     linerRing,
     // and others the interior rings (if present) bound holes within the surface
   ]);
-  
+
   // Create a Feature
   final feature_polygon = GeoJSONFeature(geom_polygon);
   feature_polygon.properties['stroke'] = '#555555';
@@ -163,7 +163,7 @@ void main() {
     return (element.geometry.type == GeometryType.polygon && (element.properties['title']).contains('HUMG'));
   }).toList();
 
-  print(polygonFeatures.isNotEmpty ? polygonFeatures.first.toMap : 'not found');
+  print(polygonFeatures.isNotEmpty ? polygonFeatures.first.toMap() : 'not found');
 
   // # Read the GeoJSON file (cache applied)
   launchTime = DateTime.now();
@@ -174,7 +174,7 @@ void main() {
   });
 
   // Create GeoJSON from GeoJSON String Objects
-  var data = jsonEncode(geoJSON.featureCollection.toMap);
+  var data = jsonEncode(geoJSON.featureCollection.toMap());
 
   var g = GeoJSON.fromString(data);
   print(g.featureCollection.features.length);

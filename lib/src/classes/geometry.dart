@@ -71,11 +71,11 @@ abstract class Geometry {
   }
 
   /// A collection of key/value pairs of geospatial data
-  Map<String, dynamic> get toMap;
+  Map<String, dynamic> toMap();
 
   /// A collection of key/value pairs of geospatial data as String
   @override
   String toString() {
-    return jsonEncode(toMap);
+    return jsonEncode(toMap());
   }
 }

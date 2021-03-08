@@ -62,31 +62,31 @@ class GeoJSONFeature {
     switch (geometry.type) {
       case GeometryType.point:
         final geom = geometry as GeoJSONPoint;
-        return geom.toMap;
+        return geom.toMap();
         break;
       case GeometryType.lineString:
         final geom = geometry as GeoJSONLineString;
-        return geom.toMap;
+        return geom.toMap();
         break;
       case GeometryType.multiPoint:
         final geom = geometry as GeoJSONMultiPoint;
-        return geom.toMap;
+        return geom.toMap();
         break;
       case GeometryType.polygon:
         final geom = geometry as GeoJSONPolygon;
-        return geom.toMap;
+        return geom.toMap();
         break;
       case GeometryType.multiLineString:
         final geom = geometry as GeoJSONMultiLineString;
-        return geom.toMap;
+        return geom.toMap();
         break;
       case GeometryType.multiPolygon:
         final geom = geometry as GeoJSONMultiPolygon;
-        return geom.toMap;
+        return geom.toMap();
         break;
       case GeometryType.geometryCollection:
         final geom = geometry as GeoJSONGeometryCollection;
-        return geom.toMap;
+        return geom.toMap();
         break;
       default:
     }
@@ -94,7 +94,7 @@ class GeoJSONFeature {
   }
 
   /// A collection of key/value pairs of geospatial data
-  Map<String, dynamic> get toMap => {
+  Map<String, dynamic> toMap() => {
         'type': type.name,
         if (id != null) 'id': id,
         'properties': properties,
@@ -107,6 +107,6 @@ class GeoJSONFeature {
   /// A collection of key/value pairs of geospatial data as String
   @override
   String toString() {
-    return jsonEncode(toMap);
+    return jsonEncode(toMap());
   }
 }
