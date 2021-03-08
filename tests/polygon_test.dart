@@ -19,10 +19,10 @@ void main() {
         'coordinates': expectedPolygonCoordinates,
       };
 
-      final geoJsonPoint = GeoJSONPolygon.fromMap(data);
+      final geoJsonPolygon = GeoJSONPolygon.fromMap(data);
 
-      expect(geoJsonPoint.type, GeometryType.polygon);
-      expect(geoJsonPoint.coordinates, expectedPolygonCoordinates);
+      expect(geoJsonPolygon.type, GeometryType.polygon);
+      expect(geoJsonPolygon.coordinates, expectedPolygonCoordinates);
     });
 
     test('toMap of an object created by the constructor', () {
@@ -31,9 +31,9 @@ void main() {
         'coordinates': expectedPolygonCoordinates,
       };
 
-      final geoJsonPoint = GeoJSONPolygon(expectedPolygonCoordinates);
+      final geoJsonPolygon = GeoJSONPolygon(expectedPolygonCoordinates);
 
-      expect(geoJsonPoint.toMap(), expectedMap);
+      expect(geoJsonPolygon.toMap(), expectedMap);
     });
 
     test('toMap of an object created by the constructor', () {
@@ -42,19 +42,19 @@ void main() {
         'coordinates': expectedPolygonCoordinates,
       };
 
-      final geoJsonPoint = GeoJSONPolygon(expectedPolygonCoordinates);
+      final geoJsonPolygon = GeoJSONPolygon(expectedPolygonCoordinates);
 
-      expect(geoJsonPoint.toMap(), expectedMap);
+      expect(geoJsonPolygon.toMap(), expectedMap);
     });
 
     test('calculates area of a given polygon', () {
       final expectedArea = 7113.80;
       final precision = 0.01;
 
-      final geoJsonPoint = GeoJSONPolygon(expectedPolygonCoordinates);
+      final geoJsonPolygon = GeoJSONPolygon(expectedPolygonCoordinates);
 
       expect(
-        geoJsonPoint.area,
+        geoJsonPolygon.area,
         inInclusiveRange(expectedArea - precision, expectedArea + precision),
       );
     });
@@ -67,9 +67,9 @@ void main() {
         -22.91159216999324
       ];
 
-      final geoJsonPoint = GeoJSONPolygon(expectedPolygonCoordinates);
+      final geoJsonPolygon = GeoJSONPolygon(expectedPolygonCoordinates);
 
-      expect(geoJsonPoint.bbox, expectedBbox);
+      expect(geoJsonPolygon.bbox, expectedBbox);
     });
   });
 }
