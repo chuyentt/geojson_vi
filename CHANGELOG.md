@@ -52,7 +52,7 @@
 
 ## 1.1.0+1
 
-- Update the package export 
+- Update the package export
 
 ## 1.1.0+2
 
@@ -139,3 +139,6 @@
 
 ## 1.5.0
 -  Added toString() to save GeoJSON objects as string
+
+## 1.6.0
+-  Changed toMap to toMap()
