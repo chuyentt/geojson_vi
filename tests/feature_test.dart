@@ -88,10 +88,7 @@ void main() {
     test(
         'geometry is Polygon, geometrySerialize returns a map of GeoJSONPolygon',
         () {
-      final expectedGeometrySerialize = {
-        'type': 'Polygon',
-        'coordinates': []
-      };
+      final expectedGeometrySerialize = {'type': 'Polygon', 'coordinates': []};
       final expectedMap = {
         'type': 'Feature',
         'geometry': expectedGeometrySerialize

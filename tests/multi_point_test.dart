@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:geojson_vi/geojson_vi.dart';
-import 'package:geojson_vi/src/classes/geometry.dart';
 import 'package:test/test.dart';
 
 void main() {

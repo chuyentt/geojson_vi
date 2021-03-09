@@ -29,7 +29,7 @@ void main() {
 
       final geoJsonPoint = GeoJSONPoint(coordinates);
 
-      expect(geoJsonPoint.toMap(), expectedMap); 
+      expect(geoJsonPoint.toMap(), expectedMap);
     });
   });
 }
