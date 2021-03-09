@@ -142,3 +142,10 @@
 
 ## 1.6.0
 -  Changed toMap to toMap()
+
+## 1.6.1
+-  Fixed bbox of multipolygons
+-  Adds unit tests to:
+    -  points
+    -  polygons
+    -  multipolygons
