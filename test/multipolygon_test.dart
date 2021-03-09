@@ -1,5 +1,4 @@
 import 'package:geojson_vi/geojson_vi.dart';
-import 'package:geojson_vi/src/classes/geometry.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -49,7 +48,8 @@ void main() {
         'coordinates': expectedCoordinates,
       };
 
-      final geoJsonMultiPolygon = GeoJSONMultiPolygon(expectedCoordinates);
+      final geoJsonMultiPolygon =
+          GeoJSONMultiPolygon(expectedCoordinates);
 
       expect(geoJsonMultiPolygon.toMap(), expectedMap);
     });
@@ -57,7 +57,8 @@ void main() {
     test('get bbox of a given multipolygon', () {
       final expectedBbox = [100.000000, 0.000000, 103.000000, 3.000000];
 
-      final geoJsonMultiPolygon = GeoJSONMultiPolygon(expectedCoordinates);
+      final geoJsonMultiPolygon =
+          GeoJSONMultiPolygon(expectedCoordinates);
 
       expect(geoJsonMultiPolygon.bbox, expectedBbox);
     });
