@@ -1,7 +1,5 @@
-import 'package:geojson_vi/src/classes/geometry.dart';
+import 'package:geojson_vi/geojson_vi.dart';
 import 'package:test/test.dart';
-
-import 'package:geojson_vi/src/classes/point.dart';
 
 void main() {
   final fakeLatitude = -30.0653338;

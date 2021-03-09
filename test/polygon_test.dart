@@ -54,7 +54,8 @@ void main() {
 
       expect(
         geoJsonPolygon.area,
-        inInclusiveRange(expectedArea - precision, expectedArea + precision),
+        inInclusiveRange(
+            expectedArea - precision, expectedArea + precision),
       );
     });
 
