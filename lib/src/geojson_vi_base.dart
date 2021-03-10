@@ -1,254 +1,74 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:geojson_vi/geojson_vi.dart';
+import '../geojson_vi.dart';
 
-import 'classes/feature_collection.dart';
-import 'classes/feature.dart';
-
-/// The abstract class of GeoJSON
+/// GeoJSON - A geospatial data interchange format
 abstract class GeoJSON {
-  /// The GeoJSON file path
-  String get path;
+  /// The GeometryType [type] must be initialized.
+  final GeoJSONType type;
 
-  /// The FeatureCollection object
-  GeoJSONFeatureCollection get featureCollection;
-
-  /// Load GeoJSON from file with file path
-  static Future<GeoJSON> load(String path) async {
-    return await _GeoJSON._load(path);
-  }
-
-  /// Create new GeoJSON with file path
-  static GeoJSON create(String path) {
-    var geoJSON = _GeoJSON(path);
-    geoJSON._featureCollection ??= GeoJSONFeatureCollection();
-    return geoJSON;
-  }
-
-  /// Create new GeoJSON from GeoJSON String
-  static GeoJSON fromString(String data) {
-    return _GeoJSON._fromString(data);
-  }
-
-  /// Save to file or save as for new file path
-  Future<File> save({String newPath});
-
-  /// Clear all cached
-  void clearAll();
-
-  /// Clear cached for the path
-  void clear(String path);
-}
-
-/// The GeoJSON Type
-enum GeoJSONType { feature, featureCollection }
-
-extension GeoJSONTypeExtension on GeoJSONType {
-  String get name {
-    switch (this) {
-      case GeoJSONType.feature:
-        return 'Feature';
-      case GeoJSONType.featureCollection:
-        return 'FeatureCollection';
-      default:
-        return null;
-    }
-  }
-}
-
-/// The implement of the GeoJSON abstract class
-class _GeoJSON implements GeoJSON {
-  /// Private cache
-  static final _cache = <String, _GeoJSON>{};
-
-  /// Default private constructor with cache applied
-  factory _GeoJSON(String path) {
-    _GeoJSON geoJSON;
-    if (_cache[path] == null) {
-      geoJSON = _GeoJSON._init(path);
-    }
-    return _cache.putIfAbsent(path, () => geoJSON);
-  }
-
-  /// Private constructor
-  _GeoJSON._init(this._path);
-
-  /// Private GeoJSON file path
-  String _path;
-
-  /// Private FeatureCollection object
-  GeoJSONFeatureCollection _featureCollection;
-
-  /// Private load
-  static Future<_GeoJSON> _load(String path) async {
-    var file = File(path);
-    if (!await file.exists()) {
-      return null;
-    }
-    var geoJSON = _GeoJSON(path);
-    if (geoJSON._featureCollection != null) {
-      return geoJSON;
-    } else {
-      /// Read file as string
-      await file.readAsString().then((data) async {
-        var json = jsonDecode(data);
-        if (json != null) {
-          String type = json['type'];
-          switch (type) {
-            case 'FeatureCollection':
-              geoJSON._featureCollection =
-                  GeoJSONFeatureCollection.fromMap(json);
-              break;
-            case 'Feature':
-              final fc = GeoJSONFeatureCollection();
-              fc.features.add(GeoJSONFeature.fromMap(json));
-              geoJSON._featureCollection = fc;
-              break;
-            case 'Point':
-              final fc = GeoJSONFeatureCollection();
-              fc.features
-                  .add(GeoJSONFeature(GeoJSONPoint.fromMap(json)));
-              geoJSON._featureCollection = fc;
-              break;
-            case 'MultiPoint':
-              final fc = GeoJSONFeatureCollection();
-              fc.features
-                  .add(GeoJSONFeature(GeoJSONMultiPoint.fromMap(json)));
-              geoJSON._featureCollection = fc;
-              break;
-            case 'LineString':
-              final fc = GeoJSONFeatureCollection();
-              fc.features
-                  .add(GeoJSONFeature(GeoJSONLineString.fromMap(json)));
-              geoJSON._featureCollection = fc;
-              break;
-            case 'MultiLineString':
-              final fc = GeoJSONFeatureCollection();
-              fc.features.add(
-                  GeoJSONFeature(GeoJSONMultiLineString.fromMap(json)));
-              geoJSON._featureCollection = fc;
-              break;
-            case 'Polygon':
-              final fc = GeoJSONFeatureCollection();
-              fc.features
-                  .add(GeoJSONFeature(GeoJSONPolygon.fromMap(json)));
-              geoJSON._featureCollection = fc;
-              break;
-            case 'MultiPolygon':
-              final fc = GeoJSONFeatureCollection();
-              fc.features.add(
-                  GeoJSONFeature(GeoJSONMultiPolygon.fromMap(json)));
-              geoJSON._featureCollection = fc;
-              break;
-            case 'GeometryCollection':
-              final fc = GeoJSONFeatureCollection();
-              fc.features.add(GeoJSONFeature(
-                  GeoJSONGeometryCollection.fromMap(json)));
-              geoJSON._featureCollection = fc;
-              break;
-          }
-        }
-      }).catchError((onError) {
-        print(onError ?? 'Unkonwn error!');
-        return null;
-      });
-
-      /// For empty file
-      geoJSON._featureCollection ??= GeoJSONFeatureCollection();
-      return geoJSON;
-    }
-  }
-
-  /// GeoJSON From String
+  /// Bounding Box
   ///
-  /// FeatureCollection, Feature and all the Geometries like
-  /// Point, MultiPoint, LineString, MultiLineString, Polygon,
-  /// MultiPolygon and GeometryCollection string
-  static _GeoJSON _fromString(String data) {
-    _cache.remove('tmp');
-    var geoJSON = _GeoJSON('tmp');
+  /// Returns array of double values [west, south, east, north]
+  List<double> get bbox;
 
-    var json = jsonDecode(data);
-    if (json != null) {
-      String type = json['type'];
-      switch (type) {
-        case 'FeatureCollection':
-          final fc = GeoJSONFeatureCollection.fromMap(json);
-          geoJSON._featureCollection = fc;
-          break;
-        case 'Feature':
-          final fc = GeoJSONFeatureCollection();
-          fc.features.add(GeoJSONFeature.fromMap(json));
-          geoJSON._featureCollection = fc;
-          break;
-        case 'Point':
-          final fc = GeoJSONFeatureCollection();
-          fc.features.add(GeoJSONFeature(GeoJSONPoint.fromMap(json)));
-          geoJSON._featureCollection = fc;
-          break;
-        case 'MultiPoint':
-          final fc = GeoJSONFeatureCollection();
-          fc.features
-              .add(GeoJSONFeature(GeoJSONMultiPoint.fromMap(json)));
-          geoJSON._featureCollection = fc;
-          break;
-        case 'LineString':
-          final fc = GeoJSONFeatureCollection();
-          fc.features
-              .add(GeoJSONFeature(GeoJSONLineString.fromMap(json)));
-          geoJSON._featureCollection = fc;
-          break;
-        case 'MultiLineString':
-          final fc = GeoJSONFeatureCollection();
-          fc.features
-              .add(GeoJSONFeature(GeoJSONMultiLineString.fromMap(json)));
-          geoJSON._featureCollection = fc;
-          break;
-        case 'Polygon':
-          final fc = GeoJSONFeatureCollection();
-          fc.features.add(GeoJSONFeature(GeoJSONPolygon.fromMap(json)));
-          geoJSON._featureCollection = fc;
-          break;
-        case 'MultiPolygon':
-          final fc = GeoJSONFeatureCollection();
-          fc.features
-              .add(GeoJSONFeature(GeoJSONMultiPolygon.fromMap(json)));
-          geoJSON._featureCollection = fc;
-          break;
-        case 'GeometryCollection':
-          final fc = GeoJSONFeatureCollection();
-          fc.features.add(
-              GeoJSONFeature(GeoJSONGeometryCollection.fromMap(json)));
-          geoJSON._featureCollection = fc;
-          break;
-      }
+  /// The constructor from map
+  factory GeoJSON.fromMap(Map<String, dynamic> map) {
+    if ((map == null) || !map.containsKey('type')) return null;
+    final _type = ExtGeoJSONType.fromString(map['type']);
+    var _instance;
+    switch (_type) {
+      case GeoJSONType.featureCollection:
+        _instance = GeoJSONFeatureCollection.fromMap(map);
+        break;
+      case GeoJSONType.feature:
+        _instance = GeoJSONFeature.fromMap(map);
+        break;
+      case GeoJSONType.point:
+        _instance = GeoJSONPoint.fromMap(map);
+        break;
+      case GeoJSONType.multiPoint:
+        _instance = GeoJSONMultiPoint.fromMap(map);
+        break;
+      case GeoJSONType.lineString:
+        _instance = GeoJSONLineString.fromMap(map);
+        break;
+      case GeoJSONType.multiLineString:
+        _instance = GeoJSONMultiLineString.fromMap(map);
+        break;
+      case GeoJSONType.polygon:
+        _instance = GeoJSONPolygon.fromMap(map);
+        break;
+      case GeoJSONType.multiPolygon:
+        _instance = GeoJSONMultiPolygon.fromMap(map);
+        break;
+      case GeoJSONType.geometryCollection:
+        _instance = GeoJSONGeometryCollection.fromMap(map);
+        break;
     }
-    return geoJSON;
+    return _instance;
+  }
+
+  /// The constructor from JSON string
+  factory GeoJSON.fromJSON(String source) =>
+      GeoJSON.fromMap(json.decode(source));
+
+  /// Converts GeoJSON to a Map
+  Map<String, dynamic> toMap();
+
+  /// Encodes GeoJSON to JSON string
+  String toJSON();
+
+  @override
+  String toString() => 'GeoJSON(type: $type)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is GeoJSONGeometry && o.type == type;
   }
 
   @override
-  String get path => _path;
-
-  @override
-  GeoJSONFeatureCollection get featureCollection => _featureCollection;
-
-  @override
-  Future<File> save({String newPath}) {
-    var filePath = newPath ?? path;
-    var file = File(filePath);
-    return file.writeAsString(
-      JsonEncoder().convert(_featureCollection.toMap()),
-    );
-  }
-
-  @override
-  void clear(String path) {
-    _cache.remove(path);
-  }
-
-  @override
-  void clearAll() {
-    _cache.clear();
-  }
+  int get hashCode => type.hashCode;
 }

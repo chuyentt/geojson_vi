@@ -1,64 +1,96 @@
 import 'dart:convert';
 
-import 'geometry.dart';
+import '../../geojson_vi.dart';
 
-/// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các điểm
-class GeoJSONMultiPoint implements Geometry {
-  List<List<double>> coordinates;
-  GeoJSONMultiPoint(this.coordinates);
+/// The geometry type MultiPoint
+class GeoJSONMultiPoint implements GeoJSONGeometry {
+  @override
+  GeoJSONType get type => GeoJSONType.multiPoint;
+
+  ///The [coordinates] member is an array of positions.
+  var coordinates = <List<double>>[];
 
   @override
-  GeometryType get type => GeometryType.multiPoint;
-
-  GeoJSONMultiPoint.fromMap(Map data) {
-    var ll = data['coordinates'];
-    final posArray = <List<double>>[];
-    ll.forEach((l) {
-      final pos = <double>[];
-      l.forEach((value) {
-        pos.add(value.toDouble());
-      });
-      posArray.add(pos);
-    });
-    coordinates = posArray;
-  }
-
-  @override
-  double get area => 0;
-
-  @override
-  double get distance => 0;
+  double get area => 0.0;
 
   @override
   List<double> get bbox {
-    double swlat;
-    double swlng;
-    double nelat;
-    double nelng;
-    var first = coordinates.first;
-    swlat ??= first[1];
-    swlng ??= first[0];
-    nelat ??= first[1];
-    nelng ??= first[0];
-    coordinates.forEach((List<double> pos) {
-      if (swlat > pos[1]) swlat = pos[1];
-      if (nelat < pos[1]) nelat = pos[1];
-      if (swlng > pos[0]) swlng = pos[0];
-      if (nelng < pos[0]) nelng = pos[0];
-    });
-    return [swlng, swlat, nelng, nelat]; //west, south, east, north
+    final longitudes = coordinates
+        .expand(
+          (element) => [element[0]],
+        )
+        .toList();
+    final latitudes = coordinates
+        .expand(
+          (element) => [element[1]],
+        )
+        .toList();
+    longitudes.sort();
+    latitudes.sort();
+
+    return [
+      longitudes.first,
+      latitudes.first,
+      longitudes.last,
+      latitudes.last,
+    ];
   }
 
-  /// A collection of key/value pairs of geospatial data
   @override
-  Map<String, dynamic> toMap() => {
-        'type': type.name,
-        'coordinates': coordinates,
-      };
+  double get distance => 0.0;
 
-  /// A collection of key/value pairs of geospatial data as String
-  @override
-  String toString() {
-    return jsonEncode(toMap());
+  /// The constructor for the [coordinates] member
+  GeoJSONMultiPoint(this.coordinates)
+      : assert(
+            coordinates != null && coordinates.isNotEmpty,
+            'The coordinates is List<List<double>>. '
+            'There MUST be one or more elements');
+
+  /// The constructor forom map
+  factory GeoJSONMultiPoint.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+    if (map.containsKey('coordinates')) {
+      final lll = map['coordinates'];
+      if (lll is List) {
+        final _coordinates = <List<double>>[];
+        lll.forEach((ll) {
+          if (ll is List) {
+            final _pos =
+                ll.map((e) => e.toDouble()).cast<double>().toList();
+            _coordinates.add(_pos);
+          }
+        });
+        return GeoJSONMultiPoint(_coordinates);
+      }
+    }
+    return null;
   }
+
+  /// The constructor from JSON string
+  factory GeoJSONMultiPoint.fromJSON(String source) =>
+      GeoJSONMultiPoint.fromMap(json.decode(source));
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.value,
+      'coordinates': coordinates,
+    };
+  }
+
+  @override
+  String toJSON() => json.encode(toMap());
+
+  @override
+  String toString() => 'MultiPoint($coordinates)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is GeoJSONMultiPoint && o.coordinates == coordinates;
+  }
+
+  @override
+  int get hashCode => coordinates.hashCode;
 }

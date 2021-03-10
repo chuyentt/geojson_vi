@@ -22,7 +22,7 @@ void main() {
     test('creates an instances by using fromMap', () {
       final geoJson = GeoJSONLineString.fromMap(expectedMap);
 
-      expect(geoJson.type, GeometryType.lineString);
+      expect(geoJson.type, GeoJSONType.lineString);
       expect(geoJson.coordinates, expectedCoordinates);
     });
 
@@ -33,7 +33,12 @@ void main() {
     });
 
     test('get bbox of a given GeoJSONLineString', () {
-      final expectedBbox = [-53.959350, -30.057208, -53.706665, -29.396533];
+      final expectedBbox = [
+        -53.959350,
+        -30.057208,
+        -53.706665,
+        -29.396533
+      ];
 
       final geoJson = GeoJSONLineString(expectedCoordinates);
 
@@ -47,7 +52,7 @@ void main() {
 
       final geoJson = GeoJSONLineString(expectedCoordinates);
 
-      expect(geoJson.toString(), expectedString);
+      expect(geoJson.toJSON(), expectedString);
     });
 
     test('distance of a given GeoJSONLineString', () {

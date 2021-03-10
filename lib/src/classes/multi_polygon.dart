@@ -1,41 +1,18 @@
 import 'dart:convert';
 
-import 'geometry.dart';
+import '../../geojson_vi.dart';
 
-/// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các vùng
-class GeoJSONMultiPolygon implements Geometry {
-  List<List<List<List<double>>>> coordinates;
-  GeoJSONMultiPolygon(this.coordinates);
+/// The geometry type MultiPolygon
+class GeoJSONMultiPolygon implements GeoJSONGeometry {
+  @override
+  GeoJSONType get type => GeoJSONType.multiPolygon;
+
+  /// The [coordinates] member is a member is an array of Polygon
+  /// coordinate arrays.
+  var coordinates = <List<List<List<double>>>>[];
 
   @override
-  GeometryType get type => GeometryType.multiPolygon;
-
-  GeoJSONMultiPolygon.fromMap(Map data) {
-    var llll = data['coordinates'];
-    final polyArray = <List<List<List<double>>>>[];
-    llll.forEach((lll) {
-      final ringArray = <List<List<double>>>[];
-      lll.forEach((ll) {
-        final posArray = <List<double>>[];
-        ll.forEach((l) {
-          final pos = <double>[];
-          l.forEach((value) {
-            pos.add(value.toDouble());
-          });
-          posArray.add(pos);
-        });
-        ringArray.add(posArray);
-      });
-      polyArray.add(ringArray);
-    });
-    coordinates = polyArray;
-  }
-
-  @override
-  double get area => 0;
-
-  @override
-  double get distance => 0;
+  double get area => 0.0;
 
   @override
   List<double> get bbox {
@@ -43,7 +20,7 @@ class GeoJSONMultiPolygon implements Geometry {
         .expand(
           (element) => element.expand(
             (element) => element.expand(
-              (element) => [element.first],
+              (element) => [element[0]],
             ),
           ),
         )
@@ -52,7 +29,7 @@ class GeoJSONMultiPolygon implements Geometry {
         .expand(
           (element) => element.expand(
             (element) => element.expand(
-              (element) => [element.last],
+              (element) => [element[1]],
             ),
           ),
         )
@@ -65,19 +42,76 @@ class GeoJSONMultiPolygon implements Geometry {
       latitudes.first,
       longitudes.last,
       latitudes.last,
-    ]; //west, south, east, north
+    ];
   }
 
-  /// A collection of key/value pairs of geospatial data
   @override
-  Map<String, dynamic> toMap() => {
-        'type': type.name,
-        'coordinates': coordinates,
-      };
+  double get distance => 0.0;
 
-  /// A collection of key/value pairs of geospatial data as String
-  @override
-  String toString() {
-    return jsonEncode(toMap());
+  /// The constructor for the [coordinates] member
+  GeoJSONMultiPolygon(this.coordinates)
+      : assert(coordinates != null && coordinates.length >= 2,
+            'The coordinates MUST be two or more elements');
+
+  /// The constructor from map
+  factory GeoJSONMultiPolygon.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+    if (map.containsKey('coordinates')) {
+      final lllll = map['coordinates'];
+      if (lllll is List) {
+        final _coordinates = <List<List<List<double>>>>[];
+        lllll.forEach((llll) {
+          final _polygon = <List<List<double>>>[];
+          if (llll is List) {
+            llll.forEach((lll) {
+              if (lll is List) {
+                final _rings = <List<double>>[];
+                lll.forEach((ll) {
+                  if (ll is List) {
+                    final _pos = ll
+                        .map((e) => e.toDouble())
+                        .cast<double>()
+                        .toList();
+                    _rings.add(_pos);
+                  }
+                });
+                _polygon.add(_rings);
+              }
+            });
+            _coordinates.add(_polygon);
+          }
+        });
+        return GeoJSONMultiPolygon(_coordinates);
+      }
+    }
+    return null;
   }
+
+  /// The constructor from JSON string
+  factory GeoJSONMultiPolygon.fromJSON(String source) =>
+      GeoJSONMultiPolygon.fromMap(json.decode(source));
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.value,
+      'coordinates': coordinates,
+    };
+  }
+
+  @override
+  String toJSON() => json.encode(toMap());
+
+  @override
+  String toString() => 'MultiPolygon($coordinates)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is GeoJSONMultiPolygon && o.coordinates == coordinates;
+  }
+
+  @override
+  int get hashCode => coordinates.hashCode;
 }

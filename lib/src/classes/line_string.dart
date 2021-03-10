@@ -1,42 +1,53 @@
 import 'dart:convert';
-import 'dart:math' show cos, sqrt, asin;
-import 'geometry.dart';
+import 'dart:math';
 
-/// Định nghĩa nguyên mẫu đối tượng hình học dạng đường
-class GeoJSONLineString implements Geometry {
-  List<List<double>> coordinates;
-  GeoJSONLineString(this.coordinates);
+import '../../geojson_vi.dart';
+
+/// The geometry type LineString
+class GeoJSONLineString implements GeoJSONGeometry {
+  @override
+  GeoJSONType get type => GeoJSONType.lineString;
+
+  /// The [coordinates] member is a array of two or more positions
+  var coordinates = <List<double>>[];
 
   @override
-  GeometryType get type => GeometryType.lineString;
-
-  GeoJSONLineString.fromMap(Map data) {
-    var ll = data['coordinates'];
-    final posArray = <List<double>>[];
-    ll.forEach((l) {
-      final pos = <double>[];
-      l.forEach((value) {
-        pos.add(value.toDouble());
-      });
-      posArray.add(pos);
-    });
-    coordinates = posArray;
-  }
+  double get area => 0.0;
 
   @override
-  double get area => 0;
+  List<double> get bbox {
+    final longitudes = coordinates
+        .expand(
+          (element) => [element[0]],
+        )
+        .toList();
+    final latitudes = coordinates
+        .expand(
+          (element) => [element[1]],
+        )
+        .toList();
+    longitudes.sort();
+    latitudes.sort();
 
-  double _calculateDistance(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = cos;
-    var a = 0.5 -
-        c((lat2 - lat1) * p) / 2 +
-        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a)) * 1000.0;
+    return [
+      longitudes.first,
+      latitudes.first,
+      longitudes.last,
+      latitudes.last,
+    ];
   }
 
   @override
   double get distance {
+    double _calculateDistance(lat1, lon1, lat2, lon2) {
+      var p = 0.017453292519943295;
+      var c = cos;
+      var a = 0.5 -
+          c((lat2 - lat1) * p) / 2 +
+          c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+      return 12742 * asin(sqrt(a)) * 1000.0;
+    }
+
     var _length = 0.0;
     for (var i = 0; i < coordinates.length - 1; i++) {
       var p1 = coordinates[i];
@@ -46,36 +57,56 @@ class GeoJSONLineString implements Geometry {
     return _length;
   }
 
-  @override
-  List<double> get bbox {
-    double swlat;
-    double swlng;
-    double nelat;
-    double nelng;
-    var first = coordinates.first;
-    swlat ??= first[1];
-    swlng ??= first[0];
-    nelat ??= first[1];
-    nelng ??= first[0];
-    coordinates.forEach((List<double> pos) {
-      if (swlat > pos[1]) swlat = pos[1];
-      if (nelat < pos[1]) nelat = pos[1];
-      if (swlng > pos[0]) swlng = pos[0];
-      if (nelng < pos[0]) nelng = pos[0];
-    });
-    return [swlng, swlat, nelng, nelat]; //west, south, east, north
+  /// The constructor for the [coordinates] member
+  GeoJSONLineString(this.coordinates)
+      : assert(coordinates != null && coordinates.length >= 2,
+            'The coordinates MUST be two or more positions');
+
+  /// The constructor from map
+  factory GeoJSONLineString.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+    if (map.containsKey('coordinates')) {
+      final lll = map['coordinates'];
+      if (lll is List) {
+        final _coordinates = <List<double>>[];
+        lll.forEach((ll) {
+          if (ll is List) {
+            final _pos =
+                ll.map((e) => e.toDouble()).cast<double>().toList();
+            _coordinates.add(_pos);
+          }
+        });
+        return GeoJSONLineString(_coordinates);
+      }
+    }
+    return null;
   }
 
-  /// A collection of key/value pairs of geospatial data
-  @override
-  Map<String, dynamic> toMap() => {
-        'type': type.name,
-        'coordinates': coordinates,
-      };
+  /// The constructor from JSON string
+  factory GeoJSONLineString.fromJSON(String source) =>
+      GeoJSONLineString.fromMap(json.decode(source));
 
-  /// A collection of key/value pairs of geospatial data as String
   @override
-  String toString() {
-    return jsonEncode(toMap());
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.value,
+      'coordinates': coordinates,
+    };
   }
+
+  @override
+  String toJSON() => json.encode(toMap());
+
+  @override
+  String toString() => 'LineString($coordinates)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is GeoJSONLineString && o.coordinates == coordinates;
+  }
+
+  @override
+  int get hashCode => coordinates.hashCode;
 }

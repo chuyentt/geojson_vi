@@ -11,7 +11,6 @@ void main() {
         {
           'type': 'Feature',
           'properties': {'prop0': 'value0'},
-          'bbox': [102.0, 0.5, 102.0, 0.5],
           'geometry': {
             'type': 'Point',
             'coordinates': [102.0, 0.5]
@@ -20,7 +19,6 @@ void main() {
         {
           'type': 'Feature',
           'properties': {'prop0': 'value0', 'prop1': 0.0},
-          'bbox': [102.0, 0.0, 105.0, 1.0],
           'geometry': {
             'type': 'LineString',
             'coordinates': [
@@ -34,7 +32,6 @@ void main() {
         {
           'type': 'Feature',
           'properties': {'prop0': 'value0'},
-          'bbox': [100.0, 0.0, 101.0, 1.0],
           'geometry': {
             'type': 'Polygon',
             'coordinates': [
@@ -52,19 +49,22 @@ void main() {
     };
 
     test('create instance from map', () {
-      final featureCollection = GeoJSONFeatureCollection.fromMap(expectedMap);
+      final featureCollection =
+          GeoJSONFeatureCollection.fromMap(expectedMap);
       expect(featureCollection.features.length, 3);
     });
 
     test('toMap from an existing instance', () {
-      final featureCollection = GeoJSONFeatureCollection.fromMap(expectedMap);
+      final featureCollection =
+          GeoJSONFeatureCollection.fromMap(expectedMap);
       expect(featureCollection.toMap(), expectedMap);
     });
 
     test('toString from an existing instance', () {
       final expectedString = jsonEncode(expectedMap);
-      final featureCollection = GeoJSONFeatureCollection.fromMap(expectedMap);
-      expect(featureCollection.toString(), expectedString);
+      final featureCollection =
+          GeoJSONFeatureCollection.fromMap(expectedMap);
+      expect(featureCollection.toJSON(), expectedString);
     });
   });
 }

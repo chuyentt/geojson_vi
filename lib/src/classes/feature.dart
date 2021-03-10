@@ -1,112 +1,98 @@
 import 'dart:convert';
 
-import '../geojson_vi_base.dart';
-import 'geometry.dart';
-import 'multi_point.dart';
-import 'line_string.dart';
-import 'multi_line_string.dart';
-import 'point.dart';
-import 'polygon.dart';
-import 'multi_polygon.dart';
-import 'geometry_collection.dart';
+import '../../geojson_vi.dart';
 
-/// Định nghĩa nguyên mẫu đối tượng địa lý
-class GeoJSONFeature {
-  /// Trong GeoJSON mục B.1.  Normative Changes có nói
-  /// A Feature object's "id" member is a string or number
-  /// If a Feature has a commonly used identifier, that identifier
-  /// SHOULD be included as a member of the Feature object with the name
-  /// "id", and the value of this member is either a JSON string or number.
-  /// TODO: Có thể viết báo đề xuất thêm id là bắt buộc và chứng minh
-  /// cho việc này là việc tìm kiếm và truy xuất,...
-  /// Vẽ lại mô hình UML
+/// The Feature represents a spatially bounded thing.
+class GeoJSONFeature implements GeoJSON {
+  /// A Feature object has a [type] member with the value "Feature".
+  @override
+  final type = GeoJSONType.feature;
 
-  GeoJSONType get type => GeoJSONType.feature;
-  Geometry geometry;
+  GeoJSONGeometry _geometry;
 
-  GeoJSONFeature(this.geometry);
+  /// A Feature object has a member with the name [geometry]. The value
+  /// of the geometry member SHALL be either a Geometry object as types:
+  /// Point, MultiPoint, LineString, MultiLineString, Polygon,
+  /// MultiPolygon, or GeometryCollection
+  GeoJSONGeometry get geometry => _geometry;
+  set geometry(value) {
+    _geometry = value;
+    _bbox = _geometry.bbox;
+  }
 
-  String _id;
-  String get id => _id;
-  set id(String value) => _id = value;
+  /// A Feature object has a member with the name [properties]. The
+  /// value of the properties member is an object (any JSON object or a
+  /// JSON null value).
+  var properties = <String, dynamic>{};
 
-  var _properties = <String, dynamic>{};
-  Map<String, dynamic> get properties => _properties;
-  set properties(Map<String, dynamic> value) => _properties = value;
+  /// The [id] is a custom member commonly used as an identifier
+  String id;
 
-  List<double> _bbox; // [west, south, east, north]
+  /// The [title] is a custom member commonly used as foreign member
+  String title;
+
+  List<double> _bbox;
+
+  /// The constructor for the [geometry] member.
+  GeoJSONFeature(GeoJSONGeometry geometry,
+      {this.properties, this.id, this.title})
+      : _geometry = geometry,
+        _bbox = geometry.bbox;
+
+  /// The constructor from map
+  factory GeoJSONFeature.fromMap(Map<String, dynamic> map) {
+    if (map == null || !map.containsKey('geometry')) return null;
+    var _properties;
+    if (map.containsKey('properties') &&
+        map['properties'] is Map &&
+        (map['properties']).isNotEmpty) _properties = map['properties'];
+
+    return GeoJSONFeature(
+      GeoJSONGeometry.fromMap(map['geometry']),
+      properties: _properties,
+      id: map['id'],
+      title: map['title'],
+    );
+  }
+
+  /// The constructor from JSON string
+  factory GeoJSONFeature.fromJSON(String source) =>
+      GeoJSONFeature.fromMap(json.decode(source));
+
+  @override
   List<double> get bbox => _bbox;
 
-  String _title;
-  String get title => _title;
-  set title(String value) => _title = value;
+  @Deprecated(
+    'Use `geometry.toMap()` instead. '
+    'Will be removed in the next version',
+  )
+  Map<String, dynamic> get geometrySerialize => geometry.toMap();
 
-  GeoJSONFeature.fromMap(Map data) {
-    geometry = Geometry.fromMap(data['geometry']);
-    _id = data['id'];
-    _properties = data['properties'];
-    List<dynamic> b = data['bbox'];
-    var bb = <double>[];
-    if (b != null) {
-      b.forEach((element) {
-        bb.add(element.toDouble());
-      });
-      if (bb.isNotEmpty && bb.length == 4) {
-        _bbox = bb;
-      }
-    }
-    _title = data['title'];
-  }
-
-  Map<String, dynamic> get geometrySerialize {
-    switch (geometry.type) {
-      case GeometryType.point:
-        final geom = geometry as GeoJSONPoint;
-        return geom.toMap();
-        break;
-      case GeometryType.lineString:
-        final geom = geometry as GeoJSONLineString;
-        return geom.toMap();
-        break;
-      case GeometryType.multiPoint:
-        final geom = geometry as GeoJSONMultiPoint;
-        return geom.toMap();
-        break;
-      case GeometryType.polygon:
-        final geom = geometry as GeoJSONPolygon;
-        return geom.toMap();
-        break;
-      case GeometryType.multiLineString:
-        final geom = geometry as GeoJSONMultiLineString;
-        return geom.toMap();
-        break;
-      case GeometryType.multiPolygon:
-        final geom = geometry as GeoJSONMultiPolygon;
-        return geom.toMap();
-        break;
-      case GeometryType.geometryCollection:
-        final geom = geometry as GeoJSONGeometryCollection;
-        return geom.toMap();
-        break;
-      default:
-    }
-    return {};
-  }
-
-  /// A collection of key/value pairs of geospatial data
-  Map<String, dynamic> toMap() => {
-        'type': type.name,
-        if (id != null) 'id': id,
-        'properties': properties,
-        'bbox': (bbox != null) ? bbox : geometry.bbox,
-        // if (bbox != null) 'bbox': bbox,
-        if (title != null) 'title': title,
-        'geometry': geometrySerialize
-      };
-
-  /// A collection of key/value pairs of geospatial data as String
   @override
-  String toString() {
-    return jsonEncode(toMap());
+  Map<String, dynamic> toMap() {
+    return {
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      'type': type.value,
+      if (properties != null && properties.isNotEmpty)
+        'properties': properties,
+      'geometry': geometry?.toMap(),
+    };
   }
+
+  @override
+  String toJSON() => json.encode(toMap());
+
+  @override
+  String toString() => 'Feature(geometry: $geometry)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is GeoJSONFeature && o.geometry == geometry;
+  }
+
+  @override
+  int get hashCode => geometry.hashCode;
 }

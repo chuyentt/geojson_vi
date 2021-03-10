@@ -36,7 +36,7 @@ void main() {
     test('creates an instances by using fromMap', () {
       final geoJson = GeoJSONMultiLineString.fromMap(expectedMap);
 
-      expect(geoJson.type, GeometryType.multiLineString);
+      expect(geoJson.type, GeoJSONType.multiLineString);
       expect(geoJson.coordinates, expectedCoordinates);
     });
 
@@ -47,7 +47,12 @@ void main() {
     });
 
     test('get bbox of a given multiLineString', () {
-      final expectedBbox = [-51.998291, -17.298199, -49.482422, -16.056371];
+      final expectedBbox = [
+        -51.998291,
+        -17.298199,
+        -49.482422,
+        -16.056371
+      ];
 
       final geoJson = GeoJSONMultiLineString(expectedCoordinates);
 
@@ -61,7 +66,7 @@ void main() {
 
       final geoJson = GeoJSONMultiLineString(expectedCoordinates);
 
-      expect(geoJson.toString(), expectedString);
+      expect(geoJson.toJSON(), expectedString);
     });
   });
 }

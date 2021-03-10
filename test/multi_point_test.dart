@@ -19,13 +19,13 @@ void main() {
 
       final geoJson = GeoJSONMultiPoint.fromMap(data);
 
-      expect(geoJson.type, GeometryType.multiPoint);
+      expect(geoJson.type, GeoJSONType.multiPoint);
       expect(geoJson.coordinates, expectedCoordinates);
     });
 
     test('toMap of an object created by the constructor', () {
       final expectedMap = {
-        'type': GeometryType.multiPoint.name,
+        'type': GeoJSONType.multiPoint.value,
         'coordinates': expectedCoordinates,
       };
 
@@ -35,7 +35,12 @@ void main() {
     });
 
     test('get bbox of a given multipoint', () {
-      final expectedBbox = [-42.187500, -18.729502, -40.473633, -17.476432];
+      final expectedBbox = [
+        -42.187500,
+        -18.729502,
+        -40.473633,
+        -17.476432
+      ];
 
       final geoJson = GeoJSONMultiPoint(expectedCoordinates);
 
@@ -46,13 +51,13 @@ void main() {
         'toString returns collection of key/value pairs of geospatial data as String',
         () {
       final map = {
-        'type': GeometryType.multiPoint.name,
+        'type': GeoJSONType.multiPoint.value,
         'coordinates': expectedCoordinates,
       };
       final expectedString = jsonEncode(map);
       final geoJson = GeoJSONMultiPoint(expectedCoordinates);
 
-      expect(geoJson.toString(), expectedString);
+      expect(geoJson.toJSON(), expectedString);
     });
   });
 }

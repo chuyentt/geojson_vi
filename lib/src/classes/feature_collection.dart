@@ -1,36 +1,198 @@
 import 'dart:convert';
+import 'dart:collection';
 
-import '../geojson_vi_base.dart';
-import 'feature.dart';
+import '../../geojson_vi.dart';
 
-/// Định nghĩa nguyên mẫu tập hợp các đối tượng địa lý
-class GeoJSONFeatureCollection {
-  GeoJSONType get type => GeoJSONType.featureCollection;
+class ListExt<T> extends ListBase<T> {
+  List innerList = [];
 
-  final List<GeoJSONFeature> features = <GeoJSONFeature>[];
+  /// We defined some callback functions
+  void Function(T element) onAdd;
+  void Function(Iterable<T> iterable) onAddAll;
+  void Function(T element) onRemove;
 
-  GeoJSONFeatureCollection();
+  @override
+  int get length => innerList.length;
 
-  GeoJSONFeatureCollection.fromMap(Map data) {
-    if (data == null) return;
-    var items = data['features'];
-    items.forEach((element) {
-      var feature = GeoJSONFeature.fromMap(element);
-      features.add(feature);
-    });
+  @override
+  set length(int length) {
+    innerList.length = length;
   }
 
-  /// A collection of key/value pairs of geospatial data
+  @override
+  void operator []=(int index, T value) {
+    innerList[index] = value;
+  }
+
+  @override
+  T operator [](int index) => innerList[index];
+
+  @override
+  void add(T element) {
+    if (onAdd != null) onAdd(element);
+    super.add(element);
+  }
+
+  @override
+  void addAll(Iterable<T> iterable) {
+    if (onAddAll != null) onAddAll(iterable);
+    super.addAll(iterable);
+  }
+
+  @override
+  bool remove(Object element) {
+    final result = super.remove(element);
+    if (result && onRemove != null) onRemove(element);
+    return result;
+  }
+
+  @override
+  T removeAt(int index) {
+    final result = super.removeAt(index);
+    if (result != null && onRemove != null) onRemove(result);
+    return result;
+  }
+
+  @override
+  T removeLast() {
+    final result = super.removeLast();
+    if (result != null && onRemove != null) onRemove(result);
+    return result;
+  }
+}
+
+/// Get bbox
+///
+/// Returns bbox from list of the features
+List<double> _getBbox(List<GeoJSONFeature> features) {
+  if (features.isEmpty) return [-180.0, -90.0, 180.0, 90.0];
+  final longitudes = <double>[];
+  final latitudes = <double>[];
+  Future.forEach(features, (GeoJSONFeature element) {
+    longitudes.addAll([element.bbox[0], element.bbox[2]]);
+    latitudes.addAll([element.bbox[1], element.bbox[3]]);
+  });
+  longitudes.sort();
+  latitudes.sort();
+  longitudes.removeWhere((e) => (e == -180.0) || (e == 180.0));
+  latitudes.removeWhere((e) => (e == -90.0) || (e == 90.0));
+  return [
+    longitudes?.first ?? -180.0,
+    latitudes?.first ?? -90.0,
+    longitudes?.last ?? 180.0,
+    latitudes?.last ?? 90.0,
+  ];
+}
+
+/// Add bbox
+///
+/// Returns bbox1 union bbox2
+List<double> _addBbox(List<double> bbox1, List<double> bbox2) {
+  final longitudes = <double>[];
+  final latitudes = <double>[];
+
+  longitudes.addAll([bbox1[0], bbox1[2]]);
+  longitudes.addAll([bbox2[0], bbox2[2]]);
+  latitudes.addAll([bbox1[1], bbox1[3]]);
+  latitudes.addAll([bbox2[1], bbox2[3]]);
+
+  longitudes.sort();
+  latitudes.sort();
+  longitudes.removeWhere((e) => (e == -180.0) || (e == 180.0));
+  latitudes.removeWhere((e) => (e == -90.0) || (e == 90.0));
+  return [
+    longitudes?.first ?? -180.0,
+    latitudes?.first ?? -90.0,
+    longitudes?.last ?? 180.0,
+    latitudes?.last ?? 90.0,
+  ];
+}
+
+/// The FeatureCollection has a member with the name "features". The
+/// value of [features] is an array of Feature object. It is possible
+/// for this array to be empty.
+class GeoJSONFeatureCollection implements GeoJSON {
+  @override
+  GeoJSONType get type => GeoJSONType.featureCollection;
+
+  ListExt<GeoJSONFeature> _features = ListExt<GeoJSONFeature>();
+
+  /// The [features] member is a array of the GeoJSONFeature
+  List<GeoJSONFeature> get features => _features;
+  set features(List<GeoJSONFeature> features) {
+    final listFeature = ListExt<GeoJSONFeature>();
+    listFeature.onAdd = (feature) => onAdd(feature);
+    listFeature.onAddAll = (features) => onAddAll(features);
+    listFeature.addAll(features);
+    _features = listFeature;
+  }
+
+  List<double> _bbox;
+
+  /// The constructor for the [features] member
+  GeoJSONFeatureCollection(List<GeoJSONFeature> features) {
+    final listFeature = ListExt<GeoJSONFeature>();
+    listFeature.onAdd = (feature) => onAdd(feature);
+    listFeature.onAddAll = (features) => onAddAll(features);
+    listFeature.addAll(features ?? []);
+    _features = listFeature;
+  }
+
+  /// The constructor from map
+  factory GeoJSONFeatureCollection.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+    if (map.containsKey('features')) {
+      final value = map['features'];
+      if (value is List) {
+        final _features = <GeoJSONFeature>[];
+        value.forEach((map) {
+          _features.add(GeoJSONFeature.fromMap(map));
+        });
+
+        return GeoJSONFeatureCollection(_features);
+      }
+    }
+    return null;
+  }
+
+  /// The constructor from JSON string
+  factory GeoJSONFeatureCollection.fromJSON(String source) =>
+      GeoJSONFeatureCollection.fromMap(json.decode(source));
+
+  /// The callback function is passed when the feature is added
+  void onAdd(GeoJSONFeature feature) {
+    _bbox = _addBbox(_bbox, feature.bbox);
+  }
+
+  /// The callback function is passed when the features is added
+  void onAddAll(Iterable<GeoJSONFeature> features) {
+    _bbox = _getBbox(features);
+  }
+
+  @override
+  List<double> get bbox => _bbox;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
-      'type': type.name,
-      'features': features.map((f) => f.toMap()).toList(),
+      'type': type.value,
+      'features': features.map((e) => e.toMap()).toList(),
     };
   }
 
-  /// A collection of key/value pairs of geospatial data as String
   @override
-  String toString() {
-    return jsonEncode(toMap());
+  String toJSON() => json.encode(toMap());
+
+  @override
+  String toString() => 'FeatureCollection(features: $features)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is GeoJSONFeatureCollection && o.features == features;
   }
+
+  @override
+  int get hashCode => features.hashCode;
 }

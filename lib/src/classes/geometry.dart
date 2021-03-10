@@ -1,81 +1,50 @@
 import 'dart:convert';
 
-import 'point.dart';
-import 'multi_point.dart';
-import 'line_string.dart';
-import 'multi_line_string.dart';
-import 'polygon.dart';
-import 'multi_polygon.dart';
-import 'geometry_collection.dart';
+import '../../geojson_vi.dart';
 
-/// Geometry type
-enum GeometryType {
-  point,
-  multiPoint,
-  lineString,
-  multiLineString,
-  polygon,
-  multiPolygon,
-  geometryCollection
-}
+/// The abstract class of the geometry
+abstract class GeoJSONGeometry implements GeoJSON {
+  /// The GeometryType [type] must be initialized.
+  @override
+  final GeoJSONType type;
 
-extension GeometryTypeExtension on GeometryType {
-  String get name {
-    switch (this) {
-      case GeometryType.point:
-        return 'Point';
-      case GeometryType.multiPoint:
-        return 'MultiPoint';
-      case GeometryType.lineString:
-        return 'LineString';
-      case GeometryType.multiLineString:
-        return 'MultiLineString';
-      case GeometryType.polygon:
-        return 'Polygon';
-      case GeometryType.multiPolygon:
-        return 'MultiPolygon';
-      case GeometryType.geometryCollection:
-        return 'GeometryCollection';
-      default:
-        return null;
-    }
-  }
-}
-
-abstract class Geometry {
-  GeometryType get type;
-
+  /// Area geometry
+  ///
+  /// Returns double value
   double get area;
-  double get distance;
-  List<double> get bbox;
 
-  factory Geometry.fromMap(Map data) {
-    String type = data['type'];
-    switch (type) {
-      case 'Point':
-        return GeoJSONPoint.fromMap(data);
-      case 'MultiPoint':
-        return GeoJSONMultiPoint.fromMap(data);
-      case 'LineString':
-        return GeoJSONLineString.fromMap(data);
-      case 'MultiLineString':
-        return GeoJSONMultiLineString.fromMap(data);
-      case 'Polygon':
-        return GeoJSONPolygon.fromMap(data);
-      case 'MultiPolygon':
-        return GeoJSONMultiPolygon.fromMap(data);
-      case 'GeometryCollection':
-        return GeoJSONGeometryCollection.fromMap(data);
-    }
-    return null;
+  /// Distance geometry
+  ///
+  /// Returns double value
+  double get distance;
+
+  /// The constructor from map
+  factory GeoJSONGeometry.fromMap(Map<String, dynamic> map) {
+    return GeoJSON.fromMap(map);
   }
 
-  /// A collection of key/value pairs of geospatial data
+  /// The constructor from JSON string
+  factory GeoJSONGeometry.fromJSON(String source) =>
+      GeoJSONGeometry.fromMap(json.decode(source));
+
+  /// Converts geometry to a Map
+  @override
   Map<String, dynamic> toMap();
 
-  /// A collection of key/value pairs of geospatial data as String
+  /// Encodes geometry to JSON string
   @override
-  String toString() {
-    return jsonEncode(toMap());
+  String toJSON();
+
+  @override
+  String toString() => 'Geometry(type: $type)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is GeoJSONGeometry && o.type == type;
   }
+
+  @override
+  int get hashCode => type.hashCode;
 }

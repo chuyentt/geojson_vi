@@ -149,3 +149,5 @@
     -  points
     -  polygons
     -  multipolygons
+
+## 2.0.0

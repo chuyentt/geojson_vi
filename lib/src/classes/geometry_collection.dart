@@ -1,41 +1,86 @@
 import 'dart:convert';
 
-import 'geometry.dart';
+import '../../geojson_vi.dart';
 
-/// Định nghĩa nguyên mẫu tập hợp các đối tượng hình học
-class GeoJSONGeometryCollection implements Geometry {
-  final List<Geometry> geometries = <Geometry>[];
-  GeoJSONGeometryCollection();
+class GeoJSONGeometryCollection implements GeoJSONGeometry {
+  @override
+  GeoJSONType get type => GeoJSONType.geometryCollection;
+
+  /// The [geometries] member is a array of the geometry
+  var geometries = <GeoJSONGeometry>[];
 
   @override
-  GeometryType get type => GeometryType.geometryCollection;
+  double get area => 0.0;
 
-  GeoJSONGeometryCollection.fromMap(Map data) {
-    List geomsMap = data['geometries'];
-    geomsMap.forEach((geomMap) {
-      geometries.add(Geometry.fromMap(geomMap));
-    });
+  @override
+  List<double> get bbox {
+    final longitudes = geometries
+        .expand((element) => [element.bbox[0], element.bbox[2]])
+        .toList();
+    final latitudes = geometries
+        .expand((element) => [element.bbox[1], element.bbox[3]])
+        .toList();
+    longitudes.sort();
+    latitudes.sort();
+
+    return [
+      longitudes.first,
+      latitudes.first,
+      longitudes.last,
+      latitudes.last,
+    ];
   }
 
   @override
-  double get area => 0;
+  double get distance => 0.0;
 
-  @override
-  double get distance => 0;
+  /// The constructor for the [geometries] member
+  GeoJSONGeometryCollection(this.geometries)
+      : assert(geometries != null && geometries.isNotEmpty,
+            'The coordinates MUST be one or more elements');
 
-  @override
-  List<double> get bbox => [0, 0, 0, 0]; //west, south, east, north
+  /// The constructor from map
+  factory GeoJSONGeometryCollection.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+    if (map.containsKey('geometries')) {
+      final value = map['geometries'];
+      if (value is List) {
+        final _geometries = <GeoJSONGeometry>[];
+        value.forEach((map) {
+          _geometries.add(GeoJSONGeometry.fromMap(map));
+        });
 
-  /// A collection of key/value pairs of geospatial data
-  @override
-  Map<String, dynamic> toMap() => {
-        'type': 'GeometryCollection',
-        'geometries': geometries.map((e) => e.toMap()).toList(),
-      };
-
-  /// A collection of key/value pairs of geospatial data as String
-  @override
-  String toString() {
-    return jsonEncode(toMap());
+        return GeoJSONGeometryCollection(_geometries);
+      }
+    }
+    return null;
   }
+
+  /// The constructor from JSON string
+  factory GeoJSONGeometryCollection.fromJSON(String source) =>
+      GeoJSONGeometryCollection.fromMap(json.decode(source));
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.value,
+      'geometries': geometries.map((e) => e.toMap()).toList(),
+    };
+  }
+
+  @override
+  String toJSON() => json.encode(toMap());
+
+  @override
+  String toString() => 'GeometryCollection(geometries: $geometries)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is GeoJSONGeometryCollection && o.geometries == geometries;
+  }
+
+  @override
+  int get hashCode => geometries.hashCode;
 }

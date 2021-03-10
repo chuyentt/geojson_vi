@@ -1,28 +1,18 @@
 import 'dart:convert';
 
-import 'geometry.dart';
+import '../../geojson_vi.dart';
 
-class GeoJSONPoint implements Geometry {
-  List<double> coordinates;
-  GeoJSONPoint(this.coordinates);
+/// The geometry type Point
+class GeoJSONPoint implements GeoJSONGeometry {
+  @override
+  GeoJSONType get type => GeoJSONType.point;
+
+  /// The [coordinates] member is a single position (two or more
+  /// elements). The first two elements are `longitude` and `latitude`
+  var coordinates = <double>[];
 
   @override
-  GeometryType get type => GeometryType.point;
-
-  GeoJSONPoint.fromMap(Map data) {
-    var l = data['coordinates'];
-    final pos = <double>[];
-    l.forEach((value) {
-      pos.add(value.toDouble());
-    });
-    coordinates = pos;
-  }
-
-  @override
-  double get area => 0;
-
-  @override
-  double get distance => 0;
+  double get area => 0.0;
 
   @override
   List<double> get bbox => [
@@ -32,16 +22,55 @@ class GeoJSONPoint implements Geometry {
         coordinates[1],
       ];
 
-  /// A collection of key/value pairs of geospatial data
   @override
-  Map<String, dynamic> toMap() => {
-        'type': type.name,
-        'coordinates': coordinates,
-      };
+  double get distance => 0.0;
 
-  /// A collection of key/value pairs of geospatial data as String
-  @override
-  String toString() {
-    return jsonEncode(toMap());
+  /// The constructor for the [coordinates] member
+  GeoJSONPoint(this.coordinates)
+      : assert(
+            coordinates != null && coordinates.length >= 2,
+            'The coordinates is List<double>. '
+            'There MUST be two or more elements');
+
+  /// The constructor from map
+  factory GeoJSONPoint.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+    if (map.containsKey('coordinates')) {
+      final value = map['coordinates'];
+      if (value is List) {
+        final _pos =
+            value.map((e) => e.toDouble()).cast<double>().toList();
+        return GeoJSONPoint(_pos);
+      }
+    }
+    return null;
   }
+
+  /// The constructor from JSON string
+  factory GeoJSONPoint.fromJSON(String source) =>
+      GeoJSONPoint.fromMap(json.decode(source));
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.value,
+      'coordinates': coordinates,
+    };
+  }
+
+  @override
+  String toJSON() => json.encode(toMap());
+
+  @override
+  String toString() => 'Point($coordinates)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is GeoJSONPoint && o.coordinates == coordinates;
+  }
+
+  @override
+  int get hashCode => coordinates.hashCode;
 }

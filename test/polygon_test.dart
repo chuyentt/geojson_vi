@@ -20,24 +20,13 @@ void main() {
 
       final geoJsonPolygon = GeoJSONPolygon.fromMap(data);
 
-      expect(geoJsonPolygon.type, GeometryType.polygon);
+      expect(geoJsonPolygon.type, GeoJSONType.polygon);
       expect(geoJsonPolygon.coordinates, expectedPolygonCoordinates);
     });
 
     test('toMap of an object created by the constructor', () {
       final expectedMap = {
-        'type': GeometryType.polygon.name,
-        'coordinates': expectedPolygonCoordinates,
-      };
-
-      final geoJsonPolygon = GeoJSONPolygon(expectedPolygonCoordinates);
-
-      expect(geoJsonPolygon.toMap(), expectedMap);
-    });
-
-    test('toMap of an object created by the constructor', () {
-      final expectedMap = {
-        'type': GeometryType.polygon.name,
+        'type': GeoJSONType.polygon.value,
         'coordinates': expectedPolygonCoordinates,
       };
 

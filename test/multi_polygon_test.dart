@@ -38,13 +38,13 @@ void main() {
 
       final geoJsonMultiPolygon = GeoJSONMultiPolygon.fromMap(data);
 
-      expect(geoJsonMultiPolygon.type, GeometryType.multiPolygon);
+      expect(geoJsonMultiPolygon.type, GeoJSONType.multiPolygon);
       expect(geoJsonMultiPolygon.coordinates, expectedCoordinates);
     });
 
     test('toMap of an object created by the constructor', () {
       final expectedMap = {
-        'type': GeometryType.multiPolygon.name,
+        'type': GeoJSONType.multiPolygon.value,
         'coordinates': expectedCoordinates,
       };
 
