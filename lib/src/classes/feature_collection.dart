@@ -72,10 +72,11 @@ List<double> _getBbox(List<GeoJSONFeature> features) {
     longitudes.addAll([element.bbox[0], element.bbox[2]]);
     latitudes.addAll([element.bbox[1], element.bbox[3]]);
   });
-  longitudes.sort();
-  latitudes.sort();
+
   longitudes.removeWhere((e) => (e == -180.0) || (e == 180.0));
   latitudes.removeWhere((e) => (e == -90.0) || (e == 90.0));
+  longitudes.sort();
+  latitudes.sort();
   return [
     longitudes?.first ?? -180.0,
     latitudes?.first ?? -90.0,
@@ -96,10 +97,34 @@ List<double> _addBbox(List<double> bbox1, List<double> bbox2) {
   latitudes.addAll([bbox1[1], bbox1[3]]);
   latitudes.addAll([bbox2[1], bbox2[3]]);
 
-  longitudes.sort();
-  latitudes.sort();
   longitudes.removeWhere((e) => (e == -180.0) || (e == 180.0));
   latitudes.removeWhere((e) => (e == -90.0) || (e == 90.0));
+  longitudes.sort();
+  latitudes.sort();
+  return [
+    longitudes?.first ?? -180.0,
+    latitudes?.first ?? -90.0,
+    longitudes?.last ?? 180.0,
+    latitudes?.last ?? 90.0,
+  ];
+}
+
+/// Remove bbox
+///
+/// Returns bbox1 \ bbox2
+List<double> _removeBbox(List<double> bbox1, List<double> bbox2) {
+  final longitudes = <double>[];
+  final latitudes = <double>[];
+
+  longitudes.addAll([bbox1[0], bbox1[2]]);
+  latitudes.addAll([bbox1[1], bbox1[3]]);
+
+  longitudes.removeWhere((e) => (e == bbox2[0]) || (e == bbox2[2]));
+  latitudes.removeWhere((e) => (e == bbox2[1]) || (e == bbox2[3]));
+  longitudes.removeWhere((e) => (e == -180.0) || (e == 180.0));
+  latitudes.removeWhere((e) => (e == -90.0) || (e == 90.0));
+  longitudes.sort();
+  latitudes.sort();
   return [
     longitudes?.first ?? -180.0,
     latitudes?.first ?? -90.0,
@@ -123,6 +148,7 @@ class GeoJSONFeatureCollection implements GeoJSON {
     final listFeature = ListExt<GeoJSONFeature>();
     listFeature.onAdd = (feature) => onAdd(feature);
     listFeature.onAddAll = (features) => onAddAll(features);
+    listFeature.onRemove = (feature) => onRemove(feature);
     listFeature.addAll(features);
     _features = listFeature;
   }
@@ -134,6 +160,7 @@ class GeoJSONFeatureCollection implements GeoJSON {
     final listFeature = ListExt<GeoJSONFeature>();
     listFeature.onAdd = (feature) => onAdd(feature);
     listFeature.onAddAll = (features) => onAddAll(features);
+    listFeature.onRemove = (feature) => onRemove(feature);
     listFeature.addAll(features ?? []);
     _features = listFeature;
   }
@@ -167,6 +194,11 @@ class GeoJSONFeatureCollection implements GeoJSON {
   /// The callback function is passed when the features is added
   void onAddAll(Iterable<GeoJSONFeature> features) {
     _bbox = _getBbox(features);
+  }
+
+  /// The callback function is passed when the feature is removed
+  void onRemove(GeoJSONFeature feature) {
+    _bbox = _removeBbox(_bbox, feature.bbox);
   }
 
   @override
