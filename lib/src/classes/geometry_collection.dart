@@ -12,12 +12,9 @@ class GeoJSONGeometryCollection implements Geometry {
 
   GeoJSONGeometryCollection.fromMap(Map data) {
     List geomsMap = data['geometries'];
-    var geoms = GeoJSONGeometryCollection();
     geomsMap.forEach((geomMap) {
-      var geom = Geometry.fromMap(geomMap);
-      geoms.geometries.add(geom);
+      geometries.add(Geometry.fromMap(geomMap));
     });
-    geometries.add(geoms);
   }
 
   @override
