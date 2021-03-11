@@ -34,12 +34,16 @@ class GeoJSONPoint implements GeoJSONGeometry {
 
   /// The constructor from map
   factory GeoJSONPoint.fromMap(Map<String, dynamic> map) {
-    assert(
-        map.containsKey('coordinates') && map['coordinates'] is List,
-        'The map is Map<String, dynamic>. '
-        'There MUST be contains key `coordinates`, and is List');
-    final value = map['coordinates'];
-    final _pos = value.map((e) => e.toDouble()).cast<double>().toList();
+    assert(map.containsKey('type'), 'There MUST be contains key `type`');
+    assert(['Point'].contains(map['type']), 'Invalid type');
+    assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`');
+    assert(map['coordinates'] is List, 'There MUST be List of double');
+    assert((map['coordinates'] as List).length > 1,
+        'The position MUST be two or more element');
+    final ll = map['coordinates'];
+    assert((ll as List).length > 1, 'There MUST be two or more element');
+    final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
     return GeoJSONPoint(_pos);
   }
 

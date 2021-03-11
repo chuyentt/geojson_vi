@@ -8,6 +8,7 @@ void main() {
   group('GeoJSONPoint', () {
     test('creates an instances by using fromMap', () {
       final data = {
+        'type': 'Point',
         'coordinates': [fakeLongitude, fakeLatitude],
       };
       final expectedCoordinates = [fakeLongitude, fakeLatitude];

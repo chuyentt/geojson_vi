@@ -48,19 +48,20 @@ class GeoJSONMultiPoint implements GeoJSONGeometry {
 
   /// The constructor forom map
   factory GeoJSONMultiPoint.fromMap(Map<String, dynamic> map) {
-    assert(
-        map.containsKey('coordinates') && map['coordinates'] is List,
-        'The map is Map<String, dynamic>. '
-        'There MUST be contains key `coordinates`, and is List');
-
+    assert(map.containsKey('type'), 'There MUST be contains key `type`');
+    assert(['MultiPoint'].contains(map['type']), 'Invalid type');
+    assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`');
+    assert(map['coordinates'] is List<List<dynamic>>,
+        'There MUST be array of positions.');
     final lll = map['coordinates'];
-
     final _coordinates = <List<double>>[];
     lll.forEach((ll) {
-      if (ll is List) {
-        final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
-        _coordinates.add(_pos);
-      }
+      assert(ll is List, 'There MUST be List');
+      assert(
+          (ll as List).length > 1, 'There MUST be two or more element');
+      final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
+      _coordinates.add(_pos);
     });
     return GeoJSONMultiPoint(_coordinates);
   }

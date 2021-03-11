@@ -20,6 +20,18 @@ abstract class GeoJSONGeometry implements GeoJSON {
 
   /// The constructor from map
   factory GeoJSONGeometry.fromMap(Map<String, dynamic> map) {
+    assert(map.containsKey('type'), 'There MUST be contains key `type`');
+    assert(
+        [
+          'Point',
+          'MultiPoint',
+          'LineString',
+          'MultiLineString',
+          'Polygon',
+          'MultiPolygon',
+          'GeometryCollection'
+        ].contains(map['type']),
+        'Invalid type');
     return GeoJSON.fromMap(map) as GeoJSONGeometry;
   }
 

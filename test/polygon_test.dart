@@ -15,6 +15,7 @@ void main() {
   group('GeoJSONPolygon', () {
     test('creates an instances by using fromMap', () {
       final data = {
+        'type': 'Polygon',
         'coordinates': expectedPolygonCoordinates,
       };
 

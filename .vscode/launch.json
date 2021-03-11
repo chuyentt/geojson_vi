@@ -6,6 +6,7 @@
     "configurations": [
         {
             "name": "geojson_vi",
+            "program": "example/bin/example.dart",
             "request": "launch",
             "type": "dart"
         }

@@ -41,17 +41,17 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
 
   /// The constructor from map
   factory GeoJSONGeometryCollection.fromMap(Map<String, dynamic> map) {
-    assert(
-        map.containsKey('geometries') && map['geometries'] is List,
-        'The map is Map<String, dynamic>. '
+    assert(map.containsKey('type'), 'There MUST be contains key `type`');
+    assert(['GeometryCollection'].contains(map['type']), 'Invalid type');
+    assert(map.containsKey('geometries'),
         'There MUST be contains key `geometries`');
-
+    assert(map['geometries'] is List,
+        'There MUST be array of the geometry.');
     final value = map['geometries'];
     final _geometries = <GeoJSONGeometry>[];
     value.forEach((map) {
       _geometries.add(GeoJSONGeometry.fromMap(map));
     });
-
     return GeoJSONGeometryCollection(_geometries);
   }
 

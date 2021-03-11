@@ -51,24 +51,30 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
 
   /// The constructor from map
   factory GeoJSONMultiLineString.fromMap(Map<String, dynamic> map) {
-    assert(
-        map.containsKey('coordinates') && map['coordinates'] is List,
-        'The map is Map<String, dynamic>. '
-        'There MUST be contains key `coordinates`, and is List');
+    assert(map.containsKey('type'), 'There MUST be contains key `type`');
+
+    assert(['MultiLineString'].contains(map['type']), 'Invalid type');
+
+    assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`');
+
+    assert(map['coordinates'] is List<List<List<dynamic>>>,
+        'There MUST be array of linear ring coordinate arrays.');
+
     final llll = map['coordinates'];
+
     final _coordinates = <List<List<double>>>[];
     llll.forEach((lll) {
-      if (lll is List) {
-        final _lines = <List<double>>[];
-        lll.forEach((ll) {
-          if (ll is List) {
-            final _pos =
-                ll.map((e) => e.toDouble()).cast<double>().toList();
-            _lines.add(_pos);
-          }
-        });
-        _coordinates.add(_lines);
-      }
+      assert(lll is List, 'There MUST be List');
+      final _rings = <List<double>>[];
+      lll.forEach((ll) {
+        assert(ll is List, 'There MUST be List');
+        assert((ll as List).length > 1,
+            'There MUST be two or more element');
+        final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
+        _rings.add(_pos);
+      });
+      _coordinates.add(_rings);
     });
     return GeoJSONMultiLineString(_coordinates);
   }

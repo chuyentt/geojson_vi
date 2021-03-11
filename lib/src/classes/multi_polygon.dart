@@ -55,31 +55,31 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
 
   /// The constructor from map
   factory GeoJSONMultiPolygon.fromMap(Map<String, dynamic> map) {
-    assert(
-        map.containsKey('coordinates') && map['coordinates'] is List,
-        'The map is Map<String, dynamic>. '
-        'There MUST be contains key `coordinates`, and is List');
-
+    assert(map.containsKey('type'), 'There MUST be contains key `type`');
+    assert(['MultiPolygon'].contains(map['type']), 'Invalid type');
+    assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`');
+    assert(map['coordinates'] is List<List<List<List<dynamic>>>>,
+        'There MUST be array of Polygon coordinate arrays.');
     final lllll = map['coordinates'];
     final _coordinates = <List<List<List<double>>>>[];
     lllll.forEach((llll) {
       final _polygon = <List<List<double>>>[];
-      if (llll is List) {
-        llll.forEach((lll) {
-          if (lll is List) {
-            final _rings = <List<double>>[];
-            lll.forEach((ll) {
-              if (ll is List) {
-                final _pos =
-                    ll.map((e) => e.toDouble()).cast<double>().toList();
-                _rings.add(_pos);
-              }
-            });
-            _polygon.add(_rings);
-          }
+      assert(llll is List, 'There MUST be List');
+      llll.forEach((lll) {
+        assert(lll is List, 'There MUST be List');
+        final _rings = <List<double>>[];
+        lll.forEach((ll) {
+          assert(ll is List, 'There MUST be List');
+          assert((ll as List).length > 1,
+              'There MUST be two or more element');
+          final _pos =
+              ll.map((e) => e.toDouble()).cast<double>().toList();
+          _rings.add(_pos);
         });
-        _coordinates.add(_polygon);
-      }
+        _polygon.add(_rings);
+      });
+      _coordinates.add(_polygon);
     });
     return GeoJSONMultiPolygon(_coordinates);
   }

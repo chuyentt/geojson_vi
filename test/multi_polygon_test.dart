@@ -33,6 +33,7 @@ void main() {
   group('GeoJSONMultiPolygon', () {
     test('creates an instances by using fromMap', () {
       final data = {
+        'type': 'MultiPolygon',
         'coordinates': expectedCoordinates,
       };
 

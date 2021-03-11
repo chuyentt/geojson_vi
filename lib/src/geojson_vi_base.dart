@@ -14,10 +14,20 @@ abstract class GeoJSON {
 
   /// The constructor from map
   factory GeoJSON.fromMap(Map<String, dynamic> map) {
+    assert(map.containsKey('type'), 'There MUST be contains key `type`');
     assert(
-        map.containsKey('type') && map['type'] is String,
-        'The map is Map<String, dynamic>. '
-        'There MUST be contains key `type`, and is String');
+        [
+          'FeatureCollection',
+          'Feature',
+          'Point',
+          'MultiPoint',
+          'LineString',
+          'MultiLineString',
+          'Polygon',
+          'MultiPolygon',
+          'GeometryCollection'
+        ].contains(map['type']),
+        'Invalid type');
 
     final _type = ExtGeoJSONType.fromString(map['type']);
     late var _instance;

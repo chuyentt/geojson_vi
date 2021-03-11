@@ -14,6 +14,7 @@ void main() {
   group('GeoJSONMultiPoint', () {
     test('creates an instances by using fromMap', () {
       final data = {
+        'type': 'MultiPoint',
         'coordinates': expectedCoordinates,
       };
 

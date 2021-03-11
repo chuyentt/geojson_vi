@@ -167,16 +167,17 @@ class GeoJSONFeatureCollection implements GeoJSON {
 
   /// The constructor from map
   factory GeoJSONFeatureCollection.fromMap(Map<String, dynamic> map) {
-    assert(
-        map.containsKey('features') && map['features'] is List,
-        'The map is Map<String, dynamic>. '
+    assert(map.containsKey('type'), 'There MUST be contains key `type`');
+    assert(['FeatureCollection'].contains(map['type']), 'Invalid type');
+    assert(map.containsKey('features'),
         'There MUST be contains key `features`');
+    assert(
+        map['features'] is List, 'There MUST be array of the feature.');
     final value = map['features'];
     final _features = <GeoJSONFeature>[];
     value.forEach((map) {
       _features.add(GeoJSONFeature.fromMap(map));
     });
-
     return GeoJSONFeatureCollection(_features);
   }
 
