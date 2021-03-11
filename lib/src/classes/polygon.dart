@@ -6,7 +6,7 @@ import '../../geojson_vi.dart';
 /// The geometry type Polygon
 class GeoJSONPolygon implements GeoJSONGeometry {
   @override
-  GeoJSONType get type => GeoJSONType.polygon;
+  GeoJSONType type = GeoJSONType.polygon;
 
   /// The [coordinates] member is a array of linear ring coordinate
   /// arrays.
@@ -69,33 +69,32 @@ class GeoJSONPolygon implements GeoJSONGeometry {
 
   /// The constructor for the [coordinates] member
   GeoJSONPolygon(this.coordinates)
-      : assert(coordinates != null && coordinates.isNotEmpty,
+      : assert(coordinates.isNotEmpty,
             'The coordinates MUST be one or more elements');
 
   /// The constructor from map
   factory GeoJSONPolygon.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    if (map.containsKey('coordinates')) {
-      final llll = map['coordinates'];
-      if (llll is List) {
-        final _coordinates = <List<List<double>>>[];
-        llll.forEach((lll) {
-          if (lll is List) {
-            final _rings = <List<double>>[];
-            lll.forEach((ll) {
-              if (ll is List) {
-                final _pos =
-                    ll.map((e) => e.toDouble()).cast<double>().toList();
-                _rings.add(_pos);
-              }
-            });
-            _coordinates.add(_rings);
+    assert(
+        map.containsKey('coordinates') && map['coordinates'] is List,
+        'The map is Map<String, dynamic>. '
+        'There MUST be contains key `coordinates`, and is List');
+
+    final llll = map['coordinates'];
+    final _coordinates = <List<List<double>>>[];
+    llll.forEach((lll) {
+      if (lll is List) {
+        final _rings = <List<double>>[];
+        lll.forEach((ll) {
+          if (ll is List) {
+            final _pos =
+                ll.map((e) => e.toDouble()).cast<double>().toList();
+            _rings.add(_pos);
           }
         });
-        return GeoJSONPolygon(_coordinates);
+        _coordinates.add(_rings);
       }
-    }
-    return null;
+    });
+    return GeoJSONPolygon(_coordinates);
   }
 
   /// The constructor from JSON string

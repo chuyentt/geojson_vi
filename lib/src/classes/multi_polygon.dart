@@ -5,7 +5,7 @@ import '../../geojson_vi.dart';
 /// The geometry type MultiPolygon
 class GeoJSONMultiPolygon implements GeoJSONGeometry {
   @override
-  GeoJSONType get type => GeoJSONType.multiPolygon;
+  GeoJSONType type = GeoJSONType.multiPolygon;
 
   /// The [coordinates] member is a member is an array of Polygon
   /// coordinate arrays.
@@ -50,41 +50,38 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
 
   /// The constructor for the [coordinates] member
   GeoJSONMultiPolygon(this.coordinates)
-      : assert(coordinates != null && coordinates.length >= 2,
+      : assert(coordinates.length >= 2,
             'The coordinates MUST be two or more elements');
 
   /// The constructor from map
   factory GeoJSONMultiPolygon.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    if (map.containsKey('coordinates')) {
-      final lllll = map['coordinates'];
-      if (lllll is List) {
-        final _coordinates = <List<List<List<double>>>>[];
-        lllll.forEach((llll) {
-          final _polygon = <List<List<double>>>[];
-          if (llll is List) {
-            llll.forEach((lll) {
-              if (lll is List) {
-                final _rings = <List<double>>[];
-                lll.forEach((ll) {
-                  if (ll is List) {
-                    final _pos = ll
-                        .map((e) => e.toDouble())
-                        .cast<double>()
-                        .toList();
-                    _rings.add(_pos);
-                  }
-                });
-                _polygon.add(_rings);
+    assert(
+        map.containsKey('coordinates') && map['coordinates'] is List,
+        'The map is Map<String, dynamic>. '
+        'There MUST be contains key `coordinates`, and is List');
+
+    final lllll = map['coordinates'];
+    final _coordinates = <List<List<List<double>>>>[];
+    lllll.forEach((llll) {
+      final _polygon = <List<List<double>>>[];
+      if (llll is List) {
+        llll.forEach((lll) {
+          if (lll is List) {
+            final _rings = <List<double>>[];
+            lll.forEach((ll) {
+              if (ll is List) {
+                final _pos =
+                    ll.map((e) => e.toDouble()).cast<double>().toList();
+                _rings.add(_pos);
               }
             });
-            _coordinates.add(_polygon);
+            _polygon.add(_rings);
           }
         });
-        return GeoJSONMultiPolygon(_coordinates);
+        _coordinates.add(_polygon);
       }
-    }
-    return null;
+    });
+    return GeoJSONMultiPolygon(_coordinates);
   }
 
   /// The constructor from JSON string

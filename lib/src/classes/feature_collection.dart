@@ -3,13 +3,13 @@ import 'dart:collection';
 
 import '../../geojson_vi.dart';
 
-class ListExt<T> extends ListBase<T> {
+class ListExt<T> extends ListBase<T?> {
   List innerList = [];
 
   /// We defined some callback functions
-  void Function(T element) onAdd;
-  void Function(Iterable<T> iterable) onAddAll;
-  void Function(T element) onRemove;
+  void Function(T? element)? onAdd;
+  void Function(Iterable<T?> iterable)? onAddAll;
+  void Function(T? element)? onRemove;
 
   @override
   int get length => innerList.length;
@@ -20,43 +20,43 @@ class ListExt<T> extends ListBase<T> {
   }
 
   @override
-  void operator []=(int index, T value) {
+  void operator []=(int index, T? value) {
     innerList[index] = value;
   }
 
   @override
-  T operator [](int index) => innerList[index];
+  T? operator [](int index) => innerList[index];
 
   @override
-  void add(T element) {
-    if (onAdd != null) onAdd(element);
+  void add(T? element) {
+    if (onAdd != null) onAdd!(element);
     super.add(element);
   }
 
   @override
-  void addAll(Iterable<T> iterable) {
-    if (onAddAll != null) onAddAll(iterable);
+  void addAll(Iterable<T?> iterable) {
+    if (onAddAll != null) onAddAll!(iterable);
     super.addAll(iterable);
   }
 
   @override
-  bool remove(Object element) {
+  bool remove(Object? element) {
     final result = super.remove(element);
-    if (result && onRemove != null) onRemove(element);
+    if (result && onRemove != null) onRemove!(element as T?);
     return result;
   }
 
   @override
-  T removeAt(int index) {
+  T? removeAt(int index) {
     final result = super.removeAt(index);
-    if (result != null && onRemove != null) onRemove(result);
+    if (result != null && onRemove != null) onRemove!(result);
     return result;
   }
 
   @override
-  T removeLast() {
+  T? removeLast() {
     final result = super.removeLast();
-    if (result != null && onRemove != null) onRemove(result);
+    if (result != null && onRemove != null) onRemove!(result);
     return result;
   }
 }
@@ -64,13 +64,13 @@ class ListExt<T> extends ListBase<T> {
 /// Get bbox
 ///
 /// Returns bbox from list of the features
-List<double> _getBbox(List<GeoJSONFeature> features) {
+List<double> _getBbox(List<GeoJSONFeature?> features) {
   if (features.isEmpty) return [-180.0, -90.0, 180.0, 90.0];
   final longitudes = <double>[];
   final latitudes = <double>[];
-  Future.forEach(features, (GeoJSONFeature element) {
-    longitudes.addAll([element.bbox[0], element.bbox[2]]);
-    latitudes.addAll([element.bbox[1], element.bbox[3]]);
+  Future.forEach(features, (GeoJSONFeature? element) {
+    longitudes.addAll([element!.bbox![0], element.bbox![2]]);
+    latitudes.addAll([element.bbox![1], element.bbox![3]]);
   });
 
   longitudes.removeWhere((e) => (e == -180.0) || (e == 180.0));
@@ -78,10 +78,10 @@ List<double> _getBbox(List<GeoJSONFeature> features) {
   longitudes.sort();
   latitudes.sort();
   return [
-    longitudes?.first ?? -180.0,
-    latitudes?.first ?? -90.0,
-    longitudes?.last ?? 180.0,
-    latitudes?.last ?? 90.0,
+    longitudes.first,
+    latitudes.first,
+    longitudes.last,
+    latitudes.last,
   ];
 }
 
@@ -102,34 +102,34 @@ List<double> _addBbox(List<double> bbox1, List<double> bbox2) {
   longitudes.sort();
   latitudes.sort();
   return [
-    longitudes?.first ?? -180.0,
-    latitudes?.first ?? -90.0,
-    longitudes?.last ?? 180.0,
-    latitudes?.last ?? 90.0,
+    longitudes.first,
+    latitudes.first,
+    longitudes.last,
+    latitudes.last,
   ];
 }
 
 /// Remove bbox
 ///
 /// Returns bbox1 \ bbox2
-List<double> _removeBbox(List<double> bbox1, List<double> bbox2) {
+List<double> _removeBbox(List<double> bbox1, List<double>? bbox2) {
   final longitudes = <double>[];
   final latitudes = <double>[];
 
   longitudes.addAll([bbox1[0], bbox1[2]]);
   latitudes.addAll([bbox1[1], bbox1[3]]);
 
-  longitudes.removeWhere((e) => (e == bbox2[0]) || (e == bbox2[2]));
-  latitudes.removeWhere((e) => (e == bbox2[1]) || (e == bbox2[3]));
+  longitudes.removeWhere((e) => (e == bbox2![0]) || (e == bbox2[2]));
+  latitudes.removeWhere((e) => (e == bbox2![1]) || (e == bbox2[3]));
   longitudes.removeWhere((e) => (e == -180.0) || (e == 180.0));
   latitudes.removeWhere((e) => (e == -90.0) || (e == 90.0));
   longitudes.sort();
   latitudes.sort();
   return [
-    longitudes?.first ?? -180.0,
-    latitudes?.first ?? -90.0,
-    longitudes?.last ?? 180.0,
-    latitudes?.last ?? 90.0,
+    longitudes.first,
+    latitudes.first,
+    longitudes.last,
+    latitudes.last,
   ];
 }
 
@@ -138,48 +138,46 @@ List<double> _removeBbox(List<double> bbox1, List<double> bbox2) {
 /// for this array to be empty.
 class GeoJSONFeatureCollection implements GeoJSON {
   @override
-  GeoJSONType get type => GeoJSONType.featureCollection;
+  GeoJSONType type = GeoJSONType.featureCollection;
 
   ListExt<GeoJSONFeature> _features = ListExt<GeoJSONFeature>();
 
   /// The [features] member is a array of the GeoJSONFeature
-  List<GeoJSONFeature> get features => _features;
-  set features(List<GeoJSONFeature> features) {
+  List<GeoJSONFeature?> get features => _features;
+  set features(List<GeoJSONFeature?> features) {
     final listFeature = ListExt<GeoJSONFeature>();
-    listFeature.onAdd = (feature) => onAdd(feature);
+    listFeature.onAdd = (feature) => onAdd(feature!);
     listFeature.onAddAll = (features) => onAddAll(features);
-    listFeature.onRemove = (feature) => onRemove(feature);
+    listFeature.onRemove = (feature) => onRemove(feature!);
     listFeature.addAll(features);
     _features = listFeature;
   }
 
-  List<double> _bbox;
+  List<double>? _bbox;
 
   /// The constructor for the [features] member
   GeoJSONFeatureCollection(List<GeoJSONFeature> features) {
     final listFeature = ListExt<GeoJSONFeature>();
-    listFeature.onAdd = (feature) => onAdd(feature);
+    listFeature.onAdd = (feature) => onAdd(feature!);
     listFeature.onAddAll = (features) => onAddAll(features);
-    listFeature.onRemove = (feature) => onRemove(feature);
-    listFeature.addAll(features ?? []);
+    listFeature.onRemove = (feature) => onRemove(feature!);
+    listFeature.addAll(features);
     _features = listFeature;
   }
 
   /// The constructor from map
   factory GeoJSONFeatureCollection.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    if (map.containsKey('features')) {
-      final value = map['features'];
-      if (value is List) {
-        final _features = <GeoJSONFeature>[];
-        value.forEach((map) {
-          _features.add(GeoJSONFeature.fromMap(map));
-        });
+    assert(
+        map.containsKey('features') && map['features'] is List,
+        'The map is Map<String, dynamic>. '
+        'There MUST be contains key `features`');
+    final value = map['features'];
+    final _features = <GeoJSONFeature>[];
+    value.forEach((map) {
+      _features.add(GeoJSONFeature.fromMap(map));
+    });
 
-        return GeoJSONFeatureCollection(_features);
-      }
-    }
-    return null;
+    return GeoJSONFeatureCollection(_features);
   }
 
   /// The constructor from JSON string
@@ -188,27 +186,27 @@ class GeoJSONFeatureCollection implements GeoJSON {
 
   /// The callback function is passed when the feature is added
   void onAdd(GeoJSONFeature feature) {
-    _bbox = _addBbox(_bbox, feature.bbox);
+    _bbox = _addBbox(_bbox!, feature.bbox!);
   }
 
   /// The callback function is passed when the features is added
-  void onAddAll(Iterable<GeoJSONFeature> features) {
-    _bbox = _getBbox(features);
+  void onAddAll(Iterable<GeoJSONFeature?> features) {
+    _bbox = _getBbox(features as List<GeoJSONFeature?>);
   }
 
   /// The callback function is passed when the feature is removed
   void onRemove(GeoJSONFeature feature) {
-    _bbox = _removeBbox(_bbox, feature.bbox);
+    _bbox = _removeBbox(_bbox!, feature.bbox);
   }
 
   @override
-  List<double> get bbox => _bbox;
+  List<double>? get bbox => _bbox;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'type': type.value,
-      'features': features.map((e) => e.toMap()).toList(),
+      'features': features.map((e) => e!.toMap()).toList(),
     };
   }
 

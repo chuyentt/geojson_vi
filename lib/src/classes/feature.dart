@@ -6,7 +6,7 @@ import '../../geojson_vi.dart';
 class GeoJSONFeature implements GeoJSON {
   /// A Feature object has a [type] member with the value "Feature".
   @override
-  final type = GeoJSONType.feature;
+  GeoJSONType type = GeoJSONType.feature;
 
   GeoJSONGeometry _geometry;
 
@@ -23,15 +23,15 @@ class GeoJSONFeature implements GeoJSON {
   /// A Feature object has a member with the name [properties]. The
   /// value of the properties member is an object (any JSON object or a
   /// JSON null value).
-  var properties = <String, dynamic>{};
+  Map<String, dynamic>? properties = <String, dynamic>{};
 
   /// The [id] is a custom member commonly used as an identifier
-  String id;
+  String? id;
 
   /// The [title] is a custom member commonly used as foreign member
-  String title;
+  String? title;
 
-  List<double> _bbox;
+  List<double>? _bbox;
 
   /// The constructor for the [geometry] member.
   GeoJSONFeature(GeoJSONGeometry geometry,
@@ -41,15 +41,14 @@ class GeoJSONFeature implements GeoJSON {
 
   /// The constructor from map
   factory GeoJSONFeature.fromMap(Map<String, dynamic> map) {
-    if (map == null || !map.containsKey('geometry')) return null;
-    var _properties;
-    if (map.containsKey('properties') &&
-        map['properties'] is Map &&
-        (map['properties']).isNotEmpty) _properties = map['properties'];
+    assert(
+        map.containsKey('geometry'),
+        'The map is Map<String, dynamic>. '
+        'There MUST be contains key `geometry`');
 
     return GeoJSONFeature(
       GeoJSONGeometry.fromMap(map['geometry']),
-      properties: _properties,
+      properties: map['properties'],
       id: map['id'],
       title: map['title'],
     );
@@ -60,7 +59,7 @@ class GeoJSONFeature implements GeoJSON {
       GeoJSONFeature.fromMap(json.decode(source));
 
   @override
-  List<double> get bbox => _bbox;
+  List<double>? get bbox => _bbox;
 
   @Deprecated(
     'Use `geometry.toMap()` instead. '
@@ -74,9 +73,9 @@ class GeoJSONFeature implements GeoJSON {
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       'type': type.value,
-      if (properties != null && properties.isNotEmpty)
+      if (properties != null && properties!.isNotEmpty)
         'properties': properties,
-      'geometry': geometry?.toMap(),
+      'geometry': geometry.toMap(),
     };
   }
 

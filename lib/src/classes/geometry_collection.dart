@@ -4,7 +4,7 @@ import '../../geojson_vi.dart';
 
 class GeoJSONGeometryCollection implements GeoJSONGeometry {
   @override
-  GeoJSONType get type => GeoJSONType.geometryCollection;
+  GeoJSONType type = GeoJSONType.geometryCollection;
 
   /// The [geometries] member is a array of the geometry
   var geometries = <GeoJSONGeometry>[];
@@ -15,10 +15,10 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
   @override
   List<double> get bbox {
     final longitudes = geometries
-        .expand((element) => [element.bbox[0], element.bbox[2]])
+        .expand((element) => [element.bbox![0], element.bbox![2]])
         .toList();
     final latitudes = geometries
-        .expand((element) => [element.bbox[1], element.bbox[3]])
+        .expand((element) => [element.bbox![1], element.bbox![3]])
         .toList();
     longitudes.sort();
     latitudes.sort();
@@ -36,24 +36,23 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
 
   /// The constructor for the [geometries] member
   GeoJSONGeometryCollection(this.geometries)
-      : assert(geometries != null && geometries.isNotEmpty,
+      : assert(geometries.isNotEmpty,
             'The coordinates MUST be one or more elements');
 
   /// The constructor from map
   factory GeoJSONGeometryCollection.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    if (map.containsKey('geometries')) {
-      final value = map['geometries'];
-      if (value is List) {
-        final _geometries = <GeoJSONGeometry>[];
-        value.forEach((map) {
-          _geometries.add(GeoJSONGeometry.fromMap(map));
-        });
+    assert(
+        map.containsKey('geometries') && map['geometries'] is List,
+        'The map is Map<String, dynamic>. '
+        'There MUST be contains key `geometries`');
 
-        return GeoJSONGeometryCollection(_geometries);
-      }
-    }
-    return null;
+    final value = map['geometries'];
+    final _geometries = <GeoJSONGeometry>[];
+    value.forEach((map) {
+      _geometries.add(GeoJSONGeometry.fromMap(map));
+    });
+
+    return GeoJSONGeometryCollection(_geometries);
   }
 
   /// The constructor from JSON string

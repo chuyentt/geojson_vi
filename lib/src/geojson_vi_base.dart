@@ -5,19 +5,23 @@ import '../geojson_vi.dart';
 /// GeoJSON - A geospatial data interchange format
 abstract class GeoJSON {
   /// The GeometryType [type] must be initialized.
-  final GeoJSONType type;
+  late final GeoJSONType type;
 
   /// Bounding Box
   ///
   /// Returns array of double values [west, south, east, north]
-  List<double> get bbox;
+  List<double>? get bbox;
 
   /// The constructor from map
   factory GeoJSON.fromMap(Map<String, dynamic> map) {
-    if ((map == null) || !map.containsKey('type')) return null;
+    assert(
+        map.containsKey('type') && map['type'] is String,
+        'The map is Map<String, dynamic>. '
+        'There MUST be contains key `type`, and is String');
+
     final _type = ExtGeoJSONType.fromString(map['type']);
-    var _instance;
-    switch (_type) {
+    late var _instance;
+    switch (_type!) {
       case GeoJSONType.featureCollection:
         _instance = GeoJSONFeatureCollection.fromMap(map);
         break;

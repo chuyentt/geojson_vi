@@ -64,7 +64,7 @@ extension ExtGeoJSONType on GeoJSONType {
     return _str;
   }
 
-  static GeoJSONType fromString(String str) {
+  static GeoJSONType? fromString(String? str) {
     var _type;
     switch (str) {
       case 'FeatureCollection':
@@ -94,6 +94,7 @@ extension ExtGeoJSONType on GeoJSONType {
       case 'GeometryCollection':
         _type = GeoJSONType.geometryCollection;
     }
+    assert(_type != null, 'Invalid GeoJSON type!');
     return _type;
   }
 }

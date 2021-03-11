@@ -5,7 +5,7 @@ import '../../geojson_vi.dart';
 /// The geometry type MultiLineString
 class GeoJSONMultiLineString implements GeoJSONGeometry {
   @override
-  GeoJSONType get type => GeoJSONType.multiLineString;
+  GeoJSONType type = GeoJSONType.multiLineString;
 
   /// The [coordinates] member is a array of LineString coordinate
   /// arrays.
@@ -46,33 +46,31 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
 
   /// The constructor for the [coordinates] member
   GeoJSONMultiLineString(this.coordinates)
-      : assert(coordinates != null && coordinates.isNotEmpty,
+      : assert(coordinates.isNotEmpty,
             'The coordinates MUST be one or more elements');
 
   /// The constructor from map
   factory GeoJSONMultiLineString.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    if (map.containsKey('coordinates')) {
-      final llll = map['coordinates'];
-      if (llll is List) {
-        final _coordinates = <List<List<double>>>[];
-        llll.forEach((lll) {
-          if (lll is List) {
-            final _lines = <List<double>>[];
-            lll.forEach((ll) {
-              if (ll is List) {
-                final _pos =
-                    ll.map((e) => e.toDouble()).cast<double>().toList();
-                _lines.add(_pos);
-              }
-            });
-            _coordinates.add(_lines);
+    assert(
+        map.containsKey('coordinates') && map['coordinates'] is List,
+        'The map is Map<String, dynamic>. '
+        'There MUST be contains key `coordinates`, and is List');
+    final llll = map['coordinates'];
+    final _coordinates = <List<List<double>>>[];
+    llll.forEach((lll) {
+      if (lll is List) {
+        final _lines = <List<double>>[];
+        lll.forEach((ll) {
+          if (ll is List) {
+            final _pos =
+                ll.map((e) => e.toDouble()).cast<double>().toList();
+            _lines.add(_pos);
           }
         });
-        return GeoJSONMultiLineString(_coordinates);
+        _coordinates.add(_lines);
       }
-    }
-    return null;
+    });
+    return GeoJSONMultiLineString(_coordinates);
   }
 
   /// The constructor from JSON string

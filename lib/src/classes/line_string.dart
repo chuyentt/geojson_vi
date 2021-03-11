@@ -6,7 +6,7 @@ import '../../geojson_vi.dart';
 /// The geometry type LineString
 class GeoJSONLineString implements GeoJSONGeometry {
   @override
-  GeoJSONType get type => GeoJSONType.lineString;
+  GeoJSONType type = GeoJSONType.lineString;
 
   /// The [coordinates] member is a array of two or more positions
   var coordinates = <List<double>>[];
@@ -59,27 +59,25 @@ class GeoJSONLineString implements GeoJSONGeometry {
 
   /// The constructor for the [coordinates] member
   GeoJSONLineString(this.coordinates)
-      : assert(coordinates != null && coordinates.length >= 2,
+      : assert(coordinates.length >= 2,
             'The coordinates MUST be two or more positions');
 
   /// The constructor from map
   factory GeoJSONLineString.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    if (map.containsKey('coordinates')) {
-      final lll = map['coordinates'];
-      if (lll is List) {
-        final _coordinates = <List<double>>[];
-        lll.forEach((ll) {
-          if (ll is List) {
-            final _pos =
-                ll.map((e) => e.toDouble()).cast<double>().toList();
-            _coordinates.add(_pos);
-          }
-        });
-        return GeoJSONLineString(_coordinates);
+    assert(
+        map.containsKey('coordinates') && map['coordinates'] is List,
+        'The map is Map<String, dynamic>. '
+        'There MUST be contains key `coordinates`, and is List');
+
+    final lll = map['coordinates'];
+    final _coordinates = <List<double>>[];
+    lll.forEach((ll) {
+      if (ll is List) {
+        final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
+        _coordinates.add(_pos);
       }
-    }
-    return null;
+    });
+    return GeoJSONLineString(_coordinates);
   }
 
   /// The constructor from JSON string

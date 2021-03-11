@@ -6,7 +6,7 @@ import '../../geojson_vi.dart';
 abstract class GeoJSONGeometry implements GeoJSON {
   /// The GeometryType [type] must be initialized.
   @override
-  final GeoJSONType type;
+  late final GeoJSONType type;
 
   /// Area geometry
   ///
@@ -20,7 +20,7 @@ abstract class GeoJSONGeometry implements GeoJSON {
 
   /// The constructor from map
   factory GeoJSONGeometry.fromMap(Map<String, dynamic> map) {
-    return GeoJSON.fromMap(map);
+    return GeoJSON.fromMap(map) as GeoJSONGeometry;
   }
 
   /// The constructor from JSON string

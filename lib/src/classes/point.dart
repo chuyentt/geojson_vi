@@ -5,7 +5,7 @@ import '../../geojson_vi.dart';
 /// The geometry type Point
 class GeoJSONPoint implements GeoJSONGeometry {
   @override
-  GeoJSONType get type => GeoJSONType.point;
+  GeoJSONType type = GeoJSONType.point;
 
   /// The [coordinates] member is a single position (two or more
   /// elements). The first two elements are `longitude` and `latitude`
@@ -28,22 +28,19 @@ class GeoJSONPoint implements GeoJSONGeometry {
   /// The constructor for the [coordinates] member
   GeoJSONPoint(this.coordinates)
       : assert(
-            coordinates != null && coordinates.length >= 2,
+            coordinates.length >= 2,
             'The coordinates is List<double>. '
             'There MUST be two or more elements');
 
   /// The constructor from map
   factory GeoJSONPoint.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    if (map.containsKey('coordinates')) {
-      final value = map['coordinates'];
-      if (value is List) {
-        final _pos =
-            value.map((e) => e.toDouble()).cast<double>().toList();
-        return GeoJSONPoint(_pos);
-      }
-    }
-    return null;
+    assert(
+        map.containsKey('coordinates') && map['coordinates'] is List,
+        'The map is Map<String, dynamic>. '
+        'There MUST be contains key `coordinates`, and is List');
+    final value = map['coordinates'];
+    final _pos = value.map((e) => e.toDouble()).cast<double>().toList();
+    return GeoJSONPoint(_pos);
   }
 
   /// The constructor from JSON string
