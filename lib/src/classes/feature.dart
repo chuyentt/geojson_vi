@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import '../../geojson_vi.dart';
 
@@ -59,6 +60,12 @@ class GeoJSONFeature implements GeoJSON {
       GeoJSONFeature.fromMap(json.decode(source));
 
   @override
+  Future<File> save(String path) async {
+    var file = File(path);
+    return file.writeAsString(toJSON());
+  }
+
+  @override
   List<double>? get bbox => _bbox;
 
   @Deprecated(
@@ -73,8 +80,7 @@ class GeoJSONFeature implements GeoJSON {
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       'type': type.value,
-      if (properties != null && properties!.isNotEmpty)
-        'properties': properties,
+      'properties': properties,
       'geometry': geometry.toMap(),
     };
   }

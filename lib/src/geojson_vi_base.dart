@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import '../geojson_vi.dart';
 
@@ -67,6 +68,17 @@ abstract class GeoJSON {
   factory GeoJSON.fromJSON(String source) =>
       GeoJSON.fromMap(json.decode(source));
 
+  /// Load GeoJSON from file with file path
+  static Future<GeoJSON> load(String path) async {
+    return await _GeoJSON._load(path);
+  }
+
+  /// Save GeoJSON to file with file path
+  Future<File> save(String path) async {
+    var file = File(path);
+    return file.writeAsString(toJSON());
+  }
+
   /// Converts GeoJSON to a Map
   Map<String, dynamic> toMap();
 
@@ -85,4 +97,18 @@ abstract class GeoJSON {
 
   @override
   int get hashCode => type.hashCode;
+}
+
+abstract class _GeoJSON implements GeoJSON {
+  /// Private load
+  static Future<GeoJSON> _load(String path) async {
+    var file = File(path);
+    assert(await file.exists(), 'File "$path" not found!');
+
+    /// Read file as string
+    final data = await file.readAsString();
+    var map = json.decode(data);
+    final geoJSON = GeoJSON.fromMap(map);
+    return geoJSON;
+  }
 }

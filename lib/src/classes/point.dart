@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import '../../geojson_vi.dart';
 
@@ -39,8 +40,6 @@ class GeoJSONPoint implements GeoJSONGeometry {
     assert(map.containsKey('coordinates'),
         'There MUST be contains key `coordinates`');
     assert(map['coordinates'] is List, 'There MUST be List of double');
-    assert((map['coordinates'] as List).length > 1,
-        'The position MUST be two or more element');
     final ll = map['coordinates'];
     assert((ll as List).length > 1, 'There MUST be two or more element');
     final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
@@ -50,6 +49,12 @@ class GeoJSONPoint implements GeoJSONGeometry {
   /// The constructor from JSON string
   factory GeoJSONPoint.fromJSON(String source) =>
       GeoJSONPoint.fromMap(json.decode(source));
+
+  @override
+  Future<File> save(String path) async {
+    var file = File(path);
+    return file.writeAsString(toJSON());
+  }
 
   @override
   Map<String, dynamic> toMap() {

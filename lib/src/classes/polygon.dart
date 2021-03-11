@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import '../../geojson_vi.dart';
@@ -78,7 +79,7 @@ class GeoJSONPolygon implements GeoJSONGeometry {
     assert(['Polygon'].contains(map['type']), 'Invalid type');
     assert(map.containsKey('coordinates'),
         'There MUST be contains key `coordinates`');
-    assert(map['coordinates'] is List<List<List<dynamic>>>,
+    assert(map['coordinates'] is List,
         'There MUST be array of linear ring coordinate arrays.');
     final llll = map['coordinates'];
     final _coordinates = <List<List<double>>>[];
@@ -100,6 +101,12 @@ class GeoJSONPolygon implements GeoJSONGeometry {
   /// The constructor from JSON string
   factory GeoJSONPolygon.fromJSON(String source) =>
       GeoJSONPolygon.fromMap(json.decode(source));
+
+  @override
+  Future<File> save(String path) async {
+    var file = File(path);
+    return file.writeAsString(toJSON());
+  }
 
   @override
   Map<String, dynamic> toMap() {

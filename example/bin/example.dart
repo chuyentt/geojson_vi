@@ -1,9 +1,6 @@
 import 'package:geojson_vi/geojson_vi.dart';
 
-void main() {
-  /// Create GeoJSON object from data
-  /// A GeoJSON object represents a Geometry (Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon, GeometryCollection), Feature, or FeatureCollection.
-  ///
+Future<void> main() async {
   final pointDataMap = {
     'type': 'Point',
     'coordinates': [105.77389, 21.0720414]
@@ -65,7 +62,17 @@ void main() {
         '$distance1\n$map1\n$json1\n$string1');
   }
 
-  /// Creating a new feature collection
+  final startTime = DateTime.now();
+  print(startTime.toString());
+  final path = '../test/test_resources/data.geojson';
+  final newPath = '../test/test_resources/data_new.geojson';
+  final geoJSONFromFile = await GeoJSON.load(path);
+  print(geoJSONFromFile.type);
+  print(geoJSONFromFile.bbox);
+  await geoJSONFromFile.save(newPath);
+  print(DateTime.now().difference(startTime));
+  
+    /// Creating a new feature collection
   final newFeatureColl = GeoJSONFeatureCollection([]);
 
   final point = GeoJSONPoint([105.780701, 21.067921]);
