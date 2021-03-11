@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import '../../geojson_vi.dart';
 
@@ -87,6 +88,12 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
   /// The constructor from JSON string
   factory GeoJSONMultiPolygon.fromJSON(String source) =>
       GeoJSONMultiPolygon.fromMap(json.decode(source));
+
+  @override
+  Future<File> save(String path) async {
+    var file = File(path);
+    return file.writeAsString(toJSON());
+  }
 
   @override
   Map<String, dynamic> toMap() {

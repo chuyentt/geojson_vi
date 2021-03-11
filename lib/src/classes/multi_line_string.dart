@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import '../../geojson_vi.dart';
 
@@ -52,17 +53,12 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
   /// The constructor from map
   factory GeoJSONMultiLineString.fromMap(Map<String, dynamic> map) {
     assert(map.containsKey('type'), 'There MUST be contains key `type`');
-
     assert(['MultiLineString'].contains(map['type']), 'Invalid type');
-
     assert(map.containsKey('coordinates'),
         'There MUST be contains key `coordinates`');
-
     assert(map['coordinates'] is List,
         'There MUST be array of linear ring coordinate arrays.');
-
     final llll = map['coordinates'];
-
     final _coordinates = <List<List<double>>>[];
     llll.forEach((lll) {
       assert(lll is List, 'There MUST be List');
@@ -82,6 +78,12 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
   /// The constructor from JSON string
   factory GeoJSONMultiLineString.fromJSON(String source) =>
       GeoJSONMultiLineString.fromMap(json.decode(source));
+
+  @override
+  Future<File> save(String path) async {
+    var file = File(path);
+    return file.writeAsString(toJSON());
+  }
 
   @override
   Map<String, dynamic> toMap() {

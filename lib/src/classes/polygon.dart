@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import '../../geojson_vi.dart';
@@ -100,6 +101,12 @@ class GeoJSONPolygon implements GeoJSONGeometry {
   /// The constructor from JSON string
   factory GeoJSONPolygon.fromJSON(String source) =>
       GeoJSONPolygon.fromMap(json.decode(source));
+
+  @override
+  Future<File> save(String path) async {
+    var file = File(path);
+    return file.writeAsString(toJSON());
+  }
 
   @override
   Map<String, dynamic> toMap() {

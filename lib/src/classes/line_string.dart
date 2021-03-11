@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import '../../geojson_vi.dart';
@@ -85,6 +86,12 @@ class GeoJSONLineString implements GeoJSONGeometry {
   /// The constructor from JSON string
   factory GeoJSONLineString.fromJSON(String source) =>
       GeoJSONLineString.fromMap(json.decode(source));
+
+  @override
+  Future<File> save(String path) async {
+    var file = File(path);
+    return file.writeAsString(toJSON());
+  }
 
   @override
   Map<String, dynamic> toMap() {
