@@ -58,7 +58,7 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
     assert(map.containsKey('coordinates'),
         'There MUST be contains key `coordinates`');
 
-    assert(map['coordinates'] is List<List<List<dynamic>>>,
+    assert(map['coordinates'] is List,
         'There MUST be array of linear ring coordinate arrays.');
 
     final llll = map['coordinates'];

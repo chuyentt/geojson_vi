@@ -59,7 +59,7 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
     assert(['MultiPolygon'].contains(map['type']), 'Invalid type');
     assert(map.containsKey('coordinates'),
         'There MUST be contains key `coordinates`');
-    assert(map['coordinates'] is List<List<List<List<dynamic>>>>,
+    assert(map['coordinates'] is List,
         'There MUST be array of Polygon coordinate arrays.');
     final lllll = map['coordinates'];
     final _coordinates = <List<List<List<double>>>>[];

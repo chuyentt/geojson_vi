@@ -39,8 +39,6 @@ class GeoJSONPoint implements GeoJSONGeometry {
     assert(map.containsKey('coordinates'),
         'There MUST be contains key `coordinates`');
     assert(map['coordinates'] is List, 'There MUST be List of double');
-    assert((map['coordinates'] as List).length > 1,
-        'The position MUST be two or more element');
     final ll = map['coordinates'];
     assert((ll as List).length > 1, 'There MUST be two or more element');
     final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();

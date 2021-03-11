@@ -68,7 +68,7 @@ class GeoJSONLineString implements GeoJSONGeometry {
     assert(['LineString'].contains(map['type']), 'Invalid type');
     assert(map.containsKey('coordinates'),
         'There MUST be contains key `coordinates`');
-    assert(map['coordinates'] is List<List<dynamic>>,
+    assert(map['coordinates'] is List,
         'There MUST be array of two or more positions.');
     final lll = map['coordinates'];
     final _coordinates = <List<double>>[];
