@@ -49,22 +49,91 @@ void main() {
     };
 
     test('create instance from map', () {
-      final featureCollection =
-          GeoJSONFeatureCollection.fromMap(expectedMap);
+      final featureCollection = GeoJSONFeatureCollection.fromMap(expectedMap);
       expect(featureCollection.features.length, 3);
     });
 
     test('toMap from an existing instance', () {
-      final featureCollection =
-          GeoJSONFeatureCollection.fromMap(expectedMap);
+      final featureCollection = GeoJSONFeatureCollection.fromMap(expectedMap);
       expect(featureCollection.toMap(), expectedMap);
     });
 
     test('toString from an existing instance', () {
       final expectedString = jsonEncode(expectedMap);
-      final featureCollection =
-          GeoJSONFeatureCollection.fromMap(expectedMap);
+      final featureCollection = GeoJSONFeatureCollection.fromMap(expectedMap);
       expect(featureCollection.toJSON(), expectedString);
+    });
+
+    test('creates featureCollection with an existing feature', () {
+      final point = GeoJSONPoint([105.780701, 21.067921]);
+
+      final pointFeature = GeoJSONFeature(point);
+      pointFeature.properties = {
+        'title': 'Hanoi University of Mining and Geology',
+        'url': 'http://humg.edu.vn',
+      };
+
+      final featureColl = GeoJSONFeatureCollection([pointFeature]);
+
+      expect(featureColl.features.length, 1);
+    });
+
+    test('adds a new feature to an existing featurecollection', () {
+      final point = GeoJSONPoint([105.780701, 21.067921]);
+
+      final pointFeature = GeoJSONFeature(point);
+      pointFeature.properties = {
+        'title': 'Hanoi University of Mining and Geology',
+        'url': 'http://humg.edu.vn',
+      };
+
+      var featureColl = GeoJSONFeatureCollection([pointFeature]);
+
+      final polygonCoordinates = [
+        [
+          [104.765625, 20.468189],
+          [106.545410, 20.468189],
+          [106.545410, 21.596150],
+          [104.765625, 21.596150],
+          [104.765625, 20.468189]
+        ]
+      ];
+
+      final polygon = GeoJSONPolygon(polygonCoordinates);
+      final polygonFeature = GeoJSONFeature(polygon);
+      featureColl.features.add(polygonFeature);
+
+      expect(featureColl.features.length, 2);
+    });
+
+    test('creates an emtpy featurecollection and adds features', () {
+      var featureColl = GeoJSONFeatureCollection([]);
+
+      final point = GeoJSONPoint([105.780701, 21.067921]);
+
+      final pointFeature = GeoJSONFeature(point);
+      pointFeature.properties = {
+        'title': 'Hanoi University of Mining and Geology',
+        'url': 'http://humg.edu.vn',
+      }; 
+
+      final polygonCoordinates = [
+        [
+          [104.765625, 20.468189],
+          [106.545410, 20.468189],
+          [106.545410, 21.596150],
+          [104.765625, 21.596150],
+          [104.765625, 20.468189]
+        ]
+      ];
+
+      featureColl.features.add(pointFeature);
+
+      final polygon = GeoJSONPolygon(polygonCoordinates);
+      final polygonFeature = GeoJSONFeature(polygon);
+      featureColl.features.add(polygonFeature);
+
+      expect(featureColl.features.length, 2);
     });
   });
 }
