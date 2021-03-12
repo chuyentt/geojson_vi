@@ -3,181 +3,143 @@
 
 GeoJSON package for Dart and Flutter developers to create, read, search, update and delete the geospatial data interchange format (GIS data). This package was originally published by Chuyen, T. T. (2020). The GeoJSON package for Dart and Flutter developers. Zenodo. https://doi.org/10.5281/ZENODO.3841927.
 
-GeoJSON package support GeoJSON objects like spatially bounded entity (a Feature), or a list of Features (a FeatureCollection). GeoJSON supports the following geometry types like Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Features in GeoJSON contain a Geometry object and additional properties, and a FeatureCollection contains a list of Features.
+This package supports GeoJSON objects including:
+
+- [x] **Geometry**
+  - [x] **Point** - represents a single position, the `coordinates` member is a single position in the order of longitude, latitude
+  - [x] **MultiPoint** - represents an array of positions
+  - [x] **LineString** - represents an array of positions
+  - [x] **MultiLineString** - represents an array of LineString
+   coordinate arrays
+  - [x] **Polygon** - represents an array of linear ring
+  - [x] **MultiPolygon** - represents an array of Polygon coordinate
+   arrays
+  - [x] **GeometryCollection** - represents a list of the geometry.
+- [x] **Feature** - represents a spatially bounded entity that includes properties member
+- [x] **FeatureCollection** - represents a list of the feature.
 
 ## GeoJSON UML Model
+
 ![GeoJSON UML Model](doc/GeoJSON_UML_Model.svg)
 
 ## Usage
-### Read the GeoJSON file
+
+### Create GeoJSON object
+
+```dart
+  final map = {
+    'type': 'Point',
+    'coordinates': [105.77389, 21.0720414]
+  };
+
+  final jsonString =
+      '{"type": "Point", "coordinates": [105.78070163726807, 21.067921688241626]}';
+
+  final polygonCoordinates = [
+    [
+      [104.765625, 20.468189],
+      [106.545410, 20.468189],
+      [106.545410, 21.596150],
+      [104.765625, 21.596150],
+      [104.765625, 20.468189]
+    ]
+  ];
+
+  // Creating a GeoJSON object from data without knowing its type
+  final pointFromMap = GeoJSON.fromMap(map);
+
+  // Creating GeoJSONPoint object from JSON string already know its type
+  final pointFromJSON = GeoJSONPoint.fromJSON(jsonString);
+
+  // Creating GeoJSONGeometry object from data without knowing its type
+  final geometryFromMap = GeoJSONGeometry.fromMap(map);
+
+  // Creating GeoJSONPoint object from JSON string already know its type
+  final geometryFromJSON = GeoJSONPoint.fromJSON(jsonString);
+
+  // Creating GeoJSONPoint object from coordinates data
+  final pointFromCoordinates = GeoJSONPoint([105.77389, 21.0720414]);
+
+  // Creating a GeoJSONFeature object
+  final feature = GeoJSONFeature(
+    GeoJSONPoint([105.780701, 21.067921]),
+    properties: {
+      'title': 'Hanoi University of Mining and Geology',
+      'url': 'http://humg.edu.vn',
+    },
+  );
+
+  // Creating GeoJSONFeatureCollection object
+  final featureCollection = GeoJSONFeatureCollection([]);
+  featureCollection.features.add(feature);
+
+  // Creating more GeoJSONFeature
+  final polygon = GeoJSONPolygon(polygonCoordinates);
+  final polygonFeature = GeoJSONFeature(polygon);
+  featureCollection.features.add(polygonFeature);
+```
+
+### Read and Write the GeoJSON file
+
+```dart
+  final path = '../test/test_resources/data.geojson';
+  final newPath = '../test/test_resources/data_new.geojson';
+  final geoJSONFromFile = await GeoJSON.load(path);
+  await geoJSONFromFile.save(newPath);
+```
+
+### Demo
+
 ```dart
 import 'package:geojson_vi/geojson_vi.dart';
 
 void main() {
-
-  // # Read the GeoJSON file
-  var launchTime = DateTime.now();
-  await GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
-    print(geoJSON.featureCollection.features.length);
-    print(DateTime.now().difference(launchTime));
+  final featureCollection = GeoJSONFeatureCollection([]);
+  final point = GeoJSONPoint([105.7743099, 21.0717561]);
+  final feature = GeoJSONFeature(point, properties: {
+    'marker-color': '#7e7e7e',
+    'marker-size': 'medium',
+    'marker-symbol': 'college',
+    'title': 'Hanoi University of Mining and Geology',
+    'department': 'Geoinformation Technology',
+    'address':
+        'No.18 Vien Street - Duc Thang Ward - Bac Tu Liem District - Ha Noi, Vietnam',
+    'url': 'http://humg.edu.vn'
   });
-}
-```
-### Read the GeoJSON file async
-```dart
-import 'package:geojson_vi/geojson_vi.dart';
-
-Future<void> main() async {
-
-  // # Read the GeoJSON file async
-  var launchTime = DateTime.now();
-  var geoJSON = await GeoJSON.load('example/data/parcels_82mb.geojson');
-  print(geoJSON.featureCollection.features.length);
-  print(DateTime.now().difference(launchTime));
-}
-```
-### Create new GeoJSON with a Feature
-Create an empty GeoJSON file, then add a feature and save it.
-```dart
-import 'package:geojson_vi/geojson_vi.dart';
-
-void main() {
-  // ### Create new GeoJSON with a Feature
-  // Create an empty GeoJSON file, then add a feature and save it.
-
-  // New GeoJSON
-  final geoJSON = GeoJSON.create('example/data/new.geojson');
-  // TODO: your code here...
-  await geoJSON.save();
-}
-```
-### Create the Feature
-```dart
-import 'package:geojson_vi/geojson_vi.dart';
-
-void main() {
-
-  // ### Create a Feature with Point geometry
-
-  // New GeoJSON
-  final geoJSON = GeoJSON.create('example/data/new.geojson');
-
-  // One position
-  final pos = <double>[];
-  pos.add(105.7743099);
-  pos.add(21.0717561);
-  // or pos.addAll([105.7743099,21.0717561]);
-
-  // Create a Point geometry from one position
-  final geom_point = GeoJSONPoint(pos);
-
-  // Create a Feature
-  final feature_point = GeoJSONFeature(geom_point);
-  feature_point.properties['marker-color'] = '#7e7e7e';
-  feature_point.properties['marker-size'] = 'medium';
-  feature_point.properties['marker-symbol'] = 'college';
-  feature_point.properties['title'] = 'Hanoi University of Mining and Geology';
-  feature_point.properties['department'] = 'Geoinformation Technology';
-  feature_point.properties['address'] = 'No.18 Vien Street - Duc Thang Ward - Bac Tu Liem District - Ha Noi, Vietnam';
-  feature_point.properties['url'] = 'http://humg.edu.vn';
-
-  // Add the feature to featureCollection
-  geoJSON.featureCollection.features.add(feature_point);
-
-  // ### Create a Feature with LineString geometry
-
-  // LineString from 3 positions
-  final pos1 = [105.7771289,21.0715458];
-  final pos2 = [105.7745218,21.0715658];
-  final pos3 = [105.7729125,21.0715358];
-
-  // Create a LineString geometry from array of position
-  final geom_line_string = GeoJSONLineString([pos1, pos2, pos3]);
-
-  // Create a Feature
-  final feature_line_string = GeoJSONFeature(geom_line_string);
-  feature_line_string.properties['stroke'] = '#7e7e7e';
-  feature_line_string.properties['stroke-width'] = 2;
-  feature_line_string.properties['stroke-opacity'] = 1;
-  feature_line_string.properties['title'] = 'Vien St.';
-
-  // Add the fearture to featureCollection
-  geoJSON.featureCollection.features.add(feature_line_string);
-
-  // ### Create a Feature with Polygon geometry
-
-  // A linear ring is a closed LineString with four or more positions.
-  // The first and last positions are equivalent, and they MUST contain
-  // identical values; their representation SHOULD also be identical.
-  final p01 = [105.7739666,21.0726795]; // The first position
-  final p02 = [105.7739719,21.0721991];
-  final p03 = [105.7743394,21.0721966];
-  final p04 = [105.7743310,21.0725269];
-  final p05 = [105.7742564,21.0726120];
-  final p06 = [105.7741865,21.0726095];
-  final p07 = [105.7741785,21.0726746];
-  final p08 = [105.7739666,21.0726795]; // The last position
-
-  //The exterior ring (boundary)
-  final linerRing = [p01,p02,p03,p04,p05,p06,p07,p08];
-
-  // Create a Polygon geometry from array of position
-  final geom_polygon = GeoJSONPolygon([
-    linerRing,
-    // and others the interior rings (if present) bound holes within the surface
-  ]);
-
-  // Create a Feature
-  final feature_polygon = GeoJSONFeature(geom_polygon);
-  feature_polygon.properties['stroke'] = '#555555';
-  feature_polygon.properties['stroke-width'] = 2;
-  feature_polygon.properties['stroke-opacity'] = 1;
-  feature_polygon.properties['fill'] = '#ab7942';
-  feature_polygon.properties['fill-opacity'] = 0.5;
-  feature_polygon.properties['title'] = 'HUMG\'s Office';
-
-  // Add to featureCollection
-  geoJSON.featureCollection.features.add(feature_polygon);
-
-  geoJSON.save();
-
-  // # Read the GeoJSON file
-  var launchTime = DateTime.now();
-  await GeoJSON.load('example/data/parcels_82mb.geojson').then((GeoJSON geoJSON) {
-    print(geoJSON.featureCollection.features.length);
-    print(DateTime.now().difference(launchTime));
-  });
-
-  // Calculate area of polygon
-  await GeoJSON.load('example/data/polygon_with_holes.geojson').then((value) {
-    value.featureCollection.features.forEach((element) {
-      if (element.geometry.type == GeometryType.polygon) {
-        GeoJSONPolygon pg = element.geometry;
-        print('Area: ${pg.area}');
-      }
-    });
-  });
-
-  // Search by geometry and properties
-  var polygonFeatures = geoJSON.featureCollection.features.where((element) {
-    return (element.geometry.type == GeometryType.polygon && (element.properties['title']).contains('HUMG'));
-  }).toList();
-
-  print(polygonFeatures.isNotEmpty ? polygonFeatures.first.toMap() : 'not found');
-
-  // # Read the GeoJSON file (cache applied)
-  launchTime = DateTime.now();
-  await GeoJSON.load('data/polygon_with_holes.geojson')
-      .then((GeoJSON geoJSON) {
-    print(geoJSON.featureCollection.features.length);
-    print(DateTime.now().difference(launchTime));
-  });
-
-  // Create GeoJSON from GeoJSON String Objects
-  var data = jsonEncode(geoJSON.featureCollection.toMap());
-
-  var g = GeoJSON.fromString(data);
-  print(g.featureCollection.features.length);
+  featureCollection.features.add(feature);
+  final pos1 = [105.7771289, 21.0715458];
+  final pos2 = [105.7745218, 21.0715658];
+  final pos3 = [105.7729125, 21.0715358];
+  final lineString = GeoJSONLineString([pos1, pos2, pos3]);
+  featureCollection.features.add(GeoJSONFeature(lineString, properties: {
+    'stroke': '#7e7e7e',
+    'stroke-width': 2,
+    'stroke-opacity': 1,
+    'title': 'Vien St.'
+  }));
+  final p01 = [105.7739666, 21.0726795]; // The first position
+  final p02 = [105.7739719, 21.0721991];
+  final p03 = [105.7743394, 21.0721966];
+  final p04 = [105.7743310, 21.0725269];
+  final p05 = [105.7742564, 21.0726120];
+  final p06 = [105.7741865, 21.0726095];
+  final p07 = [105.7741785, 21.0726746];
+  final p08 = [105.7739666, 21.0726795]; // The last position
+  final linerRing = [p01, p02, p03, p04, p05, p06, p07, p08];
+  featureCollection.features.add(
+    GeoJSONFeature(
+      GeoJSONPolygon([linerRing]),
+      properties: {
+        'stroke': '#555555',
+        'stroke-width': 2,
+        'stroke-opacity': 1,
+        'fill': '#ab7942',
+        'fill-opacity': 0.5,
+        'title': "HUMG's Office"
+      },
+    ),
+  );
+  print(featureCollection.toJSON());
 }
 ```
 Output: ```new.geojson```
