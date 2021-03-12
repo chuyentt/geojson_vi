@@ -71,4 +71,60 @@ Future<void> main() async {
   print(geoJSONFromFile.bbox);
   await geoJSONFromFile.save(newPath);
   print(DateTime.now().difference(startTime));
+  
+    /// Creating a new feature collection
+  final newFeatureColl = GeoJSONFeatureCollection([]);
+
+  final point = GeoJSONPoint([105.780701, 21.067921]);
+  final pointFeature = GeoJSONFeature(point);
+  pointFeature.properties = {
+    'title': 'Hanoi University of Mining and Geology',
+    'url': 'http://humg.edu.vn',
+  };
+
+  final polygonCoordinates = [
+    [
+      [104.765625, 20.468189],
+      [106.545410, 20.468189],
+      [106.545410, 21.596150],
+      [104.765625, 21.596150],
+      [104.765625, 20.468189]
+    ]
+  ];
+  newFeatureColl.features.add(pointFeature);
+  final polygon = GeoJSONPolygon(polygonCoordinates);
+  final polygonFeature = GeoJSONFeature(polygon);
+  newFeatureColl.features.add(polygonFeature);
+  print(newFeatureColl.toMap());
+  /*
+    {
+    'type': 'FeatureCollection',
+    'features': [
+      {
+        'type': 'Feature',
+        'properties': {'name': 'This is a Point'},
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [105.780163, 21.067921]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {'name': 'Example of Polygon'},
+        'geometry': {
+          'type': 'Polygon',
+          'coordinates': [
+            [
+              [104.765625, 20.468189],
+              [106.54541, 20.468189],
+              [106.54541, 21.59615],
+              [104.765625, 21.59615],
+              [104.765625, 20.468189]
+            ]
+          ]
+        }
+      }
+    ]
+  }
+  */
 }
