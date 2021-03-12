@@ -153,3 +153,7 @@
 ## 2.0.0
 - Internal refactor
 - Migrate to null-safety
+
+## 2.0.1
+- Removed: load, save methods
+- Fixed: formatting issues

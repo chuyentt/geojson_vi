@@ -62,16 +62,6 @@ Future<void> main() async {
         '$distance1\n$map1\n$json1\n$string1');
   }
 
-  final startTime = DateTime.now();
-  print(startTime.toString());
-  final path = '../test/test_resources/data.geojson';
-  final newPath = '../test/test_resources/data_new.geojson';
-  final geoJSONFromFile = await GeoJSON.load(path);
-  print(geoJSONFromFile.type);
-  print(geoJSONFromFile.bbox);
-  await geoJSONFromFile.save(newPath);
-  print(DateTime.now().difference(startTime));
-
   /// Creating a new feature collection
   final newFeatureColl = GeoJSONFeatureCollection([]);
 

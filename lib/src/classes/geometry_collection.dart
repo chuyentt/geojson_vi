@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import '../../geojson_vi.dart';
 
@@ -59,12 +58,6 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
   /// The constructor from JSON string
   factory GeoJSONGeometryCollection.fromJSON(String source) =>
       GeoJSONGeometryCollection.fromMap(json.decode(source));
-
-  @override
-  Future<File> save(String path) async {
-    var file = File(path);
-    return file.writeAsString(toJSON());
-  }
 
   @override
   Map<String, dynamic> toMap() {

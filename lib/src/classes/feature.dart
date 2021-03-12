@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import '../../geojson_vi.dart';
 
@@ -58,12 +57,6 @@ class GeoJSONFeature implements GeoJSON {
   /// The constructor from JSON string
   factory GeoJSONFeature.fromJSON(String source) =>
       GeoJSONFeature.fromMap(json.decode(source));
-
-  @override
-  Future<File> save(String path) async {
-    var file = File(path);
-    return file.writeAsString(toJSON());
-  }
 
   @override
   List<double>? get bbox => _bbox;
