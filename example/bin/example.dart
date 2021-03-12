@@ -71,8 +71,8 @@ Future<void> main() async {
   print(geoJSONFromFile.bbox);
   await geoJSONFromFile.save(newPath);
   print(DateTime.now().difference(startTime));
-  
-    /// Creating a new feature collection
+
+  /// Creating a new feature collection
   final newFeatureColl = GeoJSONFeatureCollection([]);
 
   final point = GeoJSONPoint([105.780701, 21.067921]);

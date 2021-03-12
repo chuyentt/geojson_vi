@@ -80,7 +80,7 @@ class GeoJSONFeature implements GeoJSON {
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       'type': type.value,
-      'properties': properties,
+      'properties': properties ?? {},
       'geometry': geometry.toMap(),
     };
   }

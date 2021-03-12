@@ -151,3 +151,5 @@
     -  multipolygons
 
 ## 2.0.0
+- Internal refactor
+- Migrate to null-safety
