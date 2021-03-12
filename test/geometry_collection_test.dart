@@ -161,14 +161,12 @@ void main() {
     };
 
     test('creates an instance via fromMap', () {
-      final geometryCollection =
-          GeoJSONGeometryCollection.fromMap(expectedMap);
+      final geometryCollection = GeoJSONGeometryCollection.fromMap(expectedMap);
       expect(geometryCollection.geometries.length, 7);
     });
 
     test('toMap returns map with geometries', () {
-      final geometryCollection =
-          GeoJSONGeometryCollection.fromMap(expectedMap);
+      final geometryCollection = GeoJSONGeometryCollection.fromMap(expectedMap);
       expect(geometryCollection.toMap(), expectedMap);
     });
 
@@ -176,8 +174,7 @@ void main() {
         'toString returns collection of key/value pairs of geospatial data as String',
         () {
       final expectedString = jsonEncode(expectedMap);
-      final geometryCollection =
-          GeoJSONGeometryCollection.fromMap(expectedMap);
+      final geometryCollection = GeoJSONGeometryCollection.fromMap(expectedMap);
       expect(geometryCollection.toJSON(), expectedString);
     });
   });

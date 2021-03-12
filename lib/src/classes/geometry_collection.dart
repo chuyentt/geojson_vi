@@ -45,8 +45,7 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
     assert(['GeometryCollection'].contains(map['type']), 'Invalid type');
     assert(map.containsKey('geometries'),
         'There MUST be contains key `geometries`');
-    assert(map['geometries'] is List,
-        'There MUST be array of the geometry.');
+    assert(map['geometries'] is List, 'There MUST be array of the geometry.');
     final value = map['geometries'];
     final _geometries = <GeoJSONGeometry>[];
     value.forEach((map) {

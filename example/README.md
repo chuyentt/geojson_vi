@@ -55,15 +55,6 @@
   featureCollection.features.add(polygonFeature);
 ```
 
-### Read and Write the GeoJSON file
-
-```dart
-  final path = '../test/test_resources/data.geojson';
-  final newPath = '../test/test_resources/data_new.geojson';
-  final geoJSONFromFile = await GeoJSON.load(path);
-  await geoJSONFromFile.save(newPath);
-```
-
 ### Demo
 
 ```dart

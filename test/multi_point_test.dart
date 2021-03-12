@@ -36,12 +36,7 @@ void main() {
     });
 
     test('get bbox of a given multipoint', () {
-      final expectedBbox = [
-        -42.187500,
-        -18.729502,
-        -40.473633,
-        -17.476432
-      ];
+      final expectedBbox = [-42.187500, -18.729502, -40.473633, -17.476432];
 
       final geoJson = GeoJSONMultiPoint(expectedCoordinates);
 

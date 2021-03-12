@@ -33,12 +33,7 @@ void main() {
     });
 
     test('get bbox of a given GeoJSONLineString', () {
-      final expectedBbox = [
-        -53.959350,
-        -30.057208,
-        -53.706665,
-        -29.396533
-      ];
+      final expectedBbox = [-53.959350, -30.057208, -53.706665, -29.396533];
 
       final geoJson = GeoJSONLineString(expectedCoordinates);
 

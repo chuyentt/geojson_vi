@@ -71,10 +71,8 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
         final _rings = <List<double>>[];
         lll.forEach((ll) {
           assert(ll is List, 'There MUST be List');
-          assert((ll as List).length > 1,
-              'There MUST be two or more element');
-          final _pos =
-              ll.map((e) => e.toDouble()).cast<double>().toList();
+          assert((ll as List).length > 1, 'There MUST be two or more element');
+          final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
           _rings.add(_pos);
         });
         _polygon.add(_rings);

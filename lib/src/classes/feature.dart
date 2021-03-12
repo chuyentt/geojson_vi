@@ -43,8 +43,8 @@ class GeoJSONFeature implements GeoJSON {
   factory GeoJSONFeature.fromMap(Map<String, dynamic> map) {
     assert(map.containsKey('type'), 'There MUST be contains key `type`');
     assert(['Feature'].contains(map['type']), 'Invalid type');
-    assert(map.containsKey('geometry'),
-        'There MUST be contains key `geometry`');
+    assert(
+        map.containsKey('geometry'), 'There MUST be contains key `geometry`');
     assert(map['geometry'] is Map, 'There MUST be geometry object.');
     return GeoJSONFeature(
       GeoJSONGeometry.fromMap(map['geometry']),

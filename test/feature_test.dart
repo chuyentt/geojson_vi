@@ -10,12 +10,7 @@ void main() {
       'key2': 'value for key 2',
       'key3': 'value for key 3'
     };
-    final expectedBbox = [
-      -43.230695,
-      -22.912718,
-      -43.229606,
-      -22.911592
-    ];
+    final expectedBbox = [-43.230695, -22.912718, -43.229606, -22.911592];
     final expectedMap = {
       'type': 'Feature',
       'id': expectedId,

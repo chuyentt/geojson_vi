@@ -115,7 +115,7 @@ void main() {
       pointFeature.properties = {
         'title': 'Hanoi University of Mining and Geology',
         'url': 'http://humg.edu.vn',
-      }; 
+      };
 
       final polygonCoordinates = [
         [

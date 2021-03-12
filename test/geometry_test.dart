@@ -13,8 +13,7 @@ void main() {
       expect(geoJson.runtimeType, GeoJSONPoint);
     });
 
-    test(
-        'given a dataMap with type MultiPoint, it returns GeoJSONMultiPoint',
+    test('given a dataMap with type MultiPoint, it returns GeoJSONMultiPoint',
         () {
       final data = {
         'type': 'MultiPoint',
@@ -28,8 +27,7 @@ void main() {
       expect(geoJson.runtimeType, GeoJSONMultiPoint);
     });
 
-    test(
-        'given a dataMap with type LineString, it returns GeoJSONLineString',
+    test('given a dataMap with type LineString, it returns GeoJSONLineString',
         () {
       final data = {
         'type': 'LineString',
@@ -63,8 +61,7 @@ void main() {
       expect(geoJson.runtimeType, GeoJSONMultiLineString);
     });
 
-    test('given a dataMap with type Polygon, it returns GeoJSONPolygon',
-        () {
+    test('given a dataMap with type Polygon, it returns GeoJSONPolygon', () {
       final data = {
         'type': 'Polygon',
         'coordinates': [

@@ -157,3 +157,7 @@
 ## 2.0.1
 - Removed: load, save methods
 - Fixed: formatting issues
+
+## 2.0.1+1
+- Fixed: formatting issues
+- Changed: README

@@ -47,12 +47,7 @@ void main() {
     });
 
     test('get bbox of a given multiLineString', () {
-      final expectedBbox = [
-        -51.998291,
-        -17.298199,
-        -49.482422,
-        -16.056371
-      ];
+      final expectedBbox = [-51.998291, -17.298199, -49.482422, -16.056371];
 
       final geoJson = GeoJSONMultiLineString(expectedCoordinates);
 

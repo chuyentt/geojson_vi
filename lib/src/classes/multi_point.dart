@@ -52,14 +52,12 @@ class GeoJSONMultiPoint implements GeoJSONGeometry {
     assert(['MultiPoint'].contains(map['type']), 'Invalid type');
     assert(map.containsKey('coordinates'),
         'There MUST be contains key `coordinates`');
-    assert(
-        map['coordinates'] is List, 'There MUST be array of positions.');
+    assert(map['coordinates'] is List, 'There MUST be array of positions.');
     final lll = map['coordinates'];
     final _coordinates = <List<double>>[];
     lll.forEach((ll) {
       assert(ll is List, 'There MUST be List');
-      assert(
-          (ll as List).length > 1, 'There MUST be two or more element');
+      assert((ll as List).length > 1, 'There MUST be two or more element');
       final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
       _coordinates.add(_pos);
     });

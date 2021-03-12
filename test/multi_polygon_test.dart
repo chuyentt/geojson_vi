@@ -49,8 +49,7 @@ void main() {
         'coordinates': expectedCoordinates,
       };
 
-      final geoJsonMultiPolygon =
-          GeoJSONMultiPolygon(expectedCoordinates);
+      final geoJsonMultiPolygon = GeoJSONMultiPolygon(expectedCoordinates);
 
       expect(geoJsonMultiPolygon.toMap(), expectedMap);
     });
@@ -58,8 +57,7 @@ void main() {
     test('get bbox of a given multipolygon', () {
       final expectedBbox = [100.000000, 0.000000, 103.000000, 3.000000];
 
-      final geoJsonMultiPolygon =
-          GeoJSONMultiPolygon(expectedCoordinates);
+      final geoJsonMultiPolygon = GeoJSONMultiPolygon(expectedCoordinates);
 
       expect(geoJsonMultiPolygon.bbox, expectedBbox);
     });
