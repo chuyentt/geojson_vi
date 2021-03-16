@@ -67,7 +67,13 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
   }
 
   @override
-  String toJSON() => json.encode(toMap());
+  String toJSON({int indent = 0}) {
+    if (indent > 0) {
+      return JsonEncoder.withIndent(' ' * indent).convert(toMap());
+    } else {
+      return json.encode(toMap());
+    }
+  }
 
   @override
   String toString() => 'GeometryCollection(geometries: $geometries)';
