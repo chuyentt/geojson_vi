@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:geojson_vi/geojson_vi.dart';
 import 'package:test/test.dart';
 
@@ -74,6 +77,16 @@ void main() {
       expect(geoJSON.toJSON(),
           '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"title":"Hanoi University of Mining and Geology","country":"Vietnam"},"geometry":{"type":"Point","coordinates":[105.77389,21.0720414]}}]}');
     });
+
+    test(
+        'creates an instances by using fromJSON for '
+        'type FeatureCollection - Read from file', () {
+      final data =
+          File('./test/test_resources/issue_13.geojson').readAsStringSync();
+      final geoJSON = GeoJSON.fromJSON(data);
+      expect(geoJSON.toMap(), json.decode(data));
+    });
+
     test(
         'creates an instances by using fromMap for '
         'type Feature', () {

@@ -50,7 +50,7 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
 
   /// The constructor for the [coordinates] member
   GeoJSONMultiPolygon(this.coordinates)
-      : assert(coordinates.length >= 2,
+      : assert(coordinates.first.first.length >= 2,
             'The coordinates MUST be two or more elements');
 
   /// The constructor from map
