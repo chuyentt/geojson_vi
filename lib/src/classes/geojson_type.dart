@@ -30,6 +30,7 @@ extension ExtGeoJSONType on GeoJSONType {
   @Deprecated('Use `value` instead. Will be removed in the next version')
   String get name => value;
 
+  /// Convert type into String
   String get value {
     var _str = '';
     switch (this) {
@@ -62,39 +63,5 @@ extension ExtGeoJSONType on GeoJSONType {
         break;
     }
     return _str;
-  }
-
-  static GeoJSONType? fromString(String? str) {
-    var _type;
-    switch (str) {
-      case 'FeatureCollection':
-        _type = GeoJSONType.featureCollection;
-        break;
-      case 'Feature':
-        _type = GeoJSONType.feature;
-        break;
-      case 'Point':
-        _type = GeoJSONType.point;
-        break;
-      case 'MultiPoint':
-        _type = GeoJSONType.multiPoint;
-        break;
-      case 'LineString':
-        _type = GeoJSONType.lineString;
-        break;
-      case 'MultiLineString':
-        _type = GeoJSONType.multiLineString;
-        break;
-      case 'Polygon':
-        _type = GeoJSONType.polygon;
-        break;
-      case 'MultiPolygon':
-        _type = GeoJSONType.multiPolygon;
-        break;
-      case 'GeometryCollection':
-        _type = GeoJSONType.geometryCollection;
-    }
-    assert(_type != null, 'Invalid GeoJSON type!');
-    return _type;
   }
 }

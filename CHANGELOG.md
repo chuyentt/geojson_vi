@@ -1,3 +1,7 @@
+## [2.0.2+1] - 2021-03-26
+
+* Updated API documentation
+
 ## 2.0.2
 
 * fixes issue 13 - multipolygon assert

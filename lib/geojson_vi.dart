@@ -1,3 +1,9 @@
+// Copyright (c) 2020-2021 Hanoi University of Mining and Geology, Vietnam.
+// All rights reserved.
+// Use of this source code is governed by a MIT license that can be
+// found in the LICENSE file.
+
+/// GeoJSON library
 library geojson_vi;
 
 export 'src/geojson_vi_base.dart';

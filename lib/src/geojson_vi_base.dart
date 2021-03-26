@@ -29,34 +29,34 @@ abstract class GeoJSON {
         ].contains(map['type']),
         'Invalid type');
 
-    final _type = ExtGeoJSONType.fromString(map['type']);
+    final _type = map['type'];
     late var _instance;
-    switch (_type!) {
-      case GeoJSONType.featureCollection:
+    switch (_type) {
+      case 'FeatureCollection':
         _instance = GeoJSONFeatureCollection.fromMap(map);
         break;
-      case GeoJSONType.feature:
+      case 'Feature':
         _instance = GeoJSONFeature.fromMap(map);
         break;
-      case GeoJSONType.point:
+      case 'Point':
         _instance = GeoJSONPoint.fromMap(map);
         break;
-      case GeoJSONType.multiPoint:
+      case 'MultiPoint':
         _instance = GeoJSONMultiPoint.fromMap(map);
         break;
-      case GeoJSONType.lineString:
+      case 'LineString':
         _instance = GeoJSONLineString.fromMap(map);
         break;
-      case GeoJSONType.multiLineString:
+      case 'MultiLineString':
         _instance = GeoJSONMultiLineString.fromMap(map);
         break;
-      case GeoJSONType.polygon:
+      case 'Polygon':
         _instance = GeoJSONPolygon.fromMap(map);
         break;
-      case GeoJSONType.multiPolygon:
+      case 'MultiPolygon':
         _instance = GeoJSONMultiPolygon.fromMap(map);
         break;
-      case GeoJSONType.geometryCollection:
+      case 'GeometryCollection':
         _instance = GeoJSONGeometryCollection.fromMap(map);
         break;
     }

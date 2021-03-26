@@ -5,22 +5,22 @@ GeoJSON package for Dart and Flutter developers to create, read, search, update 
 
 This package supports GeoJSON objects including:
 
-- [x] **Geometry**
-  - [x] **Point** - represents a single position, the `coordinates` member is a single position in the order of longitude, latitude
-  - [x] **MultiPoint** - represents an array of positions
-  - [x] **LineString** - represents an array of positions
-  - [x] **MultiLineString** - represents an array of LineString
+- **Geometry**
+  - **Point** - represents a single position, the `coordinates` member is a single position in the order of longitude, latitude
+  - **MultiPoint** - represents an array of positions
+  - **LineString** - represents an array of positions
+  - **MultiLineString** - represents an array of LineString
    coordinate arrays
-  - [x] **Polygon** - represents an array of linear ring
-  - [x] **MultiPolygon** - represents an array of Polygon coordinate
+  - **Polygon** - represents an array of linear ring
+  - **MultiPolygon** - represents an array of Polygon coordinate
    arrays
-  - [x] **GeometryCollection** - represents a list of the geometry.
-- [x] **Feature** - represents a spatially bounded entity that includes properties member
-- [x] **FeatureCollection** - represents a list of the feature.
+  - **GeometryCollection** - represents a list of the geometry.
+- **Feature** - represents a spatially bounded entity that includes properties member
+- **FeatureCollection** - represents a list of the feature.
 
 ## GeoJSON UML Model
 
-![GeoJSON UML Model](doc/GeoJSON_UML_Model.svg)
+![GeoJSON UML Model](https://raw.githubusercontent.com/chuyentt/geojson_vi/master/doc/GeoJSON_UML_Model.svg)
 
 ## Usage
 
