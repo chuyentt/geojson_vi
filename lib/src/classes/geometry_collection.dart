@@ -35,9 +35,7 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
   double get distance => 0.0;
 
   /// The constructor for the [geometries] member
-  GeoJSONGeometryCollection(this.geometries)
-      : assert(geometries.isNotEmpty,
-            'The coordinates MUST be one or more elements');
+  GeoJSONGeometryCollection(this.geometries);
 
   /// The constructor from map
   factory GeoJSONGeometryCollection.fromMap(Map<String, dynamic> map) {

@@ -1,3 +1,7 @@
+## [2.0.3] - 2021-06-08
+
+* Fixes "The coordinates MUST be one or more elements" in GeoJSONGeometryCollection #16
+
 ## [2.0.2+1] - 2021-03-26
 
 * Updated API documentation
