@@ -48,7 +48,7 @@ class GeoJSONFeature implements GeoJSON {
     assert(map['geometry'] is Map, 'There MUST be geometry object.');
     return GeoJSONFeature(
       GeoJSONGeometry.fromMap(map['geometry']),
-      properties: map['properties'],
+      properties: Map.castFrom(map['properties']),
       id: map['id'],
       title: map['title'],
     );
