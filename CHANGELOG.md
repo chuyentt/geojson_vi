@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2.0.6] - 2021-12-24
+
+* Fix GeometryCollection.bbox crashes when geometries is empty list #15
+
 ## [2.0.5] - 2021-12-24
 
 * Fix casting null value of "properties" to map #18

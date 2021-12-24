@@ -15,19 +15,19 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
   @override
   List<double> get bbox {
     final longitudes = geometries
-        .expand((element) => [element.bbox![0], element.bbox![2]])
+        .expand((element) => [element.bbox?[0], element.bbox?[2]])
         .toList();
     final latitudes = geometries
-        .expand((element) => [element.bbox![1], element.bbox![3]])
+        .expand((element) => [element.bbox?[1], element.bbox?[3]])
         .toList();
     longitudes.sort();
     latitudes.sort();
 
     return [
-      longitudes.first,
-      latitudes.first,
-      longitudes.last,
-      latitudes.last,
+      longitudes.first ?? 0,
+      latitudes.first ?? 0,
+      longitudes.last ?? 0,
+      latitudes.last ?? 0,
     ];
   }
 
