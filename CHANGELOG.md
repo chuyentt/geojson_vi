@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## [2.0.4] - 2021-06-08
+## [2.0.5] - 2021-12-24
+
+* Fix casting null value of "properties" to map #18
+
+## [2.0.4] - 2021-11-08
 
 * Fix empty map casting
 
