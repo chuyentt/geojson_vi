@@ -26,7 +26,7 @@ class GeoJSONFeature implements GeoJSON {
   Map<String, dynamic>? properties = <String, dynamic>{};
 
   /// The [id] is a custom member commonly used as an identifier
-  String? id;
+  dynamic id;
 
   /// The [title] is a custom member commonly used as foreign member
   String? title;

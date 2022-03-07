@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2.0.7] - 2022-03-07
+
+* Fix Unhandled Exception: type 'int' is not a subtype of type 'String?'
+
 ## [2.0.6] - 2021-12-24
 
 * Fix GeometryCollection.bbox crashes when geometries is empty list #15
