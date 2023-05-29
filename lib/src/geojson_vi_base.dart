@@ -2,17 +2,30 @@ import 'dart:convert';
 
 import '../geojson_vi.dart';
 
-/// GeoJSON - A geospatial data interchange format
+/// `GeoJSON` is an abstract class representing a geospatial data interchange
+/// format.
+///
+/// All GeoJSON objects must contain a member named "type". A GeoJSON object
+/// may have an optional "bbox" member.
 abstract class GeoJSON {
-  /// The GeometryType [type] must be initialized.
+  /// The GeoJSONType [type] member of the GeoJSON object.
+  ///
+  /// It is a string that determines the type of the GeoJSON object.
   late final GeoJSONType type;
 
-  /// Bounding Box
+  /// An optional bounding box [bbox] of the GeoJSON object.
   ///
-  /// Returns array of double values [west, south, east, north]
+  /// It is an array of of double values [west, south, east, north]
+  /// represented in the contained geometries.
+  /// Array contains minimum and maximum values of all axes of all geometries.
   List<double>? get bbox;
 
-  /// The constructor from map
+  /// Constructs a GeoJSON object from a map [map].
+  ///
+  /// Map must contain a member with the name "type".
+  /// The value of the type member must be one of:
+  /// "FeatureCollection", "Feature", "Point", "MultiPoint", "LineString",
+  /// "MultiLineString", "Polygon", "MultiPolygon", "GeometryCollection"
   factory GeoJSON.fromMap(Map<String, dynamic> map) {
     assert(map.containsKey('type'), 'There MUST be contains key `type`');
     assert(
@@ -29,58 +42,58 @@ abstract class GeoJSON {
         ].contains(map['type']),
         'Invalid type');
 
-    final _type = map['type'];
-    late var _instance;
-    switch (_type) {
+    final type = map['type'];
+    late GeoJSON instance;
+    switch (type) {
       case 'FeatureCollection':
-        _instance = GeoJSONFeatureCollection.fromMap(map);
+        instance = GeoJSONFeatureCollection.fromMap(map);
         break;
       case 'Feature':
-        _instance = GeoJSONFeature.fromMap(map);
+        instance = GeoJSONFeature.fromMap(map);
         break;
       case 'Point':
-        _instance = GeoJSONPoint.fromMap(map);
+        instance = GeoJSONPoint.fromMap(map);
         break;
       case 'MultiPoint':
-        _instance = GeoJSONMultiPoint.fromMap(map);
+        instance = GeoJSONMultiPoint.fromMap(map);
         break;
       case 'LineString':
-        _instance = GeoJSONLineString.fromMap(map);
+        instance = GeoJSONLineString.fromMap(map);
         break;
       case 'MultiLineString':
-        _instance = GeoJSONMultiLineString.fromMap(map);
+        instance = GeoJSONMultiLineString.fromMap(map);
         break;
       case 'Polygon':
-        _instance = GeoJSONPolygon.fromMap(map);
+        instance = GeoJSONPolygon.fromMap(map);
         break;
       case 'MultiPolygon':
-        _instance = GeoJSONMultiPolygon.fromMap(map);
+        instance = GeoJSONMultiPolygon.fromMap(map);
         break;
       case 'GeometryCollection':
-        _instance = GeoJSONGeometryCollection.fromMap(map);
+        instance = GeoJSONGeometryCollection.fromMap(map);
         break;
     }
-    return _instance;
+    return instance;
   }
 
-  /// The constructor from JSON string
+  /// Constructs a GeoJSON object from a JSON string [source].
   factory GeoJSON.fromJSON(String source) =>
       GeoJSON.fromMap(json.decode(source));
 
-  /// Converts GeoJSON to a Map
+  /// Converts GeoJSON object to a Map.
   Map<String, dynamic> toMap();
 
-  /// Encodes GeoJSON to JSON string
+  /// Converts GeoJSON object to a JSON string.
   String toJSON();
 
   @override
   String toString() => 'GeoJSON(type: $type)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is GeoJSONGeometry && o.type == type;
+    return other is GeoJSONGeometry && other.type == type;
   }
 
   @override

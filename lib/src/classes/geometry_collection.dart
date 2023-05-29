@@ -2,16 +2,23 @@ import 'dart:convert';
 
 import '../../geojson_vi.dart';
 
+/// A GeoJSON object representing a Geometry Collection.
+///
+/// A Geometry Collection is a geometry type which groups multiple geometries
+/// together.
 class GeoJSONGeometryCollection implements GeoJSONGeometry {
+  /// Specifies the GeoJSON type of this object.
   @override
   GeoJSONType type = GeoJSONType.geometryCollection;
 
-  /// The [geometries] member is a array of the geometry
+  /// A list of geometries included in this collection.
   var geometries = <GeoJSONGeometry>[];
 
+  /// Returns the area of the Geometry Collection, which is always 0.0.
   @override
   double get area => 0.0;
 
+  /// Returns the bounding box of the Geometry Collection.
   @override
   List<double> get bbox {
     final longitudes = geometries
@@ -31,13 +38,16 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
     ];
   }
 
+  /// Returns the distance of the Geometry Collection, which is always 0.0.
   @override
   double get distance => 0.0;
 
-  /// The constructor for the [geometries] member
+  /// Constructs a new Geometry Collection with the given list of geometries.
   GeoJSONGeometryCollection(this.geometries);
 
-  /// The constructor from map
+  /// Constructs a new Geometry Collection from a Map object.
+  ///
+  /// The Map must represent a valid Geometry Collection.
   factory GeoJSONGeometryCollection.fromMap(Map<String, dynamic> map) {
     assert(map.containsKey('type'), 'There MUST be contains key `type`');
     assert(['GeometryCollection'].contains(map['type']), 'Invalid type');
@@ -45,14 +55,16 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
         'There MUST be contains key `geometries`');
     assert(map['geometries'] is List, 'There MUST be array of the geometry.');
     final value = map['geometries'];
-    final _geometries = <GeoJSONGeometry>[];
+    final geoms = <GeoJSONGeometry>[];
     value.forEach((map) {
-      _geometries.add(GeoJSONGeometry.fromMap(map));
+      geoms.add(GeoJSONGeometry.fromMap(map));
     });
-    return GeoJSONGeometryCollection(_geometries);
+    return GeoJSONGeometryCollection(geoms);
   }
 
-  /// The constructor from JSON string
+  /// Constructs a new Geometry Collection from a JSON string.
+  ///
+  /// The JSON string must represent a valid Geometry Collection.
   factory GeoJSONGeometryCollection.fromJSON(String source) =>
       GeoJSONGeometryCollection.fromMap(json.decode(source));
 
@@ -77,10 +89,10 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
   String toString() => 'GeometryCollection(geometries: $geometries)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is GeoJSONGeometryCollection && o.geometries == geometries;
+    return other is GeoJSONGeometryCollection && other.geometries == geometries;
   }
 
   @override

@@ -15,27 +15,27 @@ class GeoJSONPolygon implements GeoJSONGeometry {
 
   @override
   double get area {
-    double _ringArea(List<List<double>> ringPos) {
-      const WGS84_RADIUS = 6378137.0;
-      const DEG_TO_RAD = pi / 180.0;
-      var _area = 0.0;
+    double ringArea(List<List<double>> ringPos) {
+      const double wgs84Radius = 6378137.0;
+      const double degToRad = pi / 180.0;
+      var area = 0.0;
       for (var i = 0; i < ringPos.length - 1; i++) {
         var p1 = ringPos[i];
         var p2 = ringPos[i + 1];
-        _area += (p2[0] * DEG_TO_RAD - p1[0] * DEG_TO_RAD) *
-            (2.0 + sin(p1[1] * DEG_TO_RAD) + sin(p2[1] * DEG_TO_RAD));
+        area += (p2[0] * degToRad - p1[0] * degToRad) *
+            (2.0 + sin(p1[1] * degToRad) + sin(p2[1] * degToRad));
       }
-      _area = _area * WGS84_RADIUS * WGS84_RADIUS / 2.0;
-      return _area.abs();
+      area = area * wgs84Radius * wgs84Radius / 2.0;
+      return area.abs();
     }
 
     var exteriorRing = coordinates[0];
-    var _area = _ringArea(exteriorRing);
+    var area = ringArea(exteriorRing);
     for (var i = 1; i < coordinates.length; i++) {
       var interiorRing = coordinates[i];
-      _area -= _ringArea(interiorRing);
+      area -= ringArea(interiorRing);
     }
-    return _area;
+    return area;
   }
 
   @override
@@ -82,19 +82,19 @@ class GeoJSONPolygon implements GeoJSONGeometry {
     assert(map['coordinates'] is List,
         'There MUST be array of linear ring coordinate arrays.');
     final llll = map['coordinates'];
-    final _coordinates = <List<List<double>>>[];
+    final coords = <List<List<double>>>[];
     llll.forEach((lll) {
       assert(lll is List, 'There MUST be List');
-      final _rings = <List<double>>[];
+      final rings = <List<double>>[];
       lll.forEach((ll) {
         assert(ll is List, 'There MUST be List');
         assert((ll as List).length > 1, 'There MUST be two or more element');
-        final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
-        _rings.add(_pos);
+        final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
+        rings.add(pos);
       });
-      _coordinates.add(_rings);
+      coords.add(rings);
     });
-    return GeoJSONPolygon(_coordinates);
+    return GeoJSONPolygon(coords);
   }
 
   /// The constructor from JSON string
@@ -122,10 +122,10 @@ class GeoJSONPolygon implements GeoJSONGeometry {
   String toString() => 'Polygon($coordinates)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is GeoJSONPolygon && o.coordinates == coordinates;
+    return other is GeoJSONPolygon && other.coordinates == coordinates;
   }
 
   @override

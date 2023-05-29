@@ -4,12 +4,16 @@ import 'dart:math';
 
 import '../../geojson_vi.dart';
 
-/// The geometry type LineString
+/// A class representing a GeoJSON LineString.
+///
+/// A LineString is a curve with linear interpolation between points. Each
+/// segment of the LineString is a line in the two-dimensional coordinate plane.
 class GeoJSONLineString implements GeoJSONGeometry {
   @override
   GeoJSONType type = GeoJSONType.lineString;
 
-  /// The [coordinates] member is a array of two or more positions
+  /// The coordinates of this LineString, represented as an array of point
+  /// coordinates.
   var coordinates = <List<double>>[];
 
   @override
@@ -40,7 +44,7 @@ class GeoJSONLineString implements GeoJSONGeometry {
 
   @override
   double get distance {
-    double _calculateDistance(lat1, lon1, lat2, lon2) {
+    double calculateDistance(lat1, lon1, lat2, lon2) {
       var p = 0.017453292519943295;
       var c = cos;
       var a = 0.5 -
@@ -49,21 +53,21 @@ class GeoJSONLineString implements GeoJSONGeometry {
       return 12742 * asin(sqrt(a)) * 1000.0;
     }
 
-    var _length = 0.0;
+    var length = 0.0;
     for (var i = 0; i < coordinates.length - 1; i++) {
       var p1 = coordinates[i];
       var p2 = coordinates[i + 1];
-      _length += _calculateDistance(p1[1], p1[0], p2[1], p2[0]);
+      length += calculateDistance(p1[1], p1[0], p2[1], p2[0]);
     }
-    return _length;
+    return length;
   }
 
-  /// The constructor for the [coordinates] member
+  /// Constructs a GeoJSONLineString from the provided list of [coordinates].
   GeoJSONLineString(this.coordinates)
       : assert(coordinates.length >= 2,
             'The coordinates MUST be two or more positions');
 
-  /// The constructor from map
+  /// Constructs a GeoJSONLineString from a Map.
   factory GeoJSONLineString.fromMap(Map<String, dynamic> map) {
     assert(map.containsKey('type'), 'There MUST be contains key `type`');
     assert(['LineString'].contains(map['type']), 'Invalid type');
@@ -72,17 +76,17 @@ class GeoJSONLineString implements GeoJSONGeometry {
     assert(map['coordinates'] is List,
         'There MUST be array of two or more positions.');
     final lll = map['coordinates'];
-    final _coordinates = <List<double>>[];
+    final coordinates = <List<double>>[];
     lll.forEach((ll) {
       assert(ll is List, 'There MUST be List');
       assert((ll as List).length > 1, 'There MUST be two or more element');
-      final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
-      _coordinates.add(_pos);
+      final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
+      coordinates.add(pos);
     });
-    return GeoJSONLineString(_coordinates);
+    return GeoJSONLineString(coordinates);
   }
 
-  /// The constructor from JSON string
+  /// Constructs a GeoJSONLineString from a JSON string.
   factory GeoJSONLineString.fromJSON(String source) =>
       GeoJSONLineString.fromMap(json.decode(source));
 
@@ -107,10 +111,10 @@ class GeoJSONLineString implements GeoJSONGeometry {
   String toString() => 'LineString($coordinates)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is GeoJSONLineString && o.coordinates == coordinates;
+    return other is GeoJSONLineString && other.coordinates == coordinates;
   }
 
   @override

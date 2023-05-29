@@ -66,6 +66,10 @@ class GeoJSONFeature implements GeoJSON {
     'Use `geometry.toMap()` instead. '
     'Will be removed in the next version',
   )
+
+  /// Gets the serialized geometry of the feature.
+  ///
+  /// Deprecated: Use `geometry.toMap()` instead.
   Map<String, dynamic> get geometrySerialize => geometry.toMap();
 
   @override
@@ -92,10 +96,10 @@ class GeoJSONFeature implements GeoJSON {
   String toString() => 'Feature(geometry: $geometry)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is GeoJSONFeature && o.geometry == geometry;
+    return other is GeoJSONFeature && other.geometry == geometry;
   }
 
   @override

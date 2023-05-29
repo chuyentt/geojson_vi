@@ -2,12 +2,18 @@ import 'dart:convert';
 
 import '../../geojson_vi.dart';
 
-/// The geometry type MultiPoint
+/// A class representing a GeoJSON MultiPoint.
+///
+/// A MultiPoint object represents a set of points in coordinate space.
+/// The [coordinates] property of the MultiPoint object is an array of point
+/// coordinates, where each point coordinate is an array of length 2
+/// (for 2D points).
 class GeoJSONMultiPoint implements GeoJSONGeometry {
   @override
   GeoJSONType type = GeoJSONType.multiPoint;
 
-  ///The [coordinates] member is an array of positions.
+  /// The coordinates of this MultiPoint, represented as an array of point
+  /// coordinates.
   var coordinates = <List<double>>[];
 
   @override
@@ -39,14 +45,14 @@ class GeoJSONMultiPoint implements GeoJSONGeometry {
   @override
   double get distance => 0.0;
 
-  /// The constructor for the [coordinates] member
+  /// Constructs a GeoJSONMultiPoint from the provided list of [coordinates].
   GeoJSONMultiPoint(this.coordinates)
       : assert(
             coordinates.isNotEmpty,
             'The coordinates is List<List<double>>. '
             'There MUST be one or more elements');
 
-  /// The constructor forom map
+  /// Constructs a GeoJSONMultiPoint from a Map.
   factory GeoJSONMultiPoint.fromMap(Map<String, dynamic> map) {
     assert(map.containsKey('type'), 'There MUST be contains key `type`');
     assert(['MultiPoint'].contains(map['type']), 'Invalid type');
@@ -54,17 +60,17 @@ class GeoJSONMultiPoint implements GeoJSONGeometry {
         'There MUST be contains key `coordinates`');
     assert(map['coordinates'] is List, 'There MUST be array of positions.');
     final lll = map['coordinates'];
-    final _coordinates = <List<double>>[];
+    final coords = <List<double>>[];
     lll.forEach((ll) {
       assert(ll is List, 'There MUST be List');
       assert((ll as List).length > 1, 'There MUST be two or more element');
-      final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
-      _coordinates.add(_pos);
+      final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
+      coords.add(pos);
     });
-    return GeoJSONMultiPoint(_coordinates);
+    return GeoJSONMultiPoint(coords);
   }
 
-  /// The constructor from JSON string
+  /// Constructs a GeoJSONMultiPoint from a JSON string.
   factory GeoJSONMultiPoint.fromJSON(String source) =>
       GeoJSONMultiPoint.fromMap(json.decode(source));
 
@@ -89,10 +95,10 @@ class GeoJSONMultiPoint implements GeoJSONGeometry {
   String toString() => 'MultiPoint($coordinates)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is GeoJSONMultiPoint && o.coordinates == coordinates;
+    return other is GeoJSONMultiPoint && other.coordinates == coordinates;
   }
 
   @override

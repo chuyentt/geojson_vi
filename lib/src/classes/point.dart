@@ -2,13 +2,17 @@ import 'dart:convert';
 
 import '../../geojson_vi.dart';
 
-/// The geometry type Point
+/// A class representing a GeoJSON Point.
+///
+/// A Point object represents a single location in coordinate space.
+/// The [coordinates] property of the Point object is an array of length 2
+/// (for 2D points), with the first element being the longitude and the
+/// second element being the latitude.
 class GeoJSONPoint implements GeoJSONGeometry {
   @override
   GeoJSONType type = GeoJSONType.point;
 
-  /// The [coordinates] member is a single position (two or more
-  /// elements). The first two elements are `longitude` and `latitude`
+  /// The coordinates of this Point, represented as an array of doubles.
   var coordinates = <double>[];
 
   @override
@@ -25,14 +29,14 @@ class GeoJSONPoint implements GeoJSONGeometry {
   @override
   double get distance => 0.0;
 
-  /// The constructor for the [coordinates] member
+  /// Constructs a GeoJSONPoint from the provided list of [coordinates].
   GeoJSONPoint(this.coordinates)
       : assert(
             coordinates.length >= 2,
             'The coordinates is List<double>. '
             'There MUST be two or more elements');
 
-  /// The constructor from map
+  /// Constructs a GeoJSONPoint from a Map.
   factory GeoJSONPoint.fromMap(Map<String, dynamic> map) {
     assert(map.containsKey('type'), 'There MUST be contains key `type`');
     assert(['Point'].contains(map['type']), 'Invalid type');
@@ -41,11 +45,11 @@ class GeoJSONPoint implements GeoJSONGeometry {
     assert(map['coordinates'] is List, 'There MUST be List of double');
     final ll = map['coordinates'];
     assert((ll as List).length > 1, 'There MUST be two or more element');
-    final _pos = ll.map((e) => e.toDouble()).cast<double>().toList();
-    return GeoJSONPoint(_pos);
+    final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
+    return GeoJSONPoint(pos);
   }
 
-  /// The constructor from JSON string
+  /// Constructs a GeoJSONPoint from a JSON string.
   factory GeoJSONPoint.fromJSON(String source) =>
       GeoJSONPoint.fromMap(json.decode(source));
 
@@ -70,10 +74,10 @@ class GeoJSONPoint implements GeoJSONGeometry {
   String toString() => 'Point($coordinates)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is GeoJSONPoint && o.coordinates == coordinates;
+    return other is GeoJSONPoint && other.coordinates == coordinates;
   }
 
   @override

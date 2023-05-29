@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2.0.8] - 2023-05-29
+
+* Add dartdoc comments to source code
+
 ## [2.0.7] - 2022-03-07
 
 * Fix Unhandled Exception: type 'int' is not a subtype of type 'String?'

@@ -3,10 +3,20 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-/// GeoJSON library
+/// `geojson_vi` is a comprehensive GeoJSON library for Dart and Flutter
+/// developers.
+///
+/// It is designed to facilitate parsing, reading, creating, updating,
+/// searching, and deleting geospatial data following the RFC 7946 standard.
+///
+/// Its robust support for all GeoJSON objects makes it an ideal tool for
+/// managing GIS data.
 library geojson_vi;
 
+// Base package library
 export 'src/geojson_vi_base.dart';
+
+// Classes that represent the various GeoJSON objects.
 export 'src/classes/feature_collection.dart';
 export 'src/classes/feature.dart';
 export 'src/classes/geojson_type.dart';

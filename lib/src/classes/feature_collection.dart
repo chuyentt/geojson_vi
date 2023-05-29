@@ -3,12 +3,18 @@ import 'dart:collection';
 
 import '../../geojson_vi.dart';
 
+/// The ListExt class extends the ListBase class to provide additional
+/// functionality.
 class ListExt<T> extends ListBase<T?> {
   List innerList = [];
 
-  /// We defined some callback functions
+  /// Callback function called when an element is added.
   void Function(T? element)? onAdd;
+
+  /// Callback function called when a collection of elements is added.
   void Function(Iterable<T?> iterable)? onAddAll;
+
+  /// Callback function called when an element is removed.
   void Function(T? element)? onRemove;
 
   @override
@@ -63,7 +69,7 @@ class ListExt<T> extends ListBase<T?> {
 
 /// Get bbox
 ///
-/// Returns bbox from list of the features
+/// Returns the bbox from a list of features.
 List<double> _getBbox(List<GeoJSONFeature?> features) {
   if (features.isEmpty) return [-180.0, -90.0, 180.0, 90.0];
   final longitudes = <double>[];
@@ -87,7 +93,7 @@ List<double> _getBbox(List<GeoJSONFeature?> features) {
 
 /// Add bbox
 ///
-/// Returns bbox1 union bbox2
+/// Returns the union of two bboxes.
 List<double> _addBbox(List<double> bbox1, List<double> bbox2) {
   final longitudes = <double>[];
   final latitudes = <double>[];
@@ -111,7 +117,7 @@ List<double> _addBbox(List<double> bbox1, List<double> bbox2) {
 
 /// Remove bbox
 ///
-/// Returns bbox1 \ bbox2
+/// Returns the difference of two bboxes.
 List<double> _removeBbox(List<double> bbox1, List<double>? bbox2) {
   final longitudes = <double>[];
   final latitudes = <double>[];
@@ -133,16 +139,14 @@ List<double> _removeBbox(List<double> bbox1, List<double>? bbox2) {
   ];
 }
 
-/// The FeatureCollection has a member with the name "features". The
-/// value of [features] is an array of Feature object. It is possible
-/// for this array to be empty.
+/// The GeoJSONFeatureCollection represents a collection of features.
 class GeoJSONFeatureCollection implements GeoJSON {
   @override
   GeoJSONType type = GeoJSONType.featureCollection;
 
   ListExt<GeoJSONFeature> _features = ListExt<GeoJSONFeature>();
 
-  /// The [features] member is a array of the GeoJSONFeature
+  /// The [features] member is an array of GeoJSONFeature objects.
   List<GeoJSONFeature?> get features => _features;
   set features(List<GeoJSONFeature?> features) {
     final listFeature = ListExt<GeoJSONFeature>();
@@ -155,7 +159,7 @@ class GeoJSONFeatureCollection implements GeoJSON {
 
   List<double>? _bbox;
 
-  /// The constructor for the [features] member
+  /// The constructor for the [features] member.
   GeoJSONFeatureCollection(List<GeoJSONFeature> features) {
     final listFeature = ListExt<GeoJSONFeature>();
     listFeature.onAdd = (feature) => onAdd(feature!);
@@ -165,36 +169,36 @@ class GeoJSONFeatureCollection implements GeoJSON {
     _features = listFeature;
   }
 
-  /// The constructor from map
+  /// The constructor from map.
   factory GeoJSONFeatureCollection.fromMap(Map<String, dynamic> map) {
     assert(map.containsKey('type'), 'There MUST be contains key `type`');
     assert(['FeatureCollection'].contains(map['type']), 'Invalid type');
     assert(
         map.containsKey('features'), 'There MUST be contains key `features`');
-    assert(map['features'] is List, 'There MUST be array of the feature.');
+    assert(map['features'] is List, 'There MUST be an array of features.');
     final value = map['features'] as List;
-    final _features = <GeoJSONFeature>[];
+    final fs = <GeoJSONFeature>[];
     Future.forEach(value, (map) {
-      _features.add(GeoJSONFeature.fromMap(map as Map<String, dynamic>));
+      fs.add(GeoJSONFeature.fromMap(map as Map<String, dynamic>));
     });
-    return GeoJSONFeatureCollection(_features);
+    return GeoJSONFeatureCollection(fs);
   }
 
-  /// The constructor from JSON string
+  /// The constructor from JSON string.
   factory GeoJSONFeatureCollection.fromJSON(String source) =>
       GeoJSONFeatureCollection.fromMap(json.decode(source));
 
-  /// The callback function is passed when the feature is added
+  /// The callback function called when a feature is added.
   void onAdd(GeoJSONFeature feature) {
     _bbox = _addBbox(_bbox!, feature.bbox!);
   }
 
-  /// The callback function is passed when the features is added
+  /// The callback function called when features are added.
   void onAddAll(Iterable<GeoJSONFeature?> features) {
     _bbox = _getBbox(features as List<GeoJSONFeature?>);
   }
 
-  /// The callback function is passed when the feature is removed
+  /// The callback function called when a feature is removed.
   void onRemove(GeoJSONFeature feature) {
     _bbox = _removeBbox(_bbox!, feature.bbox);
   }
@@ -223,10 +227,10 @@ class GeoJSONFeatureCollection implements GeoJSON {
   String toString() => 'FeatureCollection(features: $features)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is GeoJSONFeatureCollection && o.features == features;
+    return other is GeoJSONFeatureCollection && other.features == features;
   }
 
   @override
