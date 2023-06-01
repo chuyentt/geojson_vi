@@ -1,26 +1,25 @@
-# GeoJSON package for Dart and Flutter developers
+# geojson_vi: An Open-Source Dart and Flutter Library for Efficiently Handling GeoJSON Data in Compliance with RFC 7946
+
 [![pub package](https://img.shields.io/pub/v/geojson_vi.svg)](https://pub.dartlang.org/packages/geojson_vi)
 
-GeoJSON package for Dart and Flutter developers to create, read, search, update and delete the geospatial data interchange format (GIS data). This package was originally published by Chuyen, T. T. (2020). The GeoJSON package for Dart and Flutter developers. Zenodo. https://doi.org/10.5281/ZENODO.3841927.
+**geojson_vi** is an open-source library for Dart and Flutter developers, specifically designed to provide comprehensive support for the GeoJSON geospatial data interchange format as per the RFC 7946 standard. The software is a flexible, reliable tool that allows developers to parse, read, create, update, search, and delete geospatial data effectively.
 
-This package supports GeoJSON objects including:
+## Feature Highlights of geojson_vi
 
-- **Geometry**
-  - **Point** - represents a single position, the `coordinates` member is a single position in the order of longitude, latitude
-  - **MultiPoint** - represents an array of positions
-  - **LineString** - represents an array of positions
-  - **MultiLineString** - represents an array of LineString
-   coordinate arrays
-  - **Polygon** - represents an array of linear ring
-  - **MultiPolygon** - represents an array of Polygon coordinate
-   arrays
-  - **GeometryCollection** - represents a list of the geometry.
-- **Feature** - represents a spatially bounded entity that includes properties member
-- **FeatureCollection** - represents a list of the feature.
+Powerful Tools for Efficient GeoJSON Data Handling. Some of the primary ones include:
+- **Parsing and Reading GeoJSON Data:** geojson\_vi allows developers to quickly parse and read GeoJSON data, ensuring full compliance with RFC 7946 standard.
+- **Creating, Updating, Searching, and Deleting GeoJSON Data:** With geojson\_vi, developers can easily manipulate GeoJSON data, from creating new data entries to updating, searching, and deleting existing data.
+- **Support for All GeoJSON Objects:** geojson\_vi offers comprehensive support for a wide range of Geometry types (`GeoJSONPoint`, `GeoJSONMultiPoint`, `GeoJSONLineString`, `GeoJSONMultiLineString`, `GeoJSONPolygon`, `GeoJSONMultiPolygon`, `GeoJSONGeometryCollection`), `Feature`, and `FeatureCollection`, making it a versatile tool for effectively managing diverse geospatial data.
 
 ## GeoJSON UML Model
 
-![GeoJSON UML Model](https://raw.githubusercontent.com/chuyentt/geojson_vi/master/doc/GeoJSON_UML_Model.svg)
+| ![GeoJSON Class Diagram](https://raw.githubusercontent.com/chuyentt/geojson_vi/master/doc/GeoJSON_Class_Diagram.svg) | 
+|:--:| 
+| *Class structure of the geojson_vi library* |
+
+| ![GeoJSON Geometry Class Diagram](https://raw.githubusercontent.com/chuyentt/geojson_vi/master/doc/GeoJSON_Geometry_Class_Diagram.svg) | 
+|:--:| 
+| *Detailed Class Diagram of GeoJSON Geometry in the geojson_vi library* |
 
 ## Usage
 

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2.0.9] - 2023-06-01
+
+* Update README.md with feature highlights
+
 ## [2.0.8] - 2023-05-29
 
 * Add dartdoc comments to source code
