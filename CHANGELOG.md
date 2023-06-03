@@ -1,7 +1,22 @@
 # CHANGELOG
 
+## [2.1.0] - 2023-06-03
+
+* Add example usage of findProperties in GeoJSONFeatureCollection
+* Add feature search in findProperties with containment
+* Refactor imports and apply 'part of' directive
+
 ## [2.0.9] - 2023-06-01
 
+* Update unit tests for GeoJSONFeature class
+* Update unit tests for GeoJSONGeometryCollection class
+* Update unit tests for GeoJSONMultiPolygon class
+* Update unit tests for GeoJSONPolygon class
+* Update unit tests for GeoJSONMultiLineString class
+* Update unit tests for GeoJSONLineString class
+* Update unit tests for GeoJSONMultiPoint class
+* Update unit tests for GeoJSONPoint class
+* Update README.md
 * Add unit test for Creating a Polygon with Holes
 * Update README.md with feature highlights
 

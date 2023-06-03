@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import '../../geojson_vi.dart';
+part of geojson_vi;
 
 /// A GeoJSON object representing a Geometry Collection.
 ///

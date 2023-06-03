@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'dart:math';
-
-import '../../geojson_vi.dart';
+part of geojson_vi;
 
 /// A class representing a GeoJSON LineString.
 ///

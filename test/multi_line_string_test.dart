@@ -33,20 +33,21 @@ void main() {
   };
 
   group('GeoJSONMultiLineString', () {
-    test('creates an instances by using fromMap', () {
+    test('creates an instance using fromMap', () {
       final geoJson = GeoJSONMultiLineString.fromMap(expectedMap);
 
       expect(geoJson.type, GeoJSONType.multiLineString);
       expect(geoJson.coordinates, expectedCoordinates);
     });
 
-    test('toMap of an object created by the constructor', () {
+    test('returns a map representation of an object created by the constructor',
+        () {
       final geoJson = GeoJSONMultiLineString(expectedCoordinates);
 
       expect(geoJson.toMap(), expectedMap);
     });
 
-    test('get bbox of a given multiLineString', () {
+    test('returns the bounding box of the multi-line string', () {
       final expectedBbox = [-51.998291, -17.298199, -49.482422, -16.056371];
 
       final geoJson = GeoJSONMultiLineString(expectedCoordinates);
@@ -54,9 +55,7 @@ void main() {
       expect(geoJson.bbox, expectedBbox);
     });
 
-    test(
-        'toString returns collection of key/value pairs of geospatial data as String',
-        () {
+    test('returns the string representation of the geospatial data', () {
       final expectedString = jsonEncode(expectedMap);
 
       final geoJson = GeoJSONMultiLineString(expectedCoordinates);

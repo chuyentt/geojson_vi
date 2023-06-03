@@ -1,3 +1,5 @@
+part of geojson_vi;
+
 /// Enumerates the types of geometry that can be used in a GeoJSON object.
 enum GeoJSONType {
   featureCollection,

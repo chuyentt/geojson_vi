@@ -177,5 +177,31 @@ void main() {
       final geometryCollection = GeoJSONGeometryCollection.fromMap(expectedMap);
       expect(geometryCollection.toJSON(), expectedString);
     });
+
+    test('creates an instance with empty geometries array', () {
+      final emptyMap = {'type': 'GeometryCollection', 'geometries': []};
+      final geometryCollection = GeoJSONGeometryCollection.fromMap(emptyMap);
+      expect(geometryCollection.geometries.length, 0);
+    });
+
+    test('handles adding a geometry to an empty GeometryCollection', () {
+      final point = {
+        'type': 'Point',
+        'coordinates': [-43.230695, -22.912405]
+      };
+
+      var geometryCollection = GeoJSONGeometryCollection.fromMap(
+          {'type': 'GeometryCollection', 'geometries': []});
+
+      geometryCollection.geometries.add(GeoJSONGeometry.fromMap(point));
+      expect(geometryCollection.geometries.length, 1);
+    });
+
+    test('converts to an empty geometries JSON correctly', () {
+      var geometryCollection = GeoJSONGeometryCollection([]);
+
+      expect(geometryCollection.toJSON(),
+          '{"type":"GeometryCollection","geometries":[]}');
+    });
   });
 }

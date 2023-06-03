@@ -47,16 +47,16 @@ Powerful Tools for Efficient GeoJSON Data Handling. Some of the primary ones inc
   // Creating a GeoJSON object from data without knowing its type
   final pointFromMap = GeoJSON.fromMap(map);
 
-  // Creating GeoJSONPoint object from JSON string already know its type
+  // Creating a GeoJSONPoint object from a JSON string when the type is known
   final pointFromJSON = GeoJSONPoint.fromJSON(jsonString);
 
-  // Creating GeoJSONGeometry object from data without knowing its type
+  // Creating a GeoJSONGeometry object from data without knowing its type
   final geometryFromMap = GeoJSONGeometry.fromMap(map);
 
-  // Creating GeoJSONPoint object from JSON string already know its type
+  // Creating a GeoJSONPoint object from a JSON string when the type is known
   final geometryFromJSON = GeoJSONPoint.fromJSON(jsonString);
 
-  // Creating GeoJSONPoint object from coordinates data
+  // Creating a GeoJSONPoint object from coordinates data
   final pointFromCoordinates = GeoJSONPoint([105.77389, 21.0720414]);
 
   // Creating a GeoJSONFeature object
@@ -68,7 +68,7 @@ Powerful Tools for Efficient GeoJSON Data Handling. Some of the primary ones inc
     },
   );
 
-  // Creating GeoJSONFeatureCollection object
+  // Creating a GeoJSONFeatureCollection object
   final featureCollection = GeoJSONFeatureCollection([]);
   featureCollection.features.add(feature);
 

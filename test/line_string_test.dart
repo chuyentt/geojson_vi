@@ -19,20 +19,21 @@ void main() {
   };
 
   group('GeoJSONLineString', () {
-    test('creates an instances by using fromMap', () {
+    test('creates an instance using fromMap', () {
       final geoJson = GeoJSONLineString.fromMap(expectedMap);
 
       expect(geoJson.type, GeoJSONType.lineString);
       expect(geoJson.coordinates, expectedCoordinates);
     });
 
-    test('toMap of an object created by the constructor', () {
+    test('returns a map representation of an object created by the constructor',
+        () {
       final geoJson = GeoJSONLineString(expectedCoordinates);
 
       expect(geoJson.toMap(), expectedMap);
     });
 
-    test('get bbox of a given GeoJSONLineString', () {
+    test('returns the bounding box of the line string', () {
       final expectedBbox = [-53.959350, -30.057208, -53.706665, -29.396533];
 
       final geoJson = GeoJSONLineString(expectedCoordinates);
@@ -40,9 +41,7 @@ void main() {
       expect(geoJson.bbox, expectedBbox);
     });
 
-    test(
-        'toString returns collection of key/value pairs of geospatial data as String',
-        () {
+    test('returns the string representation of the geospatial data', () {
       final expectedString = jsonEncode(expectedMap);
 
       final geoJson = GeoJSONLineString(expectedCoordinates);
@@ -50,7 +49,7 @@ void main() {
       expect(geoJson.toJSON(), expectedString);
     });
 
-    test('distance of a given GeoJSONLineString', () {
+    test('returns the distance of the line string', () {
       final expectedDistance = 91120.70;
       final delta = 5.0;
 

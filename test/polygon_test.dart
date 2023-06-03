@@ -13,7 +13,7 @@ void main() {
   ];
 
   group('GeoJSONPolygon', () {
-    test('creates an instances by using fromMap', () {
+    test('creates an instance using fromMap', () {
       final data = {
         'type': 'Polygon',
         'coordinates': expectedPolygonCoordinates,
@@ -25,7 +25,8 @@ void main() {
       expect(geoJsonPolygon.coordinates, expectedPolygonCoordinates);
     });
 
-    test('toMap of an object created by the constructor', () {
+    test('returns a map representation of an object created by the constructor',
+        () {
       final expectedMap = {
         'type': GeoJSONType.polygon.value,
         'coordinates': expectedPolygonCoordinates,
@@ -36,7 +37,7 @@ void main() {
       expect(geoJsonPolygon.toMap(), expectedMap);
     });
 
-    test('calculates area of a given polygon', () {
+    test('calculates the area of a given polygon', () {
       final expectedArea = 7113.80;
       final precision = 0.01;
 
@@ -48,7 +49,7 @@ void main() {
       );
     });
 
-    test('get bbox of a given polygon', () {
+    test('returns the bounding box of a given polygon', () {
       final expectedBbox = [
         -43.230695575475686,
         -22.912718759177814,
