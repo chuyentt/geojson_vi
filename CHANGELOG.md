@@ -2,6 +2,8 @@
 
 ## [2.1.0] - 2023-06-03
 
+* Add example usage of findProperties in GeoJSONFeatureCollection
+* Add feature search in findProperties with containment
 * Refactor imports and apply 'part of' directive
 
 ## [2.0.9] - 2023-06-01
