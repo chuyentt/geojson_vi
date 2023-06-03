@@ -2,6 +2,7 @@
 
 ## [2.0.9] - 2023-06-01
 
+* Update unit tests for GeoJSONGeometryCollection class
 * Update unit tests for GeoJSONMultiPolygon class
 * Update unit tests for GeoJSONPolygon class
 * Update unit tests for GeoJSONMultiLineString class
