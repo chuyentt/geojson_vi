@@ -6,7 +6,7 @@ void main() {
   final fakeLongitude = -51.2356;
 
   group('GeoJSONPoint', () {
-    test('creates an instances by using fromMap', () {
+    test('creates an instance using fromMap', () {
       final data = {
         'type': 'Point',
         'coordinates': [fakeLongitude, fakeLatitude],
@@ -19,7 +19,8 @@ void main() {
       expect(geoJsonPoint.coordinates, expectedCoordinates);
     });
 
-    test('toMap of an object created by the constructor', () {
+    test('returns a map representation of an object created by the constructor',
+        () {
       final coordinates = [fakeLongitude, fakeLatitude];
       final expectedMap = {
         'type': GeoJSONType.point.value,
