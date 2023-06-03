@@ -46,7 +46,7 @@ class GeoJSONLineString implements GeoJSONGeometry {
       var a = 0.5 -
           c((lat2 - lat1) * p) / 2 +
           c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
-      return 12742 * asin(sqrt(a)) * 1000.0;
+      return 12756.274 * asin(sqrt(a)) * 1000.0;
     }
 
     var length = 0.0;

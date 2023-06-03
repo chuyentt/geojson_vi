@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2.2.0] 
+
+* Update unit tests for GeoJSONLineString and GeoJSONPolygon
+* Add perimeter function to GeoJSONPolygon
+* Updated Earth's radius in distance calculation
+
 ## [2.1.0] - 2023-06-03
 
 * Add example usage of findProperties in GeoJSONFeatureCollection

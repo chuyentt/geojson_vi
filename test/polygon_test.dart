@@ -61,5 +61,18 @@ void main() {
 
       expect(geoJsonPolygon.bbox, expectedBbox);
     });
+
+    test('calculates the perimeter of a given polygon', () {
+      final expectedPerimeter = 345.91;
+      final precision = 0.01;
+
+      final geoJsonPolygon = GeoJSONPolygon(expectedPolygonCoordinates);
+
+      expect(
+        geoJsonPolygon.perimeter,
+        inInclusiveRange(
+            expectedPerimeter - precision, expectedPerimeter + precision),
+      );
+    });
   });
 }

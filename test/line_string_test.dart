@@ -1,61 +1,74 @@
-import 'dart:convert';
-
 import 'package:geojson_vi/geojson_vi.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final expectedCoordinates = [
-    [-53.940124, -30.057208],
-    [-53.951110, -29.933515],
-    [-53.907165, -29.797751],
-    [-53.857727, -29.671349],
-    [-53.959350, -29.556734],
-    [-53.786315, -29.475470],
-    [-53.706665, -29.396533]
+  final lineStringCoordinates = [
+    [-43.230695575475686, -22.91240592161791],
+    [-43.23012828826904, -22.912718759177814],
+    [-43.229606598615646, -22.91190099471436],
+    [-43.23016718029975, -22.91159216999324],
+    [-43.230695575475686, -22.91240592161791]
   ];
-  final expectedMap = {
-    'type': 'LineString',
-    'coordinates': expectedCoordinates,
-  };
 
   group('GeoJSONLineString', () {
     test('creates an instance using fromMap', () {
-      final geoJson = GeoJSONLineString.fromMap(expectedMap);
+      final data = {
+        'type': 'LineString',
+        'coordinates': lineStringCoordinates,
+      };
 
-      expect(geoJson.type, GeoJSONType.lineString);
-      expect(geoJson.coordinates, expectedCoordinates);
+      final geoJsonLineString = GeoJSONLineString.fromMap(data);
+
+      expect(geoJsonLineString.type, GeoJSONType.lineString);
+      expect(geoJsonLineString.coordinates, lineStringCoordinates);
     });
 
     test('returns a map representation of an object created by the constructor',
         () {
-      final geoJson = GeoJSONLineString(expectedCoordinates);
+      final expectedMap = {
+        'type': GeoJSONType.lineString.value,
+        'coordinates': lineStringCoordinates,
+      };
 
-      expect(geoJson.toMap(), expectedMap);
+      final geoJsonLineString = GeoJSONLineString(lineStringCoordinates);
+
+      expect(geoJsonLineString.toMap(), expectedMap);
     });
 
-    test('returns the bounding box of the line string', () {
-      final expectedBbox = [-53.959350, -30.057208, -53.706665, -29.396533];
+    test('creates an instance using fromJSON', () {
+      final data =
+          '{"type": "LineString", "coordinates": $lineStringCoordinates}';
 
-      final geoJson = GeoJSONLineString(expectedCoordinates);
+      final geoJsonLineString = GeoJSONLineString.fromJSON(data);
 
-      expect(geoJson.bbox, expectedBbox);
+      expect(geoJsonLineString.type, GeoJSONType.lineString);
+      expect(geoJsonLineString.coordinates, lineStringCoordinates);
     });
 
-    test('returns the string representation of the geospatial data', () {
-      final expectedString = jsonEncode(expectedMap);
+    test('calculates the distance of a given line string', () {
+      final expectedDistance = 345.91;
+      final precision = 1.0;
 
-      final geoJson = GeoJSONLineString(expectedCoordinates);
+      final geoJsonLineString = GeoJSONLineString(lineStringCoordinates);
 
-      expect(geoJson.toJSON(), expectedString);
+      expect(
+        geoJsonLineString.distance,
+        inInclusiveRange(
+            expectedDistance - precision, expectedDistance + precision),
+      );
     });
 
-    test('returns the distance of the line string', () {
-      final expectedDistance = 91120.70;
-      final delta = 5.0;
+    test('returns the bounding box of a given line string', () {
+      final expectedBbox = [
+        -43.230695575475686,
+        -22.912718759177814,
+        -43.229606598615646,
+        -22.91159216999324
+      ];
 
-      final geoJson = GeoJSONLineString(expectedCoordinates);
+      final geoJsonLineString = GeoJSONLineString(lineStringCoordinates);
 
-      expect(geoJson.distance, closeTo(expectedDistance, delta));
+      expect(geoJsonLineString.bbox, expectedBbox);
     });
   });
 }
