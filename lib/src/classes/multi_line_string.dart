@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import '../../geojson_vi.dart';
+part of geojson_vi;
 
 /// This class represents the geometry type MultiLineString according to the
 /// GeoJSON specification.

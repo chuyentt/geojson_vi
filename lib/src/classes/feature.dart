@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import '../../geojson_vi.dart';
+part of geojson_vi;
 
 /// The Feature represents a spatially bounded thing.
 class GeoJSONFeature implements GeoJSON {

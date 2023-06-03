@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'dart:math';
-
-import '../../geojson_vi.dart';
+part of geojson_vi;
 
 /// The geometry type Polygon
 class GeoJSONPolygon implements GeoJSONGeometry {

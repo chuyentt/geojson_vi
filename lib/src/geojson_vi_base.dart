@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import '../geojson_vi.dart';
+part of geojson_vi;
 
 /// `GeoJSON` is an abstract class representing a geospatial data interchange
 /// format.

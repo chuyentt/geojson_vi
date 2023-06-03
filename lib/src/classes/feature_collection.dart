@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'dart:collection';
-
-import '../../geojson_vi.dart';
+part of geojson_vi;
 
 /// The ListExt class extends the ListBase class to provide additional
 /// functionality.
@@ -205,6 +202,47 @@ class GeoJSONFeatureCollection implements GeoJSON {
 
   @override
   List<double>? get bbox => _bbox;
+
+  /// Finds all features where the specified property matches the given value.
+  ///
+  /// This method will iterate over all features in the collection and check if the
+  /// provided property exists and matches the specified value.
+  ///
+  /// If the [contains] argument is set to `true`, the method will find all features
+  /// where the property contains the specified value, instead of exactly matching it.
+  ///
+  /// Returns a list of all features that match the criteria.
+  ///
+  /// Example:
+  /// ```dart
+  /// var foundFeatures = featureCollection.findProperties('name', 'na', contains: true);
+  /// print('Found ${foundFeatures.length} feature(s) with name containing "na".');
+  /// ```
+  ///
+  /// [property]: The property to match.
+  /// [value]: The value to match.
+  /// [contains]: Whether to look for a partial match (default is `false`).
+  List<GeoJSONFeature> findProperties(String property, String value,
+      {bool contains = false}) {
+    List<GeoJSONFeature> foundFeatures = [];
+
+    for (var feature in features) {
+      var properties = feature?.properties;
+
+      if (properties != null && properties.containsKey(property)) {
+        if (contains) {
+          if (properties[property].toString().contains(value)) {
+            foundFeatures.add(feature!);
+          }
+        } else {
+          if (properties[property].toString() == value) {
+            foundFeatures.add(feature!);
+          }
+        }
+      }
+    }
+    return foundFeatures;
+  }
 
   @override
   Map<String, dynamic> toMap() {

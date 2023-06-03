@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import '../../geojson_vi.dart';
+part of geojson_vi;
 
 /// An abstract base class for GeoJSON Geometry objects.
 ///

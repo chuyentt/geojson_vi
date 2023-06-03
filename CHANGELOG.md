@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2.1.0] - 2023-06-03
+
+* Refactor imports and apply 'part of' directive
+
 ## [2.0.9] - 2023-06-01
 
 * Update unit tests for GeoJSONFeature class

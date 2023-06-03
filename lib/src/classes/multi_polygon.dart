@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import '../../geojson_vi.dart';
+part of geojson_vi;
 
 /// Class that represents a MultiPolygon geometry type in GeoJSON.
 ///
