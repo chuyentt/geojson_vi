@@ -2,6 +2,7 @@
 
 ## [2.0.9] - 2023-06-01
 
+* Update unit tests for GeoJSONMultiPoint class
 * Update unit tests for GeoJSONPoint class
 * Update README.md
 * Add unit test for Creating a Polygon with Holes
