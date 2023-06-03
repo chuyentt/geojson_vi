@@ -2,6 +2,7 @@
 
 ## [2.0.9] - 2023-06-01
 
+* Update unit tests for GeoJSONMultiLineString class
 * Update unit tests for GeoJSONLineString class
 * Update unit tests for GeoJSONMultiPoint class
 * Update unit tests for GeoJSONPoint class
