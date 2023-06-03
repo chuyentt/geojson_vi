@@ -32,3 +32,4 @@ part 'src/classes/multi_line_string.dart';
 part 'src/classes/polygon.dart';
 part 'src/classes/multi_polygon.dart';
 part 'src/classes/geometry_collection.dart';
+part 'src/utils/geojson_utils.dart';
