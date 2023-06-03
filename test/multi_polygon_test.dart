@@ -31,7 +31,7 @@ void main() {
   ];
 
   group('GeoJSONMultiPolygon', () {
-    test('creates an instances by using fromMap', () {
+    test('creates an instance using fromMap', () {
       final data = {
         'type': 'MultiPolygon',
         'coordinates': expectedCoordinates,
@@ -43,7 +43,8 @@ void main() {
       expect(geoJsonMultiPolygon.coordinates, expectedCoordinates);
     });
 
-    test('toMap of an object created by the constructor', () {
+    test('returns a map representation of an object created by the constructor',
+        () {
       final expectedMap = {
         'type': GeoJSONType.multiPolygon.value,
         'coordinates': expectedCoordinates,
@@ -54,8 +55,8 @@ void main() {
       expect(geoJsonMultiPolygon.toMap(), expectedMap);
     });
 
-    test('get bbox of a given multipolygon', () {
-      final expectedBbox = [100.000000, 0.000000, 103.000000, 3.000000];
+    test('returns the bounding box of a given multiPolygon', () {
+      final expectedBbox = [100.0, 0.0, 103.0, 3.0];
 
       final geoJsonMultiPolygon = GeoJSONMultiPolygon(expectedCoordinates);
 
