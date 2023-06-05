@@ -244,6 +244,72 @@ class GeoJSONFeatureCollection implements GeoJSON {
     return foundFeatures;
   }
 
+  /// Finds the nearest GeoJSON feature to a given point.
+  ///
+  /// This function iterates over a list of features and calculates the distance
+  /// between the given point and each feature. The feature with the shortest
+  /// distance to the point is considered the nearest.
+  ///
+  /// [lat] and [lon] are the latitude and longitude coordinates of the given point.
+  ///
+  /// Returns the nearest GeoJSON feature to the given point. If the features list
+  /// is empty, returns null.
+  ///
+  /// Note: This function only calculates distances for point, lineString, and polygon features.
+  /// Distances for other types of features will need to be handled separately.
+  GeoJSONFeature? findNearestFeature(double lat, double lon) {
+    GeoJSONFeature? nearestFeature;
+    double? shortestDistance;
+
+    if (features.isEmpty) return null; // Return null if features list is empty
+
+    for (var feature in features) {
+      double? distance;
+      switch (feature!.geometry.type) {
+        case GeoJSONType.point:
+          var coords = (feature.geometry as GeoJSONPoint).coordinates;
+          distance = calculateHaversineDistance(lat, lon, coords[1], coords[0]);
+          break;
+        case GeoJSONType.lineString:
+          var coords = (feature.geometry as GeoJSONLineString).coordinates;
+          distance = coords
+              .map((coord) =>
+                  calculateHaversineDistance(lat, lon, coord[1], coord[0]))
+              .reduce(min);
+          break;
+        case GeoJSONType.polygon:
+          var polygon = (feature.geometry as GeoJSONPolygon).coordinates;
+          distance = polygon.first
+              .map((coord) =>
+                  calculateHaversineDistance(lat, lon, coord[1], coord[0]))
+              .reduce(min);
+          break;
+        // Handle other cases if needed
+        case GeoJSONType.featureCollection:
+          break;
+        case GeoJSONType.feature:
+          break;
+        case GeoJSONType.multiPoint:
+          break;
+        case GeoJSONType.multiLineString:
+          break;
+        case GeoJSONType.multiPolygon:
+          break;
+        case GeoJSONType.geometryCollection:
+          break;
+      }
+
+      // Only compare if distance is not null
+      if (distance != null &&
+          (shortestDistance == null || distance < shortestDistance)) {
+        shortestDistance = distance;
+        nearestFeature = feature;
+      }
+    }
+
+    return nearestFeature;
+  }
+
   @override
   Map<String, dynamic> toMap() {
     return {

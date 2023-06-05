@@ -2,9 +2,12 @@
 
 ## [2.2.0] 
 
-* Update unit tests for GeoJSONLineString and GeoJSONPolygon
-* Add perimeter function to GeoJSONPolygon
-* Updated Earth's radius in distance calculation
+* Add findNearestFeature function to GeoJSONFeatureCollection
+* Rename distance calculation function to calculateHaversineDistance and move to geojson_utils.dart
+* Add utils/geojson_utils.dart
+* Updated unit tests for GeoJSONLineString and GeoJSONPolygon.
+* Added perimeter function to GeoJSONPolygon.
+* Updated Earth's radius in distance calculation.
 
 ## [2.1.0] - 2023-06-03
 

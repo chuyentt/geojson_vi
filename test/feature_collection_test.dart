@@ -135,5 +135,29 @@ void main() {
 
       expect(featureColl.features.length, 2);
     });
+
+    test('Find nearest feature', () {
+      // Assume we have a list of GeoJSONFeature objects
+      final featureCollection = GeoJSONFeatureCollection.fromMap(expectedMap);
+
+      // Define a point to find the nearest feature to
+      var lat = 101.0;
+      var lon = 0.5;
+
+      // Call the findNearestFeature function
+      var nearestFeature = featureCollection.findNearestFeature(lat, lon);
+
+      // Check the result
+      expect(nearestFeature, isNotNull); // Check that a feature was found
+      expect(nearestFeature!.geometry.type,
+          GeoJSONType.lineString); // Check the type of the feature
+      var coords = (nearestFeature.geometry as GeoJSONLineString).coordinates;
+      expect(coords, [
+        [102.0, 0.0],
+        [103.0, 1.0],
+        [104.0, 0.0],
+        [105.0, 1.0]
+      ]); // Check that the correct feature was found
+    });
   });
 }
