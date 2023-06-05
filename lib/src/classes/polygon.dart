@@ -11,25 +11,11 @@ class GeoJSONPolygon implements GeoJSONGeometry {
 
   @override
   double get area {
-    double ringArea(List<List<double>> ringPos) {
-      const double wgs84Radius = 6378137.0;
-      const double degToRad = pi / 180.0;
-      var area = 0.0;
-      for (var i = 0; i < ringPos.length - 1; i++) {
-        var p1 = ringPos[i];
-        var p2 = ringPos[i + 1];
-        area += (p2[0] * degToRad - p1[0] * degToRad) *
-            (2.0 + sin(p1[1] * degToRad) + sin(p2[1] * degToRad));
-      }
-      area = area * wgs84Radius * wgs84Radius / 2.0;
-      return area.abs();
-    }
-
     var exteriorRing = coordinates[0];
-    var area = ringArea(exteriorRing);
+    var area = getGeographicArea(exteriorRing);
     for (var i = 1; i < coordinates.length; i++) {
       var interiorRing = coordinates[i];
-      area -= ringArea(interiorRing);
+      area -= getGeographicArea(interiorRing);
     }
     return area;
   }
@@ -64,19 +50,80 @@ class GeoJSONPolygon implements GeoJSONGeometry {
   @override
   double get distance => 0.0;
 
+  /// Returns the total length (perimeter) of the outer boundary of the polygon.
+  ///
+  /// The perimeter is calculated as the sum of the distances between
+  /// consecutive points in the outer polygon ring. The polygon is assumed to be
+  /// closed, meaning the distance between the last point and the first point is
+  /// also included in the perimeter calculation.
+  ///
+  /// The distance between points is calculated using the calculateDistance
+  /// method.
+  ///
+  /// Returns:
+  ///   A double representing the total length (perimeter) of the outer boundary
+  ///   of the polygon, in the same units as used by calculateDistance (usually
+  ///   meters).
   double get perimeter {
     var perimeter = 0.0;
     for (var i = 0; i < coordinates[0].length - 1; i++) {
       var p1 = coordinates[0][i];
       var p2 = coordinates[0][i + 1];
-      perimeter += calculateDistance(p1[1], p1[0], p2[1], p2[0]);
+      perimeter += calculateHaversineDistance(p1[1], p1[0], p2[1], p2[0]);
     }
     // Add distance between the last point and the first point to close the polygon
     var p1 = coordinates[0][coordinates[0].length - 1];
     var p2 = coordinates[0][0];
-    perimeter += calculateDistance(p1[1], p1[0], p2[1], p2[0]);
+    perimeter += calculateHaversineDistance(p1[1], p1[0], p2[1], p2[0]);
 
     return perimeter;
+  }
+
+  /// Returns the geographic center (centroid) of a polygon, including any holes.
+  ///
+  /// The centroid is calculated by taking into account the area of the outer
+  /// polygon and subtracting the areas of any holes.
+  ///
+  /// Note: The centroid may not necessarily lie within the polygon, especially
+  /// if the polygon has a complex shape or includes holes.
+  ///
+  /// Returns:
+  ///   A two-element list [longitude, latitude] representing the centroid
+  ///   coordinates.
+  ///
+  /// Throws an [ArgumentError] if there are fewer than three points provided
+  /// to calculate the area of a polygon.
+  ///
+  /// Reference: [Wikipedia](https://en.wikipedia.org/wiki/Centroid#Of_a_polygon)
+  List<double> get centroid {
+    var coords = <List<List<double>>>[];
+    for (final ring in coordinates) {
+      final transformedRing = <List<double>>[];
+
+      for (final point in ring) {
+        final List<double> transformedPoint =
+            convertToWebMercator(point[0], point[1]);
+        transformedRing.add(transformedPoint);
+      }
+
+      coords.add(transformedRing);
+    }
+    var outer = coords.first;
+    var n = outer.length;
+    double cx = 0;
+    double cy = 0;
+    for (int i = 0; i < n; i++) {
+      double x1 = outer[i][1];
+      double y1 = outer[i][0];
+      double x2 = outer[(i + 1) % n][1];
+      double y2 = outer[(i + 1) % n][0];
+      double f = x1 * y2 - x2 * y1;
+      cx += (x1 + x2) * f;
+      cy += (y1 + y2) * f;
+    }
+    double a = getPlanarArea(outer) * 6;
+    var c = convertFromWebMercator(cy / a, cx / a);
+    return c;
   }
 
   /// The constructor for the [coordinates] member

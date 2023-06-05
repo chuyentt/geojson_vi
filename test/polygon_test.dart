@@ -74,5 +74,50 @@ void main() {
             expectedPerimeter - precision, expectedPerimeter + precision),
       );
     });
+
+    test('calculates the centroid correctly', () {
+      final polygon = GeoJSONPolygon([
+        [
+          [105.75844517033448, 21.08115157318212],
+          [105.77613146171272, 21.08115157318212],
+          [105.77613146171272, 21.09802265821532],
+          [105.7938177531, 21.09802265821532],
+          [105.7938177531, 21.06428048815],
+          [105.75844517033448, 21.06428048815],
+          [105.75844517033448, 21.08115157318212]
+        ]
+      ]);
+
+      final centroid = polygon.centroid;
+
+      // Verify that the centroid is calculated correctly
+      expect(centroid[0], closeTo(105.77907939875072, 1e-6));
+      expect(centroid[1], closeTo(21.078340603132883, 1e-6));
+    });
+    test('calculates the centroid with hole correctly', () {
+      final polygon = GeoJSONPolygon([
+        [
+          [105.75844517033448, 21.08115157318212],
+          [105.77613146171272, 21.08115157318212],
+          [105.77613146171272, 21.09802265821532],
+          [105.7938177531, 21.09802265821532],
+          [105.7938177531, 21.06428048815],
+          [105.75844517033448, 21.06428048815],
+          [105.75844517033448, 21.08115157318212]
+        ],
+        [
+          [105.77390580027557121, 21.07735998643125441],
+          [105.78019527759438745, 21.08263503192444333],
+          [105.78317094428284406, 21.07364040307066944],
+          [105.77390580027557121, 21.07735998643125441]
+        ]
+      ]);
+
+      final centroid = polygon.centroid;
+
+      // Verify that the centroid is calculated correctly
+      expect(centroid[0], closeTo(105.77907939875072, 1e-6));
+      expect(centroid[1], closeTo(21.078340603132883, 1e-6));
+    });
   });
 }
