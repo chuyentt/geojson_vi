@@ -44,7 +44,7 @@ class GeoJSONLineString implements GeoJSONGeometry {
     for (var i = 0; i < coordinates.length - 1; i++) {
       var p1 = coordinates[i];
       var p2 = coordinates[i + 1];
-      length += calculateDistance(p1[1], p1[0], p2[1], p2[0]);
+      length += calculateHaversineDistance(p1[1], p1[0], p2[1], p2[0]);
     }
     return length;
   }
