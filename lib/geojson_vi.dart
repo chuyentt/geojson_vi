@@ -15,6 +15,7 @@ library geojson_vi;
 
 import 'dart:convert';
 import 'dart:collection';
+import 'dart:core';
 import 'dart:math';
 
 // Base package library
