@@ -90,9 +90,18 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is GeoJSONGeometryCollection && other.geometries == geometries;
+    if (other is GeoJSONGeometryCollection) {
+      if (geometries.length != other.geometries.length) return false;
+      for (int i = 0; i < geometries.length; i++) {
+        if (geometries[i] != other.geometries[i]) return false;
+      }
+      return true;
+    }
+    return false;
   }
 
   @override
-  int get hashCode => geometries.hashCode;
+  int get hashCode =>
+      type.hashCode ^
+      geometries.toSet().fold(0, (hash, geometry) => hash ^ geometry.hashCode);
 }

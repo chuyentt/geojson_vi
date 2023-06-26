@@ -69,15 +69,19 @@ class GeoJSONPoint implements GeoJSONGeometry {
   }
 
   @override
-  String toString() => 'Point($coordinates)';
+  String toString() => 'GeoJSONPoint(type: $type, coordinates: $coordinates)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
-    return other is GeoJSONPoint && other.coordinates == coordinates;
+    if (other is GeoJSONPoint) {
+      return type == type && doubleListsEqual(coordinates, other.coordinates);
+    }
+    return false;
   }
 
   @override
-  int get hashCode => coordinates.hashCode;
+  int get hashCode =>
+      type.hashCode ^
+      coordinates.fold(0, (hash, value) => hash ^ value.hashCode);
 }

@@ -9,7 +9,7 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
   GeoJSONType type = GeoJSONType.multiLineString;
 
   /// The 'coordinates' member must be an array of LineString coordinate arrays.
-  List<List<List<double>>> coordinates = [];
+  var coordinates = <List<List<double>>>[];
 
   @override
   double get area => 0.0;
@@ -102,15 +102,37 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
   }
 
   @override
-  String toString() => 'MultiLineString($coordinates)';
+  String toString() =>
+      'GeoJSONMultiLineString(type: $type, coordinates: $coordinates)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is GeoJSONMultiLineString && other.coordinates == coordinates;
+    if (other is GeoJSONMultiLineString) {
+      if (other.type != type ||
+          other.coordinates.length != coordinates.length) {
+        return false;
+      }
+
+      return coordinates.asMap().entries.map((entry) {
+        int i = entry.key;
+        List<List<double>> lineString1 = entry.value;
+        List<List<double>> lineString2 = other.coordinates[i];
+        return lineString1.asMap().entries.map((entry) {
+          int j = entry.key;
+          return doubleListsEqual(lineString1[j], lineString2[j]);
+        }).reduce((value, element) => value && element);
+      }).reduce((value, element) => value && element);
+    }
+    return false;
   }
 
   @override
-  int get hashCode => coordinates.hashCode;
+  int get hashCode =>
+      type.hashCode ^
+      coordinates
+          .expand((list) => list)
+          .expand((innerList) => innerList)
+          .fold(0, (hash, value) => hash ^ value.hashCode);
 }

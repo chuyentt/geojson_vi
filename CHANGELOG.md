@@ -1,7 +1,10 @@
 # CHANGELOG
 
-## [2.2.0] 
+## [2.2.0] - 2023-06-26
 
+* Updated the equality operator (==) and hashCode methods for the objects
+* Revised the implementation of the toMap() method to ensure correct behavior
+* Added comprehensive unit tests to verify the functionality of the objects
 * Add findNearestFeature function to GeoJSONFeatureCollection
 * Rename distance calculation function to calculateHaversineDistance and move to geojson_utils.dart
 * Add utils/geojson_utils.dart

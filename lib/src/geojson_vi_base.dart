@@ -81,8 +81,13 @@ abstract class GeoJSON {
   /// Converts GeoJSON object to a Map.
   Map<String, dynamic> toMap();
 
-  /// Converts GeoJSON object to a JSON string.
-  String toJSON();
+  /// Converts the object to a JSON string representation.
+  ///
+  /// The [indent] parameter specifies the number of spaces to use for indentation.
+  /// Set [indent] to 0 or a negative value for no indentation.
+  ///
+  /// Returns the JSON string representation of the object.
+  String toJSON({int indent = 0});
 
   @override
   String toString() => 'GeoJSON(type: $type)';

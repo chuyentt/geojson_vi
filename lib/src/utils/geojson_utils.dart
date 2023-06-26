@@ -349,3 +349,40 @@ Map<String, dynamic> findIncircle(List<List<double>> points) {
     'radius': radius
   };
 }
+
+/// Checks if two lists of doubles are equal by comparing their lengths and values.
+///
+/// Returns `true` if [list1] and [list2] are equal, or `false` otherwise.
+/// If the lengths of [list1] and [list2] are different, they are considered unequal.
+/// For each value in [list1], if the corresponding value in [list2] is different,
+/// they are considered unequal.
+bool doubleListsEqual(List<double> list1, List<double> list2) {
+  return list1.length == list2.length &&
+      list1.asMap().entries.every((entry) {
+        int index = entry.key;
+        double value = entry.value;
+        return value == list2[index];
+      });
+}
+
+/// Checks if two maps are equal by comparing their keys and values.
+///
+/// Returns `true` if [map1] and [map2] are equal, or `false` otherwise.
+/// If both [map1] and [map2] are `null`, they are considered equal.
+/// If either [map1] or [map2] is `null`, they are considered unequal.
+/// If the lengths of [map1] and [map2] are different, they are considered unequal.
+/// For each key in [map1], if [map2] does not contain the key or the values
+/// associated with the key are different, they are considered unequal.
+bool mapEquals(Map<dynamic, dynamic>? map1, Map<dynamic, dynamic>? map2) {
+  if (map1 == map2) return true;
+  if (map1 == null || map2 == null) return false;
+  if (map1.length != map2.length) return false;
+
+  for (final key in map1.keys) {
+    if (!map2.containsKey(key) || map1[key] != map2[key]) {
+      return false;
+    }
+  }
+
+  return true;
+}

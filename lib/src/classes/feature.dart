@@ -60,24 +60,15 @@ class GeoJSONFeature implements GeoJSON {
   @override
   List<double>? get bbox => _bbox;
 
-  @Deprecated(
-    'Use `geometry.toMap()` instead. '
-    'Will be removed in the next version',
-  )
-
-  /// Gets the serialized geometry of the feature.
-  ///
-  /// Deprecated: Use `geometry.toMap()` instead.
-  Map<String, dynamic> get geometrySerialize => geometry.toMap();
-
   @override
   Map<String, dynamic> toMap() {
     return {
+      'type': type.value,
       if (id != null) 'id': id,
       if (title != null) 'title': title,
-      'type': type.value,
       'properties': properties ?? {},
       'geometry': geometry.toMap(),
+      if (bbox != null) 'bbox': bbox,
     };
   }
 
@@ -91,15 +82,30 @@ class GeoJSONFeature implements GeoJSON {
   }
 
   @override
-  String toString() => 'Feature(geometry: $geometry)';
+  String toString() =>
+      'GeoJSONFeature(type: $type, geometry: $geometry, id: $id, title: $title, bbox: $bbox)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is GeoJSONFeature && other.geometry == geometry;
+    if (other is GeoJSONFeature) {
+      return type == other.type &&
+          id == other.id &&
+          title == other.title &&
+          geometry == other.geometry &&
+          mapEquals(other.properties, properties);
+    }
+    return false;
   }
 
   @override
-  int get hashCode => geometry.hashCode;
+  int get hashCode =>
+      type.hashCode ^
+      id.hashCode ^
+      title.hashCode ^
+      geometry.hashCode ^
+      (properties?.entries ?? {})
+          .map((entry) => entry.key.hashCode ^ entry.value.hashCode)
+          .fold(0, (hash, value) => hash ^ value);
 }

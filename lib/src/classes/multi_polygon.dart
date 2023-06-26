@@ -118,15 +118,45 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
   }
 
   @override
-  String toString() => 'MultiPolygon($coordinates)';
+  String toString() =>
+      'GeoJSONMultiPolygon(type: $type, coordinates: $coordinates)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is GeoJSONMultiPolygon && other.coordinates == coordinates;
+    if (other is GeoJSONMultiPolygon) {
+      if (other.type != type ||
+          other.coordinates.length != coordinates.length) {
+        return false;
+      }
+
+      return coordinates.asMap().entries.map((entry) {
+        int i = entry.key;
+        List<List<List<double>>> polygon1 = entry.value;
+        List<List<List<double>>> polygon2 = other.coordinates[i];
+
+        return polygon1.asMap().entries.map((entry) {
+          int j = entry.key;
+          List<List<double>> lineString1 = polygon1[j];
+          List<List<double>> lineString2 = polygon2[j];
+
+          return lineString1.asMap().entries.map((entry) {
+            int k = entry.key;
+            return doubleListsEqual(lineString1[k], lineString2[k]);
+          }).reduce((value, element) => value && element);
+        }).reduce((value, element) => value && element);
+      }).reduce((value, element) => value && element);
+    }
+    return false;
   }
 
   @override
-  int get hashCode => coordinates.hashCode;
+  int get hashCode =>
+      type.hashCode ^
+      coordinates
+          .expand((list) => list)
+          .expand((innerList) => innerList)
+          .expand((innerInnerList) => innerInnerList)
+          .fold(0, (hash, value) => hash ^ value.hashCode);
 }

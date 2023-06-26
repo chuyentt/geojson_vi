@@ -90,15 +90,29 @@ class GeoJSONMultiPoint implements GeoJSONGeometry {
   }
 
   @override
-  String toString() => 'MultiPoint($coordinates)';
+  String toString() =>
+      'GeoJSONMultiPoint(type: $type, coordinates: $coordinates)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is GeoJSONMultiPoint && other.coordinates == coordinates;
+    if (other is GeoJSONMultiPoint) {
+      return type == other.type &&
+          coordinates.length == other.coordinates.length &&
+          coordinates.asMap().entries.every((entry) {
+            int i = entry.key;
+            List<double> l1 = entry.value;
+            return doubleListsEqual(l1, other.coordinates[i]);
+          });
+    }
+    return false;
   }
 
   @override
-  int get hashCode => coordinates.hashCode;
+  int get hashCode =>
+      type.hashCode ^
+      coordinates
+          .expand((list) => list)
+          .fold(0, (hash, value) => hash ^ value.hashCode);
 }

@@ -203,5 +203,26 @@ void main() {
       expect(geometryCollection.toJSON(),
           '{"type":"GeometryCollection","geometries":[]}');
     });
+
+    test('checks equality of GeometryCollection objects', () {
+      final geometryCollection1 =
+          GeoJSONGeometryCollection.fromMap(expectedMap);
+      final geometryCollection2 =
+          GeoJSONGeometryCollection.fromMap(expectedMap);
+      final geometryCollection3 = GeoJSONGeometryCollection([]);
+
+      expect(geometryCollection1 == geometryCollection2, true);
+      expect(geometryCollection1 == geometryCollection3, false);
+    });
+
+    test('checks hashCode of GeometryCollection objects', () {
+      final geometryCollection1 =
+          GeoJSONGeometryCollection.fromMap(expectedMap);
+      final geometryCollection2 =
+          GeoJSONGeometryCollection.fromMap(expectedMap);
+
+      expect(
+          geometryCollection1.hashCode == geometryCollection2.hashCode, true);
+    });
   });
 }

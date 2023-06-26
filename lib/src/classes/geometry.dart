@@ -50,27 +50,19 @@ abstract class GeoJSONGeometry implements GeoJSON {
   factory GeoJSONGeometry.fromJSON(String source) =>
       GeoJSONGeometry.fromMap(json.decode(source));
 
-  /// Converts the GeoJSONGeometry object to a Map.
   @override
   Map<String, dynamic> toMap();
 
-  /// Converts the GeoJSONGeometry object to a JSON string.
   @override
-  String toJSON();
+  String toJSON({int indent = 0});
 
-  /// Returns a string representation of the GeoJSONGeometry object.
   @override
-  String toString() => 'Geometry(type: $type)';
+  String toString();
 
-  /// Checks if this GeoJSONGeometry object is equal to the [other] object.
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is GeoJSONGeometry && other.type == type;
-  }
+  bool operator ==(Object other);
 
   /// Returns a hash code for this GeoJSONGeometry object.
   @override
-  int get hashCode => type.hashCode;
+  int get hashCode;
 }

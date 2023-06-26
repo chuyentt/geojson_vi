@@ -177,15 +177,35 @@ class GeoJSONPolygon implements GeoJSONGeometry {
   }
 
   @override
-  String toString() => 'Polygon($coordinates)';
+  String toString() => 'GeoJSONPolygon(type: $type, coordinates: $coordinates)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is GeoJSONPolygon) {
+      if (other.type != type ||
+          other.coordinates.length != coordinates.length) {
+        return false;
+      }
 
-    return other is GeoJSONPolygon && other.coordinates == coordinates;
+      return coordinates.asMap().entries.map((entry) {
+        int i = entry.key;
+        List<List<double>> lineString1 = entry.value;
+        List<List<double>> lineString2 = other.coordinates[i];
+        return lineString1.asMap().entries.map((entry) {
+          int j = entry.key;
+          return doubleListsEqual(lineString1[j], lineString2[j]);
+        }).reduce((value, element) => value && element);
+      }).reduce((value, element) => value && element);
+    }
+    return false;
   }
 
   @override
-  int get hashCode => coordinates.hashCode;
+  int get hashCode =>
+      type.hashCode ^
+      coordinates
+          .expand((list) => list)
+          .expand((innerList) => innerList)
+          .fold(0, (hash, value) => hash ^ value.hashCode);
 }
