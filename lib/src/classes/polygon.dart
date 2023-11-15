@@ -122,7 +122,7 @@ class GeoJSONPolygon implements GeoJSONGeometry {
       cy += (y1 + y2) * f;
     }
     double a = getPlanarArea(outer) * 6;
-    var c = convertFromWebMercator(cy / a, cx / a);
+    var c = convertFromWebMercator(cy.abs() / a, cx.abs() / a);
     return c;
   }
 
