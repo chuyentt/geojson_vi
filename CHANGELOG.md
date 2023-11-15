@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2.2.1] - 2023-11-15
+
+* Fix centroid calculation to address algebraic sign issues for clockwise and counterclockwise polygons (Issue #22).
+* Update part-of directive to use the URI instead of the library name.
+
 ## [2.2.0] - 2023-06-26
 
 * Updated the equality operator (==) and hashCode methods for the objects
