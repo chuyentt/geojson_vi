@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../../geojson_vi.dart';
 
 /// The ListExt class extends the ListBase class to provide additional
 /// functionality.

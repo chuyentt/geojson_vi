@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../../geojson_vi.dart';
 
 /// The Feature represents a spatially bounded thing.
 class GeoJSONFeature implements GeoJSON {

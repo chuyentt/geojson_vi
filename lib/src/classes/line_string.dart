@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../../geojson_vi.dart';
 
 /// A class representing a GeoJSON LineString.
 ///

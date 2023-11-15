@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../../geojson_vi.dart';
 
 /// Calculates the Haversine distance in meters between two points specified by their
 /// latitude and longitude coordinates.

@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../../geojson_vi.dart';
 
 /// An abstract base class for GeoJSON Geometry objects.
 ///

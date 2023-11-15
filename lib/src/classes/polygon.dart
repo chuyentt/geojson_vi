@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../../geojson_vi.dart';
 
 /// The geometry type Polygon
 class GeoJSONPolygon implements GeoJSONGeometry {

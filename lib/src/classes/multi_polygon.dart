@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../../geojson_vi.dart';
 
 /// Class that represents a MultiPolygon geometry type in GeoJSON.
 ///

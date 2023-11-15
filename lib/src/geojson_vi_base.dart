@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../geojson_vi.dart';
 
 /// `GeoJSON` is an abstract class representing a geospatial data interchange
 /// format.

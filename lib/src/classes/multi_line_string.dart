@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../../geojson_vi.dart';
 
 /// This class represents the geometry type MultiLineString according to the
 /// GeoJSON specification.

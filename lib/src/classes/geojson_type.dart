@@ -1,4 +1,4 @@
-part of geojson_vi;
+part of '../../geojson_vi.dart';
 
 /// Enumerates the types of geometry that can be used in a GeoJSON object.
 enum GeoJSONType {
