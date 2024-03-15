@@ -111,7 +111,8 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
 
     if (other is GeoJSONMultiLineString) {
       if (other.type != type ||
-          other.coordinates.length != coordinates.length) {
+          other.coordinates.length != coordinates.length ||
+          other.coordinates.first.length != coordinates.first.length) {
         return false;
       }
 
@@ -119,6 +120,7 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
         int i = entry.key;
         List<List<double>> lineString1 = entry.value;
         List<List<double>> lineString2 = other.coordinates[i];
+        if (lineString1.length != lineString2.length) return false;
         return lineString1.asMap().entries.map((entry) {
           int j = entry.key;
           return doubleListsEqual(lineString1[j], lineString2[j]);

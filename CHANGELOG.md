@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2.2.2] - 2024-03-15
+
+- Resolved `RangeError` in equality comparison for `GeoJSONPolygon` when comparing polygons with different point counts (Issue #23).
+- Improved equality comparison for `GeoJSONMultiPolygon` and `GeoJSONMultiLineString` to handle nested structures more effectively, addressing the concerns raised in Issue #23
+
 ## [2.2.1] - 2023-11-15
 
 * Fix centroid calculation to address algebraic sign issues for clockwise and counterclockwise polygons (Issue #22).

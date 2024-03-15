@@ -127,7 +127,8 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
 
     if (other is GeoJSONMultiPolygon) {
       if (other.type != type ||
-          other.coordinates.length != coordinates.length) {
+          other.coordinates.length != coordinates.length ||
+          other.coordinates.first.length != coordinates.first.length) {
         return false;
       }
 
@@ -140,7 +141,7 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
           int j = entry.key;
           List<List<double>> lineString1 = polygon1[j];
           List<List<double>> lineString2 = polygon2[j];
-
+          if (lineString1.length != lineString2.length) return false;
           return lineString1.asMap().entries.map((entry) {
             int k = entry.key;
             return doubleListsEqual(lineString1[k], lineString2[k]);

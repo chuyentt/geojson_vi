@@ -357,6 +357,7 @@ Map<String, dynamic> findIncircle(List<List<double>> points) {
 /// For each value in [list1], if the corresponding value in [list2] is different,
 /// they are considered unequal.
 bool doubleListsEqual(List<double> list1, List<double> list2) {
+  if (list1.length != list2.length) return false;
   return list1.length == list2.length &&
       list1.asMap().entries.every((entry) {
         int index = entry.key;
