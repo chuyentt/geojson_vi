@@ -179,5 +179,117 @@ void main() {
       expect(centroid[0], closeTo(11.5047221, 1e-6));
       expect(centroid[1], closeTo(48.5299198, 1e-6));
     });
+
+    test('findOptimalPoint should return a point inside the polygon', () {
+      final polygon = GeoJSONPolygon([
+        [
+          [105.75844517033448, 21.08115157318212],
+          [105.77613146171272, 21.08115157318212],
+          [105.77613146171272, 21.09802265821532],
+          [105.7938177531, 21.09802265821532],
+          [105.7938177531, 21.06428048815],
+          [105.75844517033448, 21.06428048815],
+          [105.75844517033448, 21.08115157318212]
+        ]
+      ]);
+
+      final optimalPoint = polygon.optimalPointInside();
+
+      // Verify that the optimal point is calculated correctly
+      expect(optimalPoint[0], closeTo(105.78202689217815, 1e-6));
+      expect(optimalPoint[1], closeTo(21.075528729236524, 1e-6));
+    });
+
+    test(
+        'findOptimalPoint should return a point inside the complex polygon but not in the hole',
+        () {
+      final polygon = GeoJSONPolygon([
+        [
+          [105.75844517033448, 21.08115157318212],
+          [105.77613146171272, 21.08115157318212],
+          [105.77613146171272, 21.09802265821532],
+          [105.7938177531, 21.09802265821532],
+          [105.7938177531, 21.06428048815],
+          [105.75844517033448, 21.06428048815],
+          [105.75844517033448, 21.08115157318212]
+        ],
+        [
+          [105.77390580027557121, 21.07735998643125441],
+          [105.78019527759438745, 21.08263503192444333],
+          [105.78317094428284406, 21.07364040307066944],
+          [105.77390580027557121, 21.07735998643125441]
+        ]
+      ]);
+
+      final optimalPoint = polygon.optimalPointInside();
+
+      // Verify that the optimal point is calculated correctly
+      expect(optimalPoint[0], closeTo(105.77023603125633, 1e-6));
+      expect(optimalPoint[1], closeTo(21.069904715037904, 1e-6));
+    });
+    group('GeoJSONPolygon isPointInside tests', () {
+      final polygon = GeoJSONPolygon([
+        [
+          [105.75844517033448, 21.08115157318212],
+          [105.77613146171272, 21.08115157318212],
+          [105.77613146171272, 21.09802265821532],
+          [105.7938177531, 21.09802265821532],
+          [105.7938177531, 21.06428048815],
+          [105.75844517033448, 21.06428048815],
+          [105.75844517033448, 21.08115157318212]
+        ]
+      ]);
+
+      test('Point inside the polygon', () {
+        final pointInside = [105.769508, 21.086916];
+        expect(polygon.isPointInside(pointInside), isFalse);
+      });
+
+      test('Point on the edge of the polygon', () {
+        final pointOnEdge = [105.77613146171272, 21.08115157318212];
+        expect(polygon.isPointInside(pointOnEdge), isTrue);
+      });
+
+      test('Point at the vertex of the polygon', () {
+        final pointAtVertex = [105.7935077531, 21.09702265821532];
+        expect(polygon.isPointInside(pointAtVertex), isTrue);
+      });
+    });
+
+    group('GeoJSONPolygon isPointInsideComplex tests', () {
+      final complexPolygon = GeoJSONPolygon([
+        [
+          [105.75844517033448, 21.08115157318212],
+          [105.77613146171272, 21.08115157318212],
+          [105.77613146171272, 21.09802265821532],
+          [105.7938177531, 21.09802265821532],
+          [105.7938177531, 21.06428048815],
+          [105.75844517033448, 21.06428048815],
+          [105.75844517033448, 21.08115157318212]
+        ],
+        [
+          [105.770, 21.070],
+          [105.780, 21.070],
+          [105.780, 21.080],
+          [105.770, 21.080],
+          [105.770, 21.070]
+        ]
+      ]);
+
+      test('Point inside the outer boundary but outside the hole', () {
+        final pointOutsideHole = [105.7833744591905, 21.08217600500288];
+        expect(complexPolygon.isPointInsideComplex(pointOutsideHole), isTrue);
+      });
+
+      test('Point inside the hole', () {
+        final pointInsideHole = [105.77625669165923, 21.075041912341987];
+        expect(complexPolygon.isPointInsideComplex(pointInsideHole), isFalse);
+      });
+
+      test('Point outside the complex polygon', () {
+        final pointOutside = [105.755, 21.065];
+        expect(complexPolygon.isPointInsideComplex(pointOutside), isFalse);
+      });
+    });
   });
 }

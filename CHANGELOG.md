@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.2.3 - 2024-03-27
+### Added
+- Added `isPointInside` method in `GeoJSONPolygon` to check if a point is inside a given polygon.
+- Added `isPointInsideComplex` in `GeoJSONPolygon` to determine if a point lies within a complex polygon while considering holes.
+- Added `optimalPointInside` method to `GeoJSONPolygon` for calculating the optimal point within a polygon, enhancing label placement in geospatial analyses.
+
 ## [2.2.2] - 2024-03-15
 
 - Resolved `RangeError` in equality comparison for `GeoJSONPolygon` when comparing polygons with different point counts (Issue #23).
