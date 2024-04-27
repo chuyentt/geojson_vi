@@ -116,14 +116,16 @@ List<double> _addBbox(List<double> bbox1, List<double> bbox2) {
 ///
 /// Returns the difference of two bboxes.
 List<double> _removeBbox(List<double> bbox1, List<double>? bbox2) {
+  if (bbox2 == null) return bbox1;
+  if (numListEquals(bbox1, bbox2)) return bbox1;
   final longitudes = <double>[];
   final latitudes = <double>[];
 
   longitudes.addAll([bbox1[0], bbox1[2]]);
   latitudes.addAll([bbox1[1], bbox1[3]]);
 
-  longitudes.removeWhere((e) => (e == bbox2![0]) || (e == bbox2[2]));
-  latitudes.removeWhere((e) => (e == bbox2![1]) || (e == bbox2[3]));
+  longitudes.removeWhere((e) => (e == bbox2[0]) || (e == bbox2[2]));
+  latitudes.removeWhere((e) => (e == bbox2[1]) || (e == bbox2[3]));
   longitudes.removeWhere((e) => (e == -180.0) || (e == 180.0));
   latitudes.removeWhere((e) => (e == -90.0) || (e == 90.0));
   longitudes.sort();

@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 2.2.4 - 2024-04-27
+### Added
+- None
+
+### Changed
+- Enhanced the `_removeBbox` function to include null safety checks and an identity comparison to optimize performance and reliability. This improvement prevents unnecessary computations by checking if the input bounding boxes (`bbox1` and `bbox2`) are identical or if `bbox2` is `null`, thereby returning `bbox1` directly under these conditions.
+
+### Deprecated
+- None
+
+### Removed
+- None
+
+### Fixed
+- None
+
+### Security
+- None
+
 ## 2.2.3 - 2024-03-27
 ### Added
 - Added `isPointInside` method in `GeoJSONPolygon` to check if a point is inside a given polygon.
