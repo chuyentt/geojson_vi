@@ -1,7 +1,7 @@
 name: geojson_vi
 description: An Open-Source Dart and Flutter Library for Efficiently Handling GeoJSON Data in Compliance with RFC 7946
 
-version: 2.2.4
+version: 2.2.5
 homepage: https://github.com/chuyentt/geojson_vi
 
 environment:

@@ -72,14 +72,17 @@ List<double> _getBbox(List<GeoJSONFeature?> features) {
   final longitudes = <double>[];
   final latitudes = <double>[];
   Future.forEach(features, (GeoJSONFeature? element) {
-    longitudes.addAll([element!.bbox![0], element.bbox![2]]);
-    latitudes.addAll([element.bbox![1], element.bbox![3]]);
+    if (element?.geometry != null) {
+      longitudes.addAll([element!.bbox![0], element.bbox![2]]);
+      latitudes.addAll([element.bbox![1], element.bbox![3]]);
+    }
   });
 
   longitudes.removeWhere((e) => (e == -180.0) || (e == 180.0));
   latitudes.removeWhere((e) => (e == -90.0) || (e == 90.0));
   longitudes.sort();
   latitudes.sort();
+  if (longitudes.isEmpty) return [-180.0, -90.0, 180.0, 90.0];
   return [
     longitudes.first,
     latitudes.first,
@@ -189,7 +192,9 @@ class GeoJSONFeatureCollection implements GeoJSON {
 
   /// The callback function called when a feature is added.
   void onAdd(GeoJSONFeature feature) {
-    _bbox = _addBbox(_bbox!, feature.bbox!);
+    if (feature.bbox != null) {
+      _bbox = _addBbox(_bbox!, feature.bbox!);
+    }
   }
 
   /// The callback function called when features are added.
@@ -267,7 +272,8 @@ class GeoJSONFeatureCollection implements GeoJSON {
 
     for (var feature in features) {
       double? distance;
-      switch (feature!.geometry.type) {
+      if (feature?.geometry == null) continue;
+      switch (feature!.geometry!.type) {
         case GeoJSONType.point:
           var coords = (feature.geometry as GeoJSONPoint).coordinates;
           distance = calculateHaversineDistance(lat, lon, coords[1], coords[0]);

@@ -5,6 +5,37 @@ import 'package:test/test.dart';
 
 void main() {
   group('GeoJSONFeatureCollection', () {
+    test('create a feature collection with null geometry in features', () {
+      final expectedProperties = {
+        'key1': 'value for key 1',
+        'key2': 'value for key 2',
+        'key3': 'value for key 3'
+      };
+
+      final featureWithNullGeometry = {
+        'type': 'Feature',
+        'id': 'id1',
+        'properties': expectedProperties,
+        'title': 'Example of Title',
+        'geometry': null,
+      };
+
+      final featureCollectionMap = {
+        'type': 'FeatureCollection',
+        'features': [
+          featureWithNullGeometry,
+        ]
+      };
+
+      final featureCollection =
+          GeoJSONFeatureCollection.fromMap(featureCollectionMap);
+
+      expect(featureCollection.features.length, 1);
+      expect(featureCollection.features.first?.geometry, null);
+      expect(featureCollection.features.first?.properties, expectedProperties);
+      expect(featureCollection.features.first?.bbox, null);
+    });
+
     final expectedMap = {
       "type": "FeatureCollection",
       "features": [
@@ -152,7 +183,7 @@ void main() {
 
       // Check the result
       expect(nearestFeature, isNotNull); // Check that a feature was found
-      expect(nearestFeature!.geometry.type,
+      expect(nearestFeature!.geometry!.type,
           GeoJSONType.lineString); // Check the type of the feature
       var coords = (nearestFeature.geometry as GeoJSONLineString).coordinates;
       expect(coords, [

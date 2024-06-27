@@ -146,5 +146,43 @@ void main() {
 
       expect(feature == feature2, false);
     });
+    test('create a feature with null geometry', () {
+      final expectedMap = {
+        'type': 'Feature',
+        'id': expectedId,
+        'properties': expectedProperties,
+        'title': expectedTitle,
+        'geometry': null,
+      };
+
+      final feature = GeoJSONFeature.fromMap(expectedMap);
+
+      expect(feature.geometry, null);
+      expect(feature.title, expectedTitle);
+      expect(feature.id, expectedId);
+      expect(feature.properties, expectedProperties);
+      expect(feature.bbox, null);
+      expect(feature.type.value, 'Feature');
+    });
+
+    test('convert feature with null geometry to map', () {
+      final expectedMap = {
+        'type': 'Feature',
+        'id': expectedId,
+        'properties': expectedProperties,
+        'title': expectedTitle,
+        'geometry': null,
+      };
+
+      final feature = GeoJSONFeature.fromMap(expectedMap);
+      final map = feature.toMap();
+
+      expect(map['type'], 'Feature');
+      expect(map['id'], expectedId);
+      expect(map['properties'], expectedProperties);
+      expect(map['bbox'], null);
+      expect(map['title'], expectedTitle);
+      expect(map['geometry'], null);
+    });
   });
 }

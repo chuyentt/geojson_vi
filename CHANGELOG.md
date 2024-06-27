@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.2.5 - 2024-06-27
+### Added
+- Support for null geometry values in GeoJSONFeature and GeoJSONFeatureCollection according to the GeoJSON spec.
+
+### Fixed
+- Issue with GeoJSONFeature.fromMap(...) and GeoJSONFeatureCollection.fromMap(...) not allowing null geometry values.
+- Updated `findNearestFeature` to handle features with null geometry.
+- Updated bbox calculation to handle null geometry.
+
 ## 2.2.4 - 2024-04-27
 ### Added
 - None

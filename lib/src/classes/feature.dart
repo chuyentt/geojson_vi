@@ -6,16 +6,16 @@ class GeoJSONFeature implements GeoJSON {
   @override
   GeoJSONType type = GeoJSONType.feature;
 
-  GeoJSONGeometry _geometry;
+  GeoJSONGeometry? _geometry;
 
   /// A Feature object has a member with the name [geometry]. The value
   /// of the geometry member SHALL be either a Geometry object as types:
   /// Point, MultiPoint, LineString, MultiLineString, Polygon,
   /// MultiPolygon, or GeometryCollection
-  GeoJSONGeometry get geometry => _geometry;
+  GeoJSONGeometry? get geometry => _geometry;
   set geometry(value) {
     _geometry = value;
-    _bbox = _geometry.bbox;
+    _bbox = _geometry?.bbox;
   }
 
   /// A Feature object has a member with the name [properties]. The
@@ -32,10 +32,10 @@ class GeoJSONFeature implements GeoJSON {
   List<double>? _bbox;
 
   /// The constructor for the [geometry] member.
-  GeoJSONFeature(GeoJSONGeometry geometry,
+  GeoJSONFeature(GeoJSONGeometry? geometry,
       {this.properties, this.id, this.title})
       : _geometry = geometry,
-        _bbox = geometry.bbox;
+        _bbox = geometry?.bbox;
 
   /// The constructor from map
   factory GeoJSONFeature.fromMap(Map<String, dynamic> map) {
@@ -43,9 +43,11 @@ class GeoJSONFeature implements GeoJSON {
     assert(['Feature'].contains(map['type']), 'Invalid type');
     assert(
         map.containsKey('geometry'), 'There MUST be contains key `geometry`');
-    assert(map['geometry'] is Map, 'There MUST be geometry object.');
+    final geometry = map['geometry'] != null
+        ? GeoJSONGeometry.fromMap(map['geometry'])
+        : null;
     return GeoJSONFeature(
-      GeoJSONGeometry.fromMap(map['geometry']),
+      geometry,
       properties:
           map['properties'] != null ? Map.castFrom(map['properties']) : null,
       id: map['id'],
@@ -67,7 +69,7 @@ class GeoJSONFeature implements GeoJSON {
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       'properties': properties ?? {},
-      'geometry': geometry.toMap(),
+      'geometry': geometry?.toMap(),
       if (bbox != null) 'bbox': bbox,
     };
   }
