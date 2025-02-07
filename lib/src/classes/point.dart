@@ -28,26 +28,36 @@ class GeoJSONPoint implements GeoJSONGeometry {
   double get distance => 0.0;
 
   /// Constructs a GeoJSONPoint from the provided list of [coordinates].
-  GeoJSONPoint(this.coordinates)
-      : assert(
-            coordinates.length >= 2,
-            'The coordinates is List<double>. '
-            'There MUST be two or more elements');
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
+  GeoJSONPoint(this.coordinates) {
+    _assert(
+        coordinates.length >= 2,
+        'The coordinates is List<double>. '
+        'There MUST be two or more elements',
+        coordinates);
+  }
 
   /// Constructs a GeoJSONPoint from a Map.
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONPoint.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(['Point'].contains(map['type']), 'Invalid type');
-    assert(map.containsKey('coordinates'),
-        'There MUST be contains key `coordinates`');
-    assert(map['coordinates'] is List, 'There MUST be List of double');
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(['Point'].contains(map['type']), 'Invalid type', map['type']);
+    _assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`', map);
+    _assert(map['coordinates'] is List, 'There MUST be List of double',
+        map['coordinates']);
     final ll = map['coordinates'];
-    assert((ll as List).length > 1, 'There MUST be two or more element');
+    _assert((ll as List).length > 1, 'There MUST be two or more element', ll);
     final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
     return GeoJSONPoint(pos);
   }
 
   /// Constructs a GeoJSONPoint from a JSON string.
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONPoint.fromJSON(String source) =>
       GeoJSONPoint.fromMap(json.decode(source));
 

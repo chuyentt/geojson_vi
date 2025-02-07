@@ -46,12 +46,16 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
   /// Constructs a new Geometry Collection from a Map object.
   ///
   /// The Map must represent a valid Geometry Collection.
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONGeometryCollection.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(['GeometryCollection'].contains(map['type']), 'Invalid type');
-    assert(map.containsKey('geometries'),
-        'There MUST be contains key `geometries`');
-    assert(map['geometries'] is List, 'There MUST be array of the geometry.');
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(['GeometryCollection'].contains(map['type']), 'Invalid type',
+        map['type']);
+    _assert(map.containsKey('geometries'),
+        'There MUST be contains key `geometries`', map);
+    _assert(map['geometries'] is List, 'There MUST be array of the geometry.',
+        map['geometries']);
     final value = map['geometries'];
     final geoms = <GeoJSONGeometry>[];
     value.forEach((map) {
@@ -63,6 +67,9 @@ class GeoJSONGeometryCollection implements GeoJSONGeometry {
   /// Constructs a new Geometry Collection from a JSON string.
   ///
   /// The JSON string must represent a valid Geometry Collection.
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONGeometryCollection.fromJSON(String source) =>
       GeoJSONGeometryCollection.fromMap(json.decode(source));
 

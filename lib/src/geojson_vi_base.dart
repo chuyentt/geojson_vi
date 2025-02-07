@@ -1,5 +1,13 @@
 part of '../geojson_vi.dart';
 
+class GeoJSONFormatException extends FormatException {
+  GeoJSONFormatException(msg, [source]) : super(msg, source);
+}
+
+void _assert(condition, msg, [source]) {
+  if (!condition) throw GeoJSONFormatException(msg, source);
+}
+
 /// `GeoJSON` is an abstract class representing a geospatial data interchange
 /// format.
 ///
@@ -24,9 +32,11 @@ abstract class GeoJSON {
   /// The value of the type member must be one of:
   /// "FeatureCollection", "Feature", "Point", "MultiPoint", "LineString",
   /// "MultiLineString", "Polygon", "MultiPolygon", "GeometryCollection"
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSON.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(
         [
           'FeatureCollection',
           'Feature',
@@ -38,7 +48,8 @@ abstract class GeoJSON {
           'MultiPolygon',
           'GeometryCollection'
         ].contains(map['type']),
-        'Invalid type');
+        'Invalid type',
+        map['type']);
 
     final type = map['type'];
     late GeoJSON instance;
@@ -75,6 +86,9 @@ abstract class GeoJSON {
   }
 
   /// Constructs a GeoJSON object from a JSON string [source].
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSON.fromJSON(String source) =>
       GeoJSON.fromMap(json.decode(source));
 

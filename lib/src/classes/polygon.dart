@@ -290,26 +290,34 @@ class GeoJSONPolygon implements GeoJSONGeometry {
   }
 
   /// The constructor for the [coordinates] member
-  GeoJSONPolygon(this.coordinates)
-      : assert(coordinates.isNotEmpty,
-            'The coordinates MUST be one or more elements');
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
+  GeoJSONPolygon(this.coordinates) {
+    _assert(coordinates.isNotEmpty,
+        'The coordinates MUST be one or more elements', coordinates);
+  }
 
   /// The constructor from map
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONPolygon.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(['Polygon'].contains(map['type']), 'Invalid type');
-    assert(map.containsKey('coordinates'),
-        'There MUST be contains key `coordinates`');
-    assert(map['coordinates'] is List,
-        'There MUST be array of linear ring coordinate arrays.');
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(['Polygon'].contains(map['type']), 'Invalid type', map['type']);
+    _assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`', map);
+    _assert(
+        map['coordinates'] is List,
+        'There MUST be array of linear ring coordinate arrays.',
+        map['coordinates']);
     final llll = map['coordinates'];
     final coords = <List<List<double>>>[];
     llll.forEach((lll) {
-      assert(lll is List, 'There MUST be List');
+      _assert(lll is List, 'There MUST be List', [map, lll]);
       final rings = <List<double>>[];
       lll.forEach((ll) {
-        assert(ll is List, 'There MUST be List');
-        assert((ll as List).length > 1, 'There MUST be two or more element');
+        _assert(ll is List, 'There MUST be List', [map, ll]);
+        _assert((ll as List).length > 1, 'There MUST be two or more element',
+            [map, ll]);
         final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
         rings.add(pos);
       });
@@ -319,6 +327,9 @@ class GeoJSONPolygon implements GeoJSONGeometry {
   }
 
   /// The constructor from JSON string
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONPolygon.fromJSON(String source) =>
       GeoJSONPolygon.fromMap(json.decode(source));
 

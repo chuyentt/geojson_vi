@@ -56,32 +56,41 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
   /// The [coordinates] should contain at least one Polygon, and each Polygon
   /// should contain at least two points (the start and end point of a linear
   /// ring).
-  GeoJSONMultiPolygon(this.coordinates)
-      : assert(coordinates.first.first.length >= 2,
-            'The coordinates MUST be two or more elements');
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
+  GeoJSONMultiPolygon(this.coordinates) {
+    _assert(coordinates.first.first.length >= 2,
+        'The coordinates MUST be two or more elements', coordinates);
+  }
 
   /// Constructs a GeoJSONMultiPolygon from a map.
   ///
   /// The map must contain a 'type' key with the value 'MultiPolygon', and a
   /// 'coordinates' key with the value being a list of Polygon coordinate arrays.
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONMultiPolygon.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(['MultiPolygon'].contains(map['type']), 'Invalid type');
-    assert(map.containsKey('coordinates'),
-        'There MUST be contains key `coordinates`');
-    assert(map['coordinates'] is List,
-        'There MUST be array of Polygon coordinate arrays.');
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(
+        ['MultiPolygon'].contains(map['type']), 'Invalid type', map['type']);
+    _assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`', map);
+    _assert(
+        map['coordinates'] is List,
+        'There MUST be array of Polygon coordinate arrays.',
+        map['coordinates']);
     final lllll = map['coordinates'];
     final coords = <List<List<List<double>>>>[];
     lllll.forEach((llll) {
       final polygon = <List<List<double>>>[];
-      assert(llll is List, 'There MUST be List');
+      _assert(llll is List, 'There MUST be List', [map, llll]);
       llll.forEach((lll) {
-        assert(lll is List, 'There MUST be List');
+        _assert(lll is List, 'There MUST be List', [map, lll]);
         final rings = <List<double>>[];
         lll.forEach((ll) {
-          assert(ll is List, 'There MUST be List');
-          assert((ll as List).length > 1, 'There MUST be two or more element');
+          _assert(ll is List, 'There MUST be List', [map, ll]);
+          _assert((ll as List).length > 1, 'There MUST be two or more element',
+              [map, ll]);
           final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
           rings.add(pos);
         });
@@ -97,6 +106,9 @@ class GeoJSONMultiPolygon implements GeoJSONGeometry {
   /// The JSON string must represent a map containing a 'type' key with the
   /// value 'MultiPolygon', and a 'coordinates' key with the value being a list
   /// of Polygon coordinate arrays.
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONMultiPolygon.fromJSON(String source) =>
       GeoJSONMultiPolygon.fromMap(json.decode(source));
 

@@ -50,23 +50,29 @@ class GeoJSONLineString implements GeoJSONGeometry {
   }
 
   /// Constructs a GeoJSONLineString from the provided list of [coordinates].
-  GeoJSONLineString(this.coordinates)
-      : assert(coordinates.length >= 2,
-            'The coordinates MUST be two or more positions');
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
+  GeoJSONLineString(this.coordinates) {
+    _assert(coordinates.length >= 2,
+        'The coordinates MUST be two or more positions', coordinates);
+  }
 
   /// Constructs a GeoJSONLineString from a Map.
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONLineString.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(['LineString'].contains(map['type']), 'Invalid type');
-    assert(map.containsKey('coordinates'),
-        'There MUST be contains key `coordinates`');
-    assert(map['coordinates'] is List,
-        'There MUST be array of two or more positions.');
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(['LineString'].contains(map['type']), 'Invalid type', map['type']);
+    _assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`', map);
+    _assert(map['coordinates'] is List,
+        'There MUST be array of two or more positions.', map['coordinates']);
     final lll = map['coordinates'];
     final coordinates = <List<double>>[];
     lll.forEach((ll) {
-      assert(ll is List, 'There MUST be List');
-      assert((ll as List).length > 1, 'There MUST be two or more element');
+      _assert(ll is List, 'There MUST be List', [map, lll]);
+      _assert((ll as List).length > 1, 'There MUST be two or more element',
+          [map, lll, ll]);
       final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
       coordinates.add(pos);
     });
@@ -74,6 +80,9 @@ class GeoJSONLineString implements GeoJSONGeometry {
   }
 
   /// Constructs a GeoJSONLineString from a JSON string.
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONLineString.fromJSON(String source) =>
       GeoJSONLineString.fromMap(json.decode(source));
 

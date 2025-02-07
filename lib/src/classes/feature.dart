@@ -38,11 +38,13 @@ class GeoJSONFeature implements GeoJSON {
         _bbox = geometry?.bbox;
 
   /// The constructor from map
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONFeature.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(['Feature'].contains(map['type']), 'Invalid type');
-    assert(
-        map.containsKey('geometry'), 'There MUST be contains key `geometry`');
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(['Feature'].contains(map['type']), 'Invalid type', map['type']);
+    _assert(map.containsKey('geometry'),
+        'There MUST be contains key `geometry`', map);
     final geometry = map['geometry'] != null
         ? GeoJSONGeometry.fromMap(map['geometry'])
         : null;
@@ -56,6 +58,9 @@ class GeoJSONFeature implements GeoJSON {
   }
 
   /// The constructor from JSON string
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONFeature.fromJSON(String source) =>
       GeoJSONFeature.fromMap(json.decode(source));
 

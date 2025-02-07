@@ -47,29 +47,38 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
   /// Creates a new GeoJSONMultiLineString object with the given [coordinates].
   ///
   /// The [coordinates] must represent one or more valid LineString coordinates.
-  GeoJSONMultiLineString(this.coordinates)
-      : assert(coordinates.isNotEmpty,
-            'The coordinates MUST be one or more elements');
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
+  GeoJSONMultiLineString(this.coordinates) {
+    _assert(coordinates.isNotEmpty,
+        'The coordinates MUST be one or more elements', coordinates);
+  }
 
   /// Creates a new GeoJSONMultiLineString object from a map.
   ///
   /// The map must include a 'type' key with the value 'MultiLineString' and
   /// a 'coordinates' key with an array of linear ring coordinate arrays.
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONMultiLineString.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(['MultiLineString'].contains(map['type']), 'Invalid type');
-    assert(map.containsKey('coordinates'),
-        'There MUST be contains key `coordinates`');
-    assert(map['coordinates'] is List,
-        'There MUST be array of linear ring coordinate arrays.');
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(
+        ['MultiLineString'].contains(map['type']), 'Invalid type', map['type']);
+    _assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`', map);
+    _assert(
+        map['coordinates'] is List,
+        'There MUST be array of linear ring coordinate arrays.',
+        map['coordinates']);
     final llll = map['coordinates'];
     final coords = <List<List<double>>>[];
     llll.forEach((lll) {
-      assert(lll is List, 'There MUST be List');
+      _assert(lll is List, 'There MUST be List', [map, lll]);
       final rings = <List<double>>[];
       lll.forEach((ll) {
-        assert(ll is List, 'There MUST be List');
-        assert((ll as List).length > 1, 'There MUST be two or more element');
+        _assert(ll is List, 'There MUST be List', [map, ll]);
+        _assert((ll as List).length > 1, 'There MUST be two or more element',
+            [map, ll]);
         final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
         rings.add(pos);
       });
@@ -81,6 +90,9 @@ class GeoJSONMultiLineString implements GeoJSONGeometry {
   /// Creates a new GeoJSONMultiLineString object from a JSON string.
   ///
   /// The JSON string must represent a valid GeoJSON MultiLineString object.
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONMultiLineString.fromJSON(String source) =>
       GeoJSONMultiLineString.fromMap(json.decode(source));
 

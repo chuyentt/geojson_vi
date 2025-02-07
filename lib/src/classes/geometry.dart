@@ -27,9 +27,11 @@ abstract class GeoJSONGeometry implements GeoJSON {
   ///
   /// The Map must contain a 'type' key with one of the valid GeoJSON Geometry
   /// types.
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONGeometry.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(
         [
           'Point',
           'MultiPoint',
@@ -39,7 +41,8 @@ abstract class GeoJSONGeometry implements GeoJSON {
           'MultiPolygon',
           'GeometryCollection'
         ].contains(map['type']),
-        'Invalid type');
+        'Invalid type',
+        map['type']);
     return GeoJSON.fromMap(map) as GeoJSONGeometry;
   }
 
@@ -47,6 +50,9 @@ abstract class GeoJSONGeometry implements GeoJSON {
   ///
   /// The JSON string must represent a Map containing a 'type' key with one of
   /// the valid GeoJSON Geometry types.
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONGeometry.fromJSON(String source) =>
       GeoJSONGeometry.fromMap(json.decode(source));
 

@@ -172,12 +172,16 @@ class GeoJSONFeatureCollection implements GeoJSON {
   }
 
   /// The constructor from map.
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONFeatureCollection.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(['FeatureCollection'].contains(map['type']), 'Invalid type');
-    assert(
-        map.containsKey('features'), 'There MUST be contains key `features`');
-    assert(map['features'] is List, 'There MUST be an array of features.');
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(['FeatureCollection'].contains(map['type']), 'Invalid type',
+        map['type']);
+    _assert(map.containsKey('features'),
+        'There MUST be contains key `features`', map);
+    _assert(map['features'] is List, 'There MUST be an array of features.',
+        map['features']);
     final value = map['features'] as List;
     final fs = <GeoJSONFeature>[];
     Future.forEach(value, (map) {
@@ -187,6 +191,9 @@ class GeoJSONFeatureCollection implements GeoJSON {
   }
 
   /// The constructor from JSON string.
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONFeatureCollection.fromJSON(String source) =>
       GeoJSONFeatureCollection.fromMap(json.decode(source));
 

@@ -44,24 +44,32 @@ class GeoJSONMultiPoint implements GeoJSONGeometry {
   double get distance => 0.0;
 
   /// Constructs a GeoJSONMultiPoint from the provided list of [coordinates].
-  GeoJSONMultiPoint(this.coordinates)
-      : assert(
-            coordinates.isNotEmpty,
-            'The coordinates is List<List<double>>. '
-            'There MUST be one or more elements');
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
+  GeoJSONMultiPoint(this.coordinates) {
+    _assert(
+        coordinates.isNotEmpty,
+        'The coordinates is List<List<double>>. '
+        'There MUST be one or more elements',
+        coordinates);
+  }
 
   /// Constructs a GeoJSONMultiPoint from a Map.
+  ///
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONMultiPoint.fromMap(Map<String, dynamic> map) {
-    assert(map.containsKey('type'), 'There MUST be contains key `type`');
-    assert(['MultiPoint'].contains(map['type']), 'Invalid type');
-    assert(map.containsKey('coordinates'),
-        'There MUST be contains key `coordinates`');
-    assert(map['coordinates'] is List, 'There MUST be array of positions.');
+    _assert(map.containsKey('type'), 'There MUST be contains key `type`', map);
+    _assert(['MultiPoint'].contains(map['type']), 'Invalid type', map['type']);
+    _assert(map.containsKey('coordinates'),
+        'There MUST be contains key `coordinates`', map);
+    _assert(map['coordinates'] is List, 'There MUST be array of positions.',
+        map['coordinates']);
     final lll = map['coordinates'];
     final coords = <List<double>>[];
     lll.forEach((ll) {
-      assert(ll is List, 'There MUST be List');
-      assert((ll as List).length > 1, 'There MUST be two or more element');
+      _assert(ll is List, 'There MUST be List', [map, ll]);
+      _assert((ll as List).length > 1, 'There MUST be two or more element',
+          [map, ll]);
       final pos = ll.map((e) => e.toDouble()).cast<double>().toList();
       coords.add(pos);
     });
@@ -69,6 +77,9 @@ class GeoJSONMultiPoint implements GeoJSONGeometry {
   }
 
   /// Constructs a GeoJSONMultiPoint from a JSON string.
+  ///
+  /// Throws [FormatException] if argument is not valid JSON
+  /// Throws [GeoJSONFormatException] if argument is not valid GeoJSON
   factory GeoJSONMultiPoint.fromJSON(String source) =>
       GeoJSONMultiPoint.fromMap(json.decode(source));
 
