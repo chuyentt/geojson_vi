@@ -1,0 +1,42 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Run analysis and tests
+        run: |
+          dart analyze
+          dart test
+
+      - name: Authenticate to pub.dev
+        env:
+          PUB_DEV_TOKEN: ${{ secrets.PUB_DEV_TOKEN }}
+        run: |
+          if [ -z "$PUB_DEV_TOKEN" ]; then
+            echo "Missing PUB_DEV_TOKEN secret"
+            exit 1
+          fi
+          dart pub token add https://pub.dev --env-var PUB_DEV_TOKEN
+
+      - name: Publish package
+        run: dart pub publish --force
